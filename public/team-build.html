@@ -71,17 +71,23 @@
     <script src="team-build.js"></script>
     <script>
         const user = localStorage.getItem('user');
-        if (!user) {
-            window.location.href = '/';
-        }
-        document.getElementById('user-display').textContent = user;
+        const logoutBtn = document.getElementById('logout-btn');
         
-        document.getElementById('logout-btn').addEventListener('click', () => {
-            if(confirm('Are you sure you want to logout?')) {
-                localStorage.removeItem('user');
-                window.location.href = '/';
-            }
-        });
+        if (!user) {
+            logoutBtn.textContent = 'Login';
+            logoutBtn.addEventListener('click', () => {
+                window.location.href = 'login.html';
+            });
+        } else {
+            document.getElementById('user-display').textContent = user;
+            logoutBtn.addEventListener('click', () => {
+                if(confirm('Are you sure you want to logout?')) {
+                    localStorage.removeItem('user');
+                    localStorage.removeItem('avatar');
+                    window.location.href = 'login.html';
+                }
+            });
+        }
     </script>
 </body>
 </html>
