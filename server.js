@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3000;
 const USERS_FILE = path.join(__dirname, 'users.json');
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] }));
 
 // Initialize users.json if it doesn't exist
 if (!fs.existsSync(USERS_FILE)) {
