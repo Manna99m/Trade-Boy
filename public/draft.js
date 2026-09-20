@@ -62,7 +62,9 @@ const draftCards = document.querySelector('.draft-cards-container');
 
 // State
 let currentChoices = [];
+let currentOpponentChoices = [];
 let currentTypes = [];
+let currentOpponentTypes = [];
 let choiceIndex = 0;
 let myRoomId = null;
 let timeLeft = 30;
@@ -113,7 +115,9 @@ socket.on('gameStarted', (data) => {
     myRoomId = data.roomId || myRoomId; 
     
     currentChoices = data.choices;
+    currentOpponentChoices = data.opponentChoices;
     currentTypes = data.type;
+    currentOpponentTypes = data.opponentType;
     choiceIndex = 0;
     
     document.getElementById('opponent-team-title').textContent = data.opponentName + "'s Team";
@@ -190,6 +194,18 @@ function renderChoice() {
     const path = type === 'hero' ? 'heroes/' : 'pets/';
     document.getElementById('img-0').src = path + choicePair[0];
     document.getElementById('img-1').src = path + choicePair[1];
+    
+    if (currentOpponentChoices && currentOpponentChoices[choiceIndex]) {
+        const oppChoicePair = currentOpponentChoices[choiceIndex];
+        const oppType = currentOpponentTypes && currentOpponentTypes[choiceIndex] ? currentOpponentTypes[choiceIndex] : type;
+        const oppPath = oppType === 'hero' ? 'heroes/' : 'pets/';
+        
+        document.getElementById('opp-img-0').src = oppPath + oppChoicePair[0];
+        document.getElementById('opp-img-1').src = oppPath + oppChoicePair[1];
+        document.getElementById('opponent-cards-container').style.display = 'flex';
+    } else {
+        document.getElementById('opponent-cards-container').style.display = 'none';
+    }
 }
 
 window.selectCard = function(index, isAuto = false) {
