@@ -282,3 +282,122 @@ body {
 .lang-option:hover, .lang-option.active {
     background-color: #fef6da;
 }
+
+/* Site Footer */
+.site-footer {
+    background: #050505;
+    color: #fff;
+    padding: 40px 20px;
+    font-family: Arial, sans-serif;
+    border-top: 1px solid #222;
+    margin-top: 60px;
+}
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+.footer-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.footer-logo-container {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: white;
+    margin-bottom: 8px;
+}
+.footer-logo-img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-right: 12px;
+}
+.footer-logo-text {
+    font-size: 1.8rem;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 2px;
+}
+.footer-slogan {
+    font-size: 0.85rem;
+    color: #ddd;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin: 0;
+}
+.footer-center {
+    flex: 1;
+    text-align: center;
+}
+.footer-links {
+    margin-bottom: 12px;
+}
+.footer-links a {
+    color: #3b82f6;
+    text-decoration: none;
+    margin: 0 8px;
+    font-size: 0.9rem;
+}
+.footer-links a:hover {
+    text-decoration: underline;
+}
+.footer-copyright {
+    font-size: 0.8rem;
+    color: #aaa;
+    font-style: italic;
+    margin: 0;
+}
+.footer-right {
+    flex: 1;
+    text-align: right;
+}
+.social-title {
+    margin: 0 0 12px 0;
+    font-size: 1.2rem;
+}
+.social-icons {
+    margin-bottom: 15px;
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+}
+.social-icon {
+    font-size: 1.6rem;
+    text-decoration: none;
+    margin-left: 12px;
+    filter: grayscale(100%);
+    transition: filter 0.2s;
+}
+.social-icon:hover {
+    filter: grayscale(0%);
+}
+.footer-disclaimer {
+    font-size: 0.8rem;
+    color: #888;
+    line-height: 1.4;
+    margin: 0;
+}
+
+@media (max-width: 900px) {
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 40px;
+    }
+    .footer-left, .footer-right {
+        align-items: center;
+        text-align: center;
+    }
+    .social-icons {
+        justify-content: center;
+    }
+    .social-icon {
+        margin: 0 6px;
+    }
+}
