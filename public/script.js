@@ -79,7 +79,7 @@ authForm.addEventListener('submit', async (e) => {
                 // Save user and redirect to home
                 localStorage.setItem('user', username);
                 localStorage.setItem('avatar', data.avatar);
-                window.location.href = '/home.html';
+                window.location.href = '/';
             } else {
                 // Auto switch to login
                 toggleLink.click();
