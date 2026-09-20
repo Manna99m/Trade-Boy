@@ -368,14 +368,12 @@ body {
     justify-content: flex-end;
 }
 .social-icon {
-    font-size: 1.6rem;
-    text-decoration: none;
-    margin-left: 12px;
-    filter: grayscale(100%);
-    transition: filter 0.2s;
+    color: #aaa;
+    transition: color 0.2s, transform 0.2s;
 }
 .social-icon:hover {
-    filter: grayscale(0%);
+    color: #fff;
+    transform: scale(1.1);
 }
 .footer-disclaimer {
     font-size: 0.8rem;
