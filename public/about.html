@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Trade Boy</title>
+    <link rel="stylesheet" href="home.css">
+    <script src="translations.js"></script>
+    <style>
+        .policy-container {
+            max-width: 800px;
+            margin: 100px auto 40px auto;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            color: #ddd;
+            line-height: 1.6;
+            text-align: center;
+        }
+        .policy-container h1 {
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        .policy-container h2 {
+            color: #aef649;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        .policy-container p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        .about-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 20px auto;
+            display: block;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="/" class="logo-container">
+            <img src="logo.jpg" alt="Trade Boy Logo" class="logo-img">
+            <span class="logo">Trade Boy</span>
+        </a>
+        <div style="display: flex; align-items: center; gap: 25px;">
+            <div class="lang-menu-container" style="position: relative;">
+                <button class="nav-icon-btn" onclick="const m = document.getElementById('lang-dropdown'); m.style.display = m.style.display === 'none' ? 'block' : 'none';" data-i18n="lang_en">
+                    EN <span style="font-size: 1.2em; margin-top: -2px;">🌐</span>
+                </button>
+                <div id="lang-dropdown" class="lang-dropdown">
+                    <div class="lang-option active" onclick="selectLanguage(this, 'EN')">🇺🇸 English</div>
+                    <div class="lang-option" onclick="selectLanguage(this, 'ID')">🇮🇩 Indonesia</div>
+                    <div class="lang-option" onclick="selectLanguage(this, 'RU')">🇷🇺 Русский</div>
+                </div>
+            </div>
+            <div id="user-info" style="display: flex; align-items: center; gap: 15px;">
+                <span id="user-display" style="font-weight: bold; color: #aef649;"></span>
+                <img id="user-avatar" src="" alt="Avatar" style="width: 40px; height: 40px; border-radius: 50%; display: none; border: 2px solid #aef649; cursor: pointer;">
+                <button id="logout-btn" class="nav-icon-btn" style="padding: 6px 15px; font-size: 0.8rem;" data-i18n="logout">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="policy-container">
+            <img src="logo.jpg" alt="Trade Boy Logo" class="about-logo">
+            <h1>About Trade Boy</h1>
+            
+            <p>Welcome to <strong>Trade Boy</strong>, your ultimate destination for everything Hero Wars!</p>
+            
+            <h2>Who We Are</h2>
+            <p>Created by a passionate veteran of the game (<strong>tradeboy_yt</strong>), this website was born out of a desire to build a central hub where the community could access top-tier strategies, team synergies, and advanced tools completely free of charge.</p>
+            
+            <h2>Our Mission</h2>
+            <p>Our mission is simple: to help you elevate your Hero Wars strategy. Whether you're trying to crush the Archdemon, dominate in the Arena, or master the complex mechanics of Mega Drafts, Trade Boy is here to provide the insights and simulators you need to build the ultimate team.</p>
+            
+            <h2>Join the Community</h2>
+            <p>We are constantly expanding our guides and tools based on community feedback. Be sure to check out our YouTube channel for in-depth video guides, follow our Facebook page for updates, and join our Discord to talk strategy with fellow legends!</p>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <a href="/" class="footer-logo-container">
+                    <img src="logo.jpg" alt="Trade Boy Logo" class="footer-logo-img">
+                    <span class="footer-logo-text">Trade Boy</span>
+                </a>
+                <p class="footer-slogan">ELEVATE YOUR HERO WARS STRATEGY.</p>
+            </div>
+            
+            <div class="footer-center">
+                <div class="footer-links">
+                    <a href="/privacy">Privacy Policy</a> | 
+                    <a href="/terms">Terms & Conditions</a> | 
+                    <a href="/disclaimer">Disclaimer</a> | 
+                    <a href="/contact">Contact</a> | 
+                    <a href="/about">About Us</a>
+                </div>
+                <p class="footer-copyright">TRADE BOY &copy; 2026 ALL RIGHTS RESERVED</p>
+            </div>
+            
+            <div class="footer-right">
+                <h4 class="social-title">Social Links</h4>
+                <div class="social-icons">
+                    <a href="https://discord.com/" class="social-icon" title="Discord Username: tradeboy_yt" target="_blank" onclick="alert('Add me on Discord: tradeboy_yt');">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+                    </a>
+                    <!-- YouTube -->
+                    <a href="https://www.youtube.com/@tradeboy1K" class="social-icon" title="YouTube" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    </a>
+                    <!-- Facebook -->
+                    <a href="https://www.facebook.com/soc.mgma/" class="social-icon" title="Facebook" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    </a>
+                    <!-- Gmail -->
+                    <a href="mailto:fihadmunna10@gmail.com" class="social-icon" title="Email: fihadmunna10@gmail.com">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>
+                    </a>
+                </div>
+                <p class="footer-disclaimer">
+                    This website is not associated with Nexters, not sponsored by Nexters, and Nexters is not liable for it.
+                </p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('click', (e) => {
+            const container = document.querySelector('.lang-menu-container');
+            const menu = document.getElementById('lang-dropdown');
+            if (container && menu && !container.contains(e.target)) {
+                menu.style.display = 'none';
+            }
+        });
+        
+        function selectLanguage(element, langCode) {
+            const btn = element.closest('.lang-menu-container').querySelector('.nav-icon-btn');
+            btn.innerHTML = langCode + ' <span style="font-size: 1.2em; margin-top: -2px;">🌐</span>';
+            const options = element.parentElement.querySelectorAll('.lang-option');
+            options.forEach(opt => opt.classList.remove('active'));
+            element.classList.add('active');
+            localStorage.setItem('selectedLang', langCode);
+            element.parentElement.style.display = 'none';
+            if (window.applyTranslations) window.applyTranslations(langCode);
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('selectedLang') || 'EN';
+            const option = Array.from(document.querySelectorAll('.lang-option')).find(o => o.textContent.includes(savedLang));
+            if (option) {
+                selectLanguage(option, savedLang);
+            }
+            
+            const user = localStorage.getItem('user');
+            const userAvatarEl = document.getElementById('user-avatar');
+            const logoutBtn = document.getElementById('logout-btn');
+            const profileBtn = document.getElementById('user-avatar');
+            
+            if(!user) {
+                document.getElementById('user-display').textContent = 'Guest';
+                profileBtn.style.display = 'none';
+                logoutBtn.textContent = 'Login';
+                logoutBtn.removeAttribute('data-i18n'); // Remove data-i18n so translations don't override it to 'Logout'
+                logoutBtn.addEventListener('click', () => {
+                    window.location.href = '/login';
+                });
+            } else {
+                document.getElementById('user-display').textContent = user;
+                
+                const localAvatar = localStorage.getItem('avatar');
+                if (localAvatar) {
+                    userAvatarEl.src = 'avatars/' + localAvatar;
+                    userAvatarEl.style.display = 'block';
+                }
+                
+                logoutBtn.addEventListener('click', () => {
+                    if(confirm('Are you sure you want to logout?')) {
+                        localStorage.removeItem('user');
+                        localStorage.removeItem('avatar');
+                        window.location.href = '/login';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
