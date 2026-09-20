@@ -200,14 +200,14 @@
         // ... (Posts logic follows)
 
         const posts = [
-            { id: 'mega-draft-battle', title: 'Mega Draft Battle', desc: 'Pick from a shared pool to build the ultimate team.', link: 'mega-draft.html', img: 'https://img.youtube.com/vi/UBoCvXFwSww/mqdefault.jpg' },
-            { id: 'triple-draft-battle', title: 'Triple Draft Battle', desc: 'Draft 5 Heroes and 1 Pet by picking 1 from 3 options each round!', link: 'triple-draft.html', img: 'https://img.youtube.com/vi/UBoCvXFwSww/mqdefault.jpg' },
+            { id: 'mega-draft-battle', title: 'Mega Draft Battle', desc: 'Pick from a shared pool to build the ultimate team.', link: 'mega-draft', img: 'https://img.youtube.com/vi/UBoCvXFwSww/mqdefault.jpg' },
+            { id: 'triple-draft-battle', title: 'Triple Draft Battle', desc: 'Draft 5 Heroes and 1 Pet by picking 1 from 3 options each round!', link: 'triple-draft', img: 'https://img.youtube.com/vi/UBoCvXFwSww/mqdefault.jpg' },
             { id: 'event-teams', title: 'Event Teams', desc: 'Top tier combinations for the current events.', img: 'event-teams.jpg' },
             { id: 'archdemon-teams', title: 'Archdemon Teams', desc: 'Best formations to tackle the Archdemon.', img: 'archdemon-fight.webp' },
-            { id: 'draft-battle', title: 'Draft Battle', desc: 'Strategies and tips for dominating in Draft Battles.', link: 'draft.html', img: 'https://img.youtube.com/vi/UBoCvXFwSww/mqdefault.jpg' },
+            { id: 'draft-battle', title: 'Draft Battle', desc: 'Strategies and tips for dominating in Draft Battles.', link: 'draft', img: 'https://img.youtube.com/vi/UBoCvXFwSww/mqdefault.jpg' },
             { id: 'osh-teams', title: 'Best Team for OSH', desc: 'Discover the most effective lineups for defeating OSH.', img: 'osh-teams.png' },
             { id: 'maestro-teams', title: 'Best Team for Maestro', desc: 'Top strategies and team comps to counter Maestro.', img: 'maestro-teams.webp' },
-            { id: 'team-build', title: 'Team Build', desc: 'Comprehensive guide to building a balanced team.', link: 'team-build.html', img: 'team-build.jpg' },
+            { id: 'team-build', title: 'Team Build', desc: 'Comprehensive guide to building a balanced team.', link: 'team-build', img: 'team-build.jpg' },
             { id: 'heroes', title: 'Heroes', desc: 'Tier list and analysis of the best heroes.', img: 'heroes.jpg' },
             { id: 'titans', title: 'Titans', desc: 'Maximize your titans damage and utility.', img: 'titans.jpg' }
         ];
@@ -226,7 +226,7 @@
             
             filteredPosts.forEach(post => {
                 const card = document.createElement('a');
-                card.href = post.link ? post.link : `post.html?id=${post.id}`;
+                card.href = post.link ? post.link : `post?id=${post.id}`;
                 card.className = 'card';
                 
                 card.innerHTML = `
