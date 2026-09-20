@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trade Boy - Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background"></div>
+    <div class="login-container">
+        <h2 id="form-title">Login</h2>
+        <form id="auth-form">
+            <div class="input-group">
+                <input type="text" id="username" placeholder="Username" required>
+                <span class="icon">👤</span>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" placeholder="Password" required>
+                <span class="icon">🔒</span>
+            </div>
+            
+            <div id="avatar-picker-container" style="display: none; margin: 15px 0;">
+                <p style="color: #ccc; margin-bottom: 10px; font-size: 0.85rem; text-align: left;">Choose an Avatar (Optional)</p>
+                <div class="avatar-grid" id="avatar-grid">
+                    <!-- Avatars will be injected by JS -->
+                </div>
+            </div>
+            
+            <div class="options" id="login-options">
+                <label><input type="checkbox"> Remember me</label>
+                <a href="#">Forgot password?</a>
+            </div>
+
+            <button type="submit" id="submit-btn">Login</button>
+            <p class="error-msg" id="error-msg"></p>
+            
+            <p class="toggle-text">
+                <span id="toggle-msg">Don't have an account?</span> 
+                <a href="#" id="toggle-link">Register</a>
+            </p>
+        </form>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

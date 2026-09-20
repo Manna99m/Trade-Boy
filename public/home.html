@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Trade Boy</title>
+    <link rel="stylesheet" href="home.css">
+    <script src="translations.js"></script>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="home.html" class="logo-container">
+            <img src="logo.jpg" alt="Trade Boy Logo" class="logo-img">
+            <span class="logo">Trade Boy</span>
+        </a>
+        <div class="search-container">
+            <input type="text" class="search-bar" data-i18n-placeholder="search_placeholder" placeholder="Search guides, heroes, teams...">
+        </div>
+        <div style="display: flex; align-items: center; gap: 25px;">
+            <div class="lang-menu-container" style="position: relative;">
+                <button class="nav-icon-btn" onclick="document.getElementById('lang-dropdown').style.display = document.getElementById('lang-dropdown').style.display === 'none' ? 'block' : 'none';">
+                    EN <span style="font-size: 1.2em; margin-top: -2px;">🌐</span>
+                </button>
+                <div id="lang-dropdown" class="lang-dropdown" style="display: none;">
+                    <div class="lang-option active" onclick="selectLanguage(this, 'EN')">EN - English</div>
+                    <div class="lang-option" onclick="selectLanguage(this, 'RU')">RU - Русский</div>
+                    <div class="lang-option" onclick="selectLanguage(this, 'PT')">PT - Português</div>
+                    <div class="lang-option" onclick="selectLanguage(this, 'FR')">FR - Français</div>
+                    <div class="lang-option" onclick="selectLanguage(this, 'IT')">IT - Italiano</div>
+                    <div class="lang-option" onclick="selectLanguage(this, 'DE')">DE - Deutsch</div>
+                    <div class="lang-option" onclick="selectLanguage(this, 'ES')">ES - Español</div>
+                    <div class="lang-option" onclick="selectLanguage(this, 'PL')">PL - Polski</div>
+                    <div class="lang-option" onclick="selectLanguage(this, 'Zh-CN')">Zh-CN - 简体字</div>
+                    <div class="lang-option" onclick="selectLanguage(this, 'Zh-TW')">Zh-TW - 繁體中文</div>
+                    <div class="lang-option" onclick="selectLanguage(this, 'JA')">JA - 日本語</div>
+                    <div class="lang-option" onclick="selectLanguage(this, 'KO')">KO - 한국어</div>
+                    <div class="lang-option" onclick="selectLanguage(this, 'TH')">TH - ภาษาไทย</div>
+                </div>
+            </div>
+            
+            <div class="profile-container" style="margin-left: 10px;">
+                <div id="profile-btn" style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 5px 10px; border-radius: 20px; transition: background 0.2s;">
+                    <img src="" id="user-avatar" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #aef649; display: none;">
+                    <span id="user-display" style="font-weight: bold;"></span>
+                </div>
+                <button class="logout-btn" id="logout-btn" data-i18n="logout">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <h1 class="page-title" data-i18n="latest_guides">Latest Guides & Updates</h1>
+        
+        <div class="grid" id="posts-grid">
+            <!-- Posts will be generated here -->
+        </div>
+    </main>
+
+    <!-- Avatar Change Modal -->
+    <div id="avatar-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center;">
+        <div style="background: #1a1a1a; padding: 30px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.2); width: 400px; text-align: center;">
+            <h2 style="color: #fff; margin-bottom: 20px;" data-i18n="change_avatar">Change Avatar</h2>
+            <div id="modal-avatar-grid" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 25px;"></div>
+            <button id="save-avatar-btn" style="padding: 10px 20px; border-radius: 8px; border: none; background: #aef649; color: #000; font-weight: bold; cursor: pointer;" data-i18n="save">Save</button>
+            <button id="cancel-avatar-btn" style="padding: 10px 20px; border-radius: 8px; border: none; background: #555; color: #fff; font-weight: bold; cursor: pointer; margin-left: 10px;" data-i18n="cancel">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('click', (e) => {
+            const container = document.querySelector('.lang-menu-container');
+            const menu = document.getElementById('lang-dropdown');
+            if (container && menu && !container.contains(e.target)) {
+                menu.style.display = 'none';
+            }
+        });
+        
+        function selectLanguage(element, langCode) {
+            const btn = element.closest('.lang-menu-container').querySelector('.nav-icon-btn');
+            btn.innerHTML = langCode + ' <span style="font-size: 1.2em; margin-top: -2px;">🌐</span>';
+            const options = element.parentElement.querySelectorAll('.lang-option');
+            options.forEach(opt => opt.classList.remove('active'));
+            element.classList.add('active');
+            localStorage.setItem('selectedLang', langCode);
+            element.parentElement.style.display = 'none';
+            if (window.applyTranslations) window.applyTranslations(langCode);
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('selectedLang') || 'EN';
+            const container = document.querySelector('.lang-menu-container');
+            if (container) {
+                const btn = container.querySelector('.nav-icon-btn');
+                btn.innerHTML = savedLang + ' <span style="font-size: 1.2em; margin-top: -2px;">🌐</span>';
+                const options = container.querySelectorAll('.lang-option');
+                options.forEach(opt => {
+                    if (opt.textContent.startsWith(savedLang)) opt.classList.add('active');
+                    else opt.classList.remove('active');
+                });
+            }
+            if (window.applyTranslations) window.applyTranslations(savedLang);
+        });
+        
+        const user = localStorage.getItem('user');
+        if (!user) {
+            window.location.href = '/';
+        }
+        document.getElementById('user-display').textContent = user;
+        
+        const userAvatarEl = document.getElementById('user-avatar');
+        
+        async function fetchUser() {
+            try {
+                const res = await fetch('/api/user/' + user);
+                const data = await res.json();
+                if(data.avatar) {
+                    localStorage.setItem('avatar', data.avatar);
+                    userAvatarEl.src = 'avatars/' + data.avatar;
+                    userAvatarEl.style.display = 'block';
+                }
+            } catch(e) {}
+        }
+        
+        const localAvatar = localStorage.getItem('avatar');
+        if (localAvatar) {
+            userAvatarEl.src = 'avatars/' + localAvatar;
+            userAvatarEl.style.display = 'block';
+        } else {
+            fetchUser();
+        }
+        
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            if(confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('user');
+                localStorage.removeItem('avatar');
+                window.location.href = '/';
+            }
+        });
+        
+        // Avatar Modal Logic
+        const profileBtn = document.getElementById('profile-btn');
+        const avatarModal = document.getElementById('avatar-modal');
+        const modalGrid = document.getElementById('modal-avatar-grid');
+        let newSelectedAvatar = null;
+        
+        profileBtn.addEventListener('click', () => {
+            avatarModal.style.display = 'flex';
+            modalGrid.innerHTML = '';
+            newSelectedAvatar = localStorage.getItem('avatar');
+            
+            for(let i=1; i<=10; i++) {
+                const img = document.createElement('img');
+                img.src = `avatars/avatar${i}.jpg`;
+                img.style.width = '60px';
+                img.style.height = '60px';
+                img.style.borderRadius = '50%';
+                img.style.cursor = 'pointer';
+                img.style.objectFit = 'cover';
+                img.style.border = `3px solid ${newSelectedAvatar === 'avatar'+i+'.jpg' ? '#aef649' : 'transparent'}`;
+                
+                img.addEventListener('click', () => {
+                    Array.from(modalGrid.children).forEach(el => el.style.border = '3px solid transparent');
+                    img.style.border = '3px solid #aef649';
+                    newSelectedAvatar = `avatar${i}.jpg`;
+                });
+                modalGrid.appendChild(img);
+            }
+        });
+        
+        document.getElementById('cancel-avatar-btn').addEventListener('click', () => {
+            avatarModal.style.display = 'none';
+        });
+        
+        document.getElementById('save-avatar-btn').addEventListener('click', async () => {
+            if(!newSelectedAvatar) return;
+            try {
+                await fetch('/api/user/avatar', {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({username: user, avatar: newSelectedAvatar})
+                });
+                localStorage.setItem('avatar', newSelectedAvatar);
+                userAvatarEl.src = 'avatars/' + newSelectedAvatar;
+                avatarModal.style.display = 'none';
+            } catch(e) {
+                alert('Error saving avatar');
+            }
+        });
+
+        profileBtn.addEventListener('mouseover', () => profileBtn.style.background = 'rgba(255,255,255,0.1)');
+        profileBtn.addEventListener('mouseout', () => profileBtn.style.background = 'transparent');
+        
+        // ... (Posts logic follows)
+
+        const posts = [
+            { id: 'mega-draft-battle', title: 'Mega Draft Battle', desc: 'Pick from a shared pool to build the ultimate team.', link: 'mega-draft.html', img: 'https://img.youtube.com/vi/UBoCvXFwSww/mqdefault.jpg' },
+            { id: 'triple-draft-battle', title: 'Triple Draft Battle', desc: 'Draft 5 Heroes and 1 Pet by picking 1 from 3 options each round!', link: 'triple-draft.html', img: 'https://img.youtube.com/vi/UBoCvXFwSww/mqdefault.jpg' },
+            { id: 'event-teams', title: 'Event Teams', desc: 'Top tier combinations for the current events.', img: 'event-teams.jpg' },
+            { id: 'archdemon-teams', title: 'Archdemon Teams', desc: 'Best formations to tackle the Archdemon.', img: 'archdemon-fight.webp' },
+            { id: 'draft-battle', title: 'Draft Battle', desc: 'Strategies and tips for dominating in Draft Battles.', link: 'draft.html', img: 'https://img.youtube.com/vi/UBoCvXFwSww/mqdefault.jpg' },
+            { id: 'osh-teams', title: 'Best Team for OSH', desc: 'Discover the most effective lineups for defeating OSH.', img: 'osh-teams.png' },
+            { id: 'maestro-teams', title: 'Best Team for Maestro', desc: 'Top strategies and team comps to counter Maestro.', img: 'maestro-teams.webp' },
+            { id: 'team-build', title: 'Team Build', desc: 'Comprehensive guide to building a balanced team.', link: 'team-build.html', img: 'team-build.jpg' },
+            { id: 'heroes', title: 'Heroes', desc: 'Tier list and analysis of the best heroes.', img: 'heroes.jpg' },
+            { id: 'titans', title: 'Titans', desc: 'Maximize your titans damage and utility.', img: 'titans.jpg' }
+        ];
+
+        const grid = document.getElementById('posts-grid');
+        const searchBar = document.querySelector('.search-bar');
+        
+        function renderPosts(query = '') {
+            grid.innerHTML = '';
+            const lowerQuery = query.toLowerCase();
+            
+            const filteredPosts = posts.filter(post => 
+                post.title.toLowerCase().includes(lowerQuery) || 
+                post.desc.toLowerCase().includes(lowerQuery)
+            );
+            
+            filteredPosts.forEach(post => {
+                const card = document.createElement('a');
+                card.href = post.link ? post.link : `post.html?id=${post.id}`;
+                card.className = 'card';
+                
+                card.innerHTML = `
+                    <img src="${post.img || 'thumbnail.jpg'}" alt="${post.title}" class="thumbnail">
+                    <div class="card-content">
+                        <h3 class="card-title">${post.title}</h3>
+                        <p class="card-excerpt">${post.desc}</p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+        
+        searchBar.addEventListener('input', (e) => {
+            renderPosts(e.target.value);
+        });
+        
+        renderPosts();
+    </script>
+</body>
+</html>

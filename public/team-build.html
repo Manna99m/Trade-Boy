@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Build - Trade Boy</title>
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="team-build.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="home.html" class="logo-container">
+            <img src="logo.jpg" alt="Trade Boy Logo" class="logo-img">
+            <span class="logo">Trade Boy</span>
+        </a>
+        <div class="search-container">
+            <input type="text" class="search-bar" placeholder="Search guides, heroes, teams...">
+        </div>
+        <div class="profile-container">
+            <span id="user-display"></span>
+            <button class="logout-btn" id="logout-btn">Logout</button>
+        </div>
+    </nav>
+
+    <main class="main-content" style="max-width: 900px; padding-bottom: 20px;">
+        <a href="home.html" class="hero-btn" style="margin-bottom: 20px;">&larr; Back to Home</a>
+        
+        <h2 style="text-align: center; margin-bottom: 20px; color: #ffd700; text-transform: uppercase;">Gather Your Team</h2>
+
+        <div class="hero-builder-container">
+            <div class="sidebar">
+                <button class="tab-btn active" id="tab-heroes">Heroes</button>
+                <button class="tab-btn" id="tab-pets">Pets</button>
+            </div>
+            
+            <div class="hero-grid" id="item-grid">
+                <!-- Items (Heroes/Pets) will be injected here via JS -->
+            </div>
+        </div>
+    </main>
+
+    <div class="bottom-bar">
+        <div class="selected-slots">
+            <!-- Pet slot -->
+            <div class="slot pet-slot" id="pet-slot"></div>
+            <!-- Hero slots -->
+            <div class="slot hero-slot"></div>
+            <div class="slot hero-slot"></div>
+            <div class="slot hero-slot"></div>
+            <div class="slot hero-slot"></div>
+            <div class="slot hero-slot"></div>
+        </div>
+        <div class="bottom-actions">
+            <button class="ok-btn" id="ok-btn">OK</button>
+        </div>
+    </div>
+
+    <!-- Patron Pet Modal -->
+    <div class="modal-overlay" id="pet-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Choose a patron pet</h3>
+                <button class="close-btn" id="close-modal">&times;</button>
+            </div>
+            <div class="modal-body" id="pet-modal-grid">
+                <!-- Pets injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <script src="team-build.js"></script>
+    <script>
+        const user = localStorage.getItem('user');
+        if (!user) {
+            window.location.href = '/';
+        }
+        document.getElementById('user-display').textContent = user;
+        
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            if(confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('user');
+                window.location.href = '/';
+            }
+        });
+    </script>
+</body>
+</html>
