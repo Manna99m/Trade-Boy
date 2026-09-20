@@ -1,6 +1,6 @@
 const user = localStorage.getItem('user');
 if (!user) {
-    window.location.href = 'login.html';
+    window.location.href = '/login';
 }
 document.getElementById('user-display').textContent = user;
 const avatar = localStorage.getItem('avatar');

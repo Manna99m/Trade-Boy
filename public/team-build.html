@@ -9,7 +9,7 @@
 </head>
 <body>
     <nav class="top-nav">
-        <a href="index.html" class="logo-container">
+        <a href="/" class="logo-container">
             <img src="logo.jpg" alt="Trade Boy Logo" class="logo-img">
             <span class="logo">Trade Boy</span>
         </a>
@@ -23,7 +23,7 @@
     </nav>
 
     <main class="main-content" style="max-width: 900px; padding-bottom: 20px;">
-        <a href="index.html" class="hero-btn" style="margin-bottom: 20px;">&larr; Back to Home</a>
+        <a href="/" class="hero-btn" style="margin-bottom: 20px;">&larr; Back to Home</a>
         
         <h2 style="text-align: center; margin-bottom: 20px; color: #ffd700; text-transform: uppercase;">Gather Your Team</h2>
 
@@ -76,7 +76,7 @@
         if (!user) {
             logoutBtn.textContent = 'Login';
             logoutBtn.addEventListener('click', () => {
-                window.location.href = 'login.html';
+                window.location.href = '/login';
             });
         } else {
             document.getElementById('user-display').textContent = user;
@@ -84,7 +84,7 @@
                 if(confirm('Are you sure you want to logout?')) {
                     localStorage.removeItem('user');
                     localStorage.removeItem('avatar');
-                    window.location.href = 'login.html';
+                    window.location.href = '/login';
                 }
             });
         }
