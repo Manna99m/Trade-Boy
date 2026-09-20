@@ -225,8 +225,8 @@ function startGame(roomId) {
     const p1Avatar = getUserAvatar(room.p1.username);
     const p2Avatar = getUserAvatar(room.p2.username);
     
-    io.to(room.p1.id).emit('gameStarted', { roomId, role: 'p1', choices: room.p1.choices, type: room.p1.type, opponentName: room.p2.username, opponentAvatar: p2Avatar });
-    io.to(room.p2.id).emit('gameStarted', { roomId, role: 'p2', choices: room.p2.choices, type: room.p2.type, opponentName: room.p1.username, opponentAvatar: p1Avatar });
+    io.to(room.p1.id).emit('gameStarted', { roomId, role: 'p1', choices: room.p1.choices, opponentChoices: room.p2.choices, type: room.p1.type, opponentType: room.p2.type, opponentName: room.p2.username, opponentAvatar: p2Avatar });
+    io.to(room.p2.id).emit('gameStarted', { roomId, role: 'p2', choices: room.p2.choices, opponentChoices: room.p1.choices, type: room.p2.type, opponentType: room.p1.type, opponentName: room.p1.username, opponentAvatar: p1Avatar });
 
     room.timer = setTimeout(() => {
         const players = [room.p1, room.p2];
