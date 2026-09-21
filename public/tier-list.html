@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heroes Tier List Maker - Trade Boy</title>
+    <link rel="stylesheet" href="home.css">
+    <script src="translations.js"></script>
+    <!-- Include SortableJS via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        .page-header {
+            text-align: center;
+            margin-top: 100px;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+        .page-description {
+            text-align: center;
+            color: #aaa;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .tier-list-container {
+            max-width: 1000px;
+            margin: 0 auto 40px auto;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        
+        .tier-row {
+            display: flex;
+            min-height: 100px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .tier-row:last-child {
+            border-bottom: none;
+        }
+        
+        .tier-label {
+            width: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: 900;
+            color: #111;
+            text-shadow: 0px 1px 1px rgba(255,255,255,0.4);
+        }
+        .tier-label.s { background-color: #ff7f7f; }
+        .tier-label.a { background-color: #ffbf7f; }
+        .tier-label.b { background-color: #ffff7f; }
+        .tier-label.c { background-color: #7fff7f; }
+        .tier-label.d { background-color: #7fbfff; }
+        
+        .tier-dropzone {
+            flex: 1;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            min-height: 100px;
+        }
+        
+        .hero-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 2px solid rgba(255,255,255,0.2);
+            cursor: grab;
+            transition: transform 0.1s;
+            user-select: none;
+            background: #222;
+        }
+        .hero-icon:active {
+            cursor: grabbing;
+        }
+        .hero-icon:hover {
+            border-color: #aef649;
+            transform: scale(1.05);
+        }
+        .hero-icon.sortable-ghost {
+            opacity: 0.4;
+            transform: scale(0.95);
+        }
+        
+        .save-btn-container {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .save-btn {
+            background: linear-gradient(135deg, #aef649, #8bd032);
+            color: #000;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(174, 246, 73, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(174, 246, 73, 0.6);
+        }
+        .save-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .hero-pool-container {
+            max-width: 1000px;
+            margin: 0 auto 60px auto;
+            text-align: center;
+        }
+        .hero-pool-title {
+            font-size: 1.4rem;
+            color: #fff;
+            margin-bottom: 15px;
+        }
+        .hero-pool {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            min-height: 150px;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="/" class="logo-container">
+            <img src="logo.jpg" alt="Trade Boy Logo" class="logo-img">
+            <span class="logo">Trade Boy</span>
+        </a>
+        <div style="display: flex; align-items: center; gap: 25px;">
+            <div class="lang-menu-container" style="position: relative;">
+                <button class="nav-icon-btn" onclick="const m = document.getElementById('lang-dropdown'); m.style.display = m.style.display === 'none' ? 'block' : 'none';" data-i18n="lang_en">
+                    EN <span style="font-size: 1.2em; margin-top: -2px;">🌐</span>
+                </button>
+                <div id="lang-dropdown" class="lang-dropdown">
+                    <div class="lang-option active" onclick="selectLanguage(this, 'EN')">🇺🇸 English</div>
+                    <div class="lang-option" onclick="selectLanguage(this, 'ID')">🇮🇩 Indonesia</div>
+                    <div class="lang-option" onclick="selectLanguage(this, 'RU')">🇷🇺 Русский</div>
+                </div>
+            </div>
+            <div id="user-info" style="display: flex; align-items: center; gap: 15px;">
+                <span id="user-display" style="font-weight: bold; color: #aef649;"></span>
+                <img id="user-avatar" src="" alt="Avatar" style="width: 40px; height: 40px; border-radius: 50%; display: none; border: 2px solid #aef649; cursor: pointer;">
+                <button id="logout-btn" class="nav-icon-btn" style="padding: 6px 15px; font-size: 0.8rem;" data-i18n="logout">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div style="max-width: 1000px; margin: 0 auto; padding-top: 20px;">
+            <a href="/" style="color: #aef649; text-decoration: none; font-weight: bold; font-size: 1.1rem; display: inline-block; margin-bottom: 20px; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#aef649'">&larr; Back to Home</a>
+        </div>
+        <h1 class="page-header">Hero Tier List Maker</h1>
+        <p class="page-description">Drag and drop the heroes from the pool below to create your very own ultimate Hero Wars tier list.</p>
+        
+        <div class="tier-list-container">
+            <div class="tier-row">
+                <div class="tier-label s">S</div>
+                <div class="tier-dropzone" id="tier-s"></div>
+            </div>
+            <div class="tier-row">
+                <div class="tier-label a">A</div>
+                <div class="tier-dropzone" id="tier-a"></div>
+            </div>
+            <div class="tier-row">
+                <div class="tier-label b">B</div>
+                <div class="tier-dropzone" id="tier-b"></div>
+            </div>
+            <div class="tier-row">
+                <div class="tier-label c">C</div>
+                <div class="tier-dropzone" id="tier-c"></div>
+            </div>
+            <div class="tier-row">
+                <div class="tier-label d">D</div>
+                <div class="tier-dropzone" id="tier-d"></div>
+            </div>
+        </div>
+
+        <div class="save-btn-container">
+            <button id="save-tier-list-btn" class="save-btn">💾 Save Tier List as Image</button>
+        </div>
+
+        <div class="hero-pool-container">
+            <h2 class="hero-pool-title">Hero Pool</h2>
+            <div class="hero-pool" id="hero-pool">
+                <img src="heroes/adam.webp" class="hero-icon" alt="adam" title="adam">
+                <img src="heroes/Aidan.png" class="hero-icon" alt="Aidan" title="Aidan">
+                <img src="heroes/Amira.png" class="hero-icon" alt="Amira" title="Amira">
+                <img src="heroes/Andvari.png" class="hero-icon" alt="Andvari" title="Andvari">
+                <img src="heroes/Arachne.png" class="hero-icon" alt="Arachne" title="Arachne">
+                <img src="heroes/Artemis.png" class="hero-icon" alt="Artemis" title="Artemis">
+                <img src="heroes/Astaroth.png" class="hero-icon" alt="Astaroth" title="Astaroth">
+                <img src="heroes/Astrid.png" class="hero-icon" alt="Astrid" title="Astrid">
+                <img src="heroes/Augustus.png" class="hero-icon" alt="Augustus" title="Augustus">
+                <img src="heroes/Aurora.png" class="hero-icon" alt="Aurora" title="Aurora">
+                <img src="heroes/Avalon.png" class="hero-icon" alt="Avalon" title="Avalon">
+                <img src="heroes/byrna.webp" class="hero-icon" alt="byrna" title="byrna">
+                <img src="heroes/Cascade.png" class="hero-icon" alt="Cascade" title="Cascade">
+                <img src="heroes/Celeste.png" class="hero-icon" alt="Celeste" title="Celeste">
+                <img src="heroes/Chabba.png" class="hero-icon" alt="Chabba" title="Chabba">
+                <img src="heroes/Cleaver.png" class="hero-icon" alt="Cleaver" title="Cleaver">
+                <img src="heroes/Cornelious.png" class="hero-icon" alt="Cornelious" title="Cornelious">
+                <img src="heroes/corvus.png" class="hero-icon" alt="corvus" title="corvus">
+                <img src="heroes/Dante.png" class="hero-icon" alt="Dante" title="Dante">
+                <img src="heroes/Dare Devil.png" class="hero-icon" alt="Dare Devil" title="Dare Devil">
+                <img src="heroes/Dark star.png" class="hero-icon" alt="Dark star" title="Dark star">
+                <img src="heroes/Dorian.png" class="hero-icon" alt="Dorian" title="Dorian">
+                <img src="heroes/Electra.png" class="hero-icon" alt="Electra" title="Electra">
+                <img src="heroes/Elmir.png" class="hero-icon" alt="Elmir" title="Elmir">
+                <img src="heroes/eva.webp" class="hero-icon" alt="eva" title="eva">
+                <img src="heroes/Faceless.png" class="hero-icon" alt="Faceless" title="Faceless">
+                <img src="heroes/Fafnir.png" class="hero-icon" alt="Fafnir" title="Fafnir">
+                <img src="heroes/fluffy.webp" class="hero-icon" alt="fluffy" title="fluffy">
+                <img src="heroes/Folio.png" class="hero-icon" alt="Folio" title="Folio">
+                <img src="heroes/Fox.png" class="hero-icon" alt="Fox" title="Fox">
+                <img src="heroes/Galahad.png" class="hero-icon" alt="Galahad" title="Galahad">
+                <img src="heroes/Ginger.png" class="hero-icon" alt="Ginger" title="Ginger">
+                <img src="heroes/Guus.png" class="hero-icon" alt="Guus" title="Guus">
+                <img src="heroes/Heidi.png" class="hero-icon" alt="Heidi" title="Heidi">
+                <img src="heroes/Helios.png" class="hero-icon" alt="Helios" title="Helios">
+                <img src="heroes/Iris.png" class="hero-icon" alt="Iris" title="Iris">
+                <img src="heroes/isaac.png" class="hero-icon" alt="isaac" title="isaac">
+                <img src="heroes/Ishmael.png" class="hero-icon" alt="Ishmael" title="Ishmael">
+                <img src="heroes/Jet.png" class="hero-icon" alt="Jet" title="Jet">
+                <img src="heroes/Jhu.png" class="hero-icon" alt="Jhu" title="Jhu">
+                <img src="heroes/Jordgen.png" class="hero-icon" alt="Jordgen" title="Jordgen">
+                <img src="heroes/Judge.png" class="hero-icon" alt="Judge" title="Judge">
+                <img src="heroes/Julias.png" class="hero-icon" alt="Julias" title="Julias">
+                <img src="heroes/Kai.png" class="hero-icon" alt="Kai" title="Kai">
+                <img src="heroes/Karkh.png" class="hero-icon" alt="Karkh" title="Karkh">
+                <img src="heroes/Kayla.png" class="hero-icon" alt="Kayla" title="Kayla">
+                <img src="heroes/Keira.png" class="hero-icon" alt="Keira" title="Keira">
+                <img src="heroes/Krista.png" class="hero-icon" alt="Krista" title="Krista">
+                <img src="heroes/Lara Croft.png" class="hero-icon" alt="Lara Croft" title="Lara Croft">
+                <img src="heroes/Lars.png" class="hero-icon" alt="Lars" title="Lars">
+                <img src="heroes/Lian.png" class="hero-icon" alt="Lian" title="Lian">
+                <img src="heroes/Lilith.png" class="hero-icon" alt="Lilith" title="Lilith">
+                <img src="heroes/Lyria.png" class="hero-icon" alt="Lyria" title="Lyria">
+                <img src="heroes/Markus.png" class="hero-icon" alt="Markus" title="Markus">
+                <img src="heroes/Martha.png" class="hero-icon" alt="Martha" title="Martha">
+                <img src="heroes/Maya.png" class="hero-icon" alt="Maya" title="Maya">
+                <img src="heroes/Mojo.png" class="hero-icon" alt="Mojo" title="Mojo">
+                <img src="heroes/morrigan.png" class="hero-icon" alt="morrigan" title="morrigan">
+                <img src="heroes/Mushy and Shroom.png" class="hero-icon" alt="Mushy and Shroom" title="Mushy and Shroom">
+                <img src="heroes/Nebula.png" class="hero-icon" alt="Nebula" title="Nebula">
+                <img src="heroes/Ninja Turtles.png" class="hero-icon" alt="Ninja Turtles" title="Ninja Turtles">
+                <img src="heroes/Omen.png" class="hero-icon" alt="Omen" title="Omen">
+                <img src="heroes/Orion.png" class="hero-icon" alt="Orion" title="Orion">
+                <img src="heroes/Peppy.png" class="hero-icon" alt="Peppy" title="Peppy">
+                <img src="heroes/Phobos.png" class="hero-icon" alt="Phobos" title="Phobos">
+                <img src="heroes/Polaris.png" class="hero-icon" alt="Polaris" title="Polaris">
+                <img src="heroes/Quing Mao.png" class="hero-icon" alt="Quing Mao" title="Quing Mao">
+                <img src="heroes/Rufus.png" class="hero-icon" alt="Rufus" title="Rufus">
+                <img src="heroes/Satori.png" class="hero-icon" alt="Satori" title="Satori">
+                <img src="heroes/Sebastian.png" class="hero-icon" alt="Sebastian" title="Sebastian">
+                <img src="heroes/somna.webp" class="hero-icon" alt="somna" title="somna">
+                <img src="heroes/Thea.png" class="hero-icon" alt="Thea" title="Thea">
+                <img src="heroes/Tristan.png" class="hero-icon" alt="Tristan" title="Tristan">
+                <img src="heroes/yasmine.png" class="hero-icon" alt="yasmine" title="yasmine">
+                <img src="heroes/Ziri.png" class="hero-icon" alt="Ziri" title="Ziri">
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <a href="/" class="footer-logo-container">
+                    <img src="logo.jpg" alt="Trade Boy Logo" class="footer-logo-img">
+                    <span class="footer-logo-text">Trade Boy</span>
+                </a>
+                <p class="footer-slogan">ELEVATE YOUR HERO WARS STRATEGY.</p>
+            </div>
+            
+            <div class="footer-center">
+                <div class="footer-links">
+                    <a href="/privacy">Privacy Policy</a> | 
+                    <a href="/terms">Terms & Conditions</a> | 
+                    <a href="/disclaimer">Disclaimer</a> | 
+                    <a href="/contact">Contact</a> | 
+                    <a href="/about">About Us</a>
+                </div>
+                <p class="footer-copyright">TRADE BOY &copy; 2026 ALL RIGHTS RESERVED</p>
+            </div>
+            
+            <div class="footer-right">
+                <h4 class="social-title">Social Links</h4>
+                <div class="social-icons">
+                    <!-- Discord -->
+                    <a href="https://discord.com/" class="social-icon" title="Discord Username: tradeboy_yt" target="_blank" onclick="alert('Add me on Discord: tradeboy_yt');">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+                    </a>
+                    <!-- YouTube -->
+                    <a href="https://www.youtube.com/@tradeboy1K" class="social-icon" title="YouTube" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    </a>
+                    <!-- Facebook -->
+                    <a href="https://www.facebook.com/soc.mgma/" class="social-icon" title="Facebook" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    </a>
+                    <!-- Gmail -->
+                    <a href="mailto:fihadmunna10@gmail.com" class="social-icon" title="Email: fihadmunna10@gmail.com">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>
+                    </a>
+                </div>
+                <p class="footer-disclaimer">
+                    This website is not associated with Nexters, not sponsored by Nexters, and Nexters is not liable for it.
+                </p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // SortableJS Initialization for Drag and Drop
+        document.addEventListener('DOMContentLoaded', () => {
+            const dropzones = document.querySelectorAll('.tier-dropzone, .hero-pool');
+            
+            dropzones.forEach(zone => {
+                new Sortable(zone, {
+                    group: 'shared', // set both lists to same group so items can move between them
+                    animation: 150,
+                    ghostClass: 'sortable-ghost',
+                    easing: "cubic-bezier(1, 0, 0, 1)"
+                });
+            });
+        });
+
+        // Navigation and Auth Logic
+        document.addEventListener('click', (e) => {
+            const container = document.querySelector('.lang-menu-container');
+            const menu = document.getElementById('lang-dropdown');
+            if (container && menu && !container.contains(e.target)) {
+                menu.style.display = 'none';
+            }
+        });
+        
+        function selectLanguage(element, langCode) {
+            const btn = element.closest('.lang-menu-container').querySelector('.nav-icon-btn');
+            btn.innerHTML = langCode + ' <span style="font-size: 1.2em; margin-top: -2px;">🌐</span>';
+            const options = element.parentElement.querySelectorAll('.lang-option');
+            options.forEach(opt => opt.classList.remove('active'));
+            element.classList.add('active');
+            localStorage.setItem('selectedLang', langCode);
+            element.parentElement.style.display = 'none';
+            if (window.applyTranslations) window.applyTranslations(langCode);
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('selectedLang') || 'EN';
+            const option = Array.from(document.querySelectorAll('.lang-option')).find(o => o.textContent.includes(savedLang));
+            if (option) {
+                selectLanguage(option, savedLang);
+            }
+            
+            const user = localStorage.getItem('user');
+            const userAvatarEl = document.getElementById('user-avatar');
+            const logoutBtn = document.getElementById('logout-btn');
+            const profileBtn = document.getElementById('user-avatar');
+            
+            if(!user) {
+                document.getElementById('user-display').textContent = 'Guest';
+                profileBtn.style.display = 'none';
+                logoutBtn.textContent = 'Login';
+                logoutBtn.removeAttribute('data-i18n'); // Remove data-i18n so translations don't override it to 'Logout'
+                logoutBtn.addEventListener('click', () => {
+                    window.location.href = '/login';
+                });
+            } else {
+                document.getElementById('user-display').textContent = user;
+                
+                const localAvatar = localStorage.getItem('avatar');
+                if (localAvatar) {
+                    userAvatarEl.src = 'avatars/' + localAvatar;
+                    userAvatarEl.style.display = 'block';
+                }
+                
+                logoutBtn.addEventListener('click', () => {
+                    if(confirm('Are you sure you want to logout?')) {
+                        localStorage.removeItem('user');
+                        localStorage.removeItem('avatar');
+                        window.location.href = '/login';
+                    }
+                });
+            }
+            
+            document.getElementById('save-tier-list-btn').addEventListener('click', () => {
+                const container = document.querySelector('.tier-list-container');
+                const btn = document.getElementById('save-tier-list-btn');
+                const originalText = btn.textContent;
+                btn.textContent = '⏳ Saving...';
+                
+                html2canvas(container, {
+                    backgroundColor: '#1a1a1a',
+                    scale: 2
+                }).then(canvas => {
+                    const link = document.createElement('a');
+                    link.download = 'my-hero-wars-tier-list.png';
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                    btn.textContent = originalText;
+                }).catch(err => {
+                    console.error('Error saving tier list:', err);
+                    alert('Oops! Something went wrong while saving.');
+                    btn.textContent = originalText;
+                });
+            });
+        });
+    </script>
+</body>
+</html>
