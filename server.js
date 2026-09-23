@@ -538,8 +538,27 @@ io.on('connection', (socket) => {
         processMegaPick(roomId, socket.id, type, item);
     });
 
+    socket.on('cancelMatchmaking', (data) => {
+        randomQueue = randomQueue.filter(s => s.id !== socket.id);
+        tripleRandomQueue = tripleRandomQueue.filter(s => s.id !== socket.id);
+        megaRandomQueue = megaRandomQueue.filter(s => s.id !== socket.id);
+        
+        if (data && data.roomId) {
+            if (rooms[data.roomId] && rooms[data.roomId].p1 && rooms[data.roomId].p1.id === socket.id) {
+                delete rooms[data.roomId];
+            }
+            if (tripleRooms[data.roomId] && tripleRooms[data.roomId].p1 && tripleRooms[data.roomId].p1.id === socket.id) {
+                delete tripleRooms[data.roomId];
+            }
+            if (megaRooms[data.roomId] && megaRooms[data.roomId].p1 && megaRooms[data.roomId].p1.id === socket.id) {
+                delete megaRooms[data.roomId];
+            }
+        }
+    });
+
     socket.on('disconnect', () => {
         randomQueue = randomQueue.filter(s => s.id !== socket.id);
+        tripleRandomQueue = tripleRandomQueue.filter(s => s.id !== socket.id);
         megaRandomQueue = megaRandomQueue.filter(s => s.id !== socket.id);
     });
 });
