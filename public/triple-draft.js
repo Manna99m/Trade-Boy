@@ -59,6 +59,37 @@ const resultsScreen = document.getElementById('results-screen');
 const lobbyStatus = document.getElementById('lobby-status');
 const draftWaiting = document.getElementById('draft-waiting');
 const draftCards = document.querySelector('.draft-cards-container');
+const matchmakingControls = document.getElementById('matchmaking-controls');
+const matchmakingTimer = document.getElementById('matchmaking-timer');
+const btnCancelMatchmaking = document.getElementById('btn-cancel-matchmaking');
+
+let matchmakingInterval;
+let matchmakingSeconds = 0;
+
+function startMatchmakingTimer() {
+    matchmakingControls.style.display = 'block';
+    matchmakingSeconds = 0;
+    matchmakingTimer.textContent = '00:00';
+    if (matchmakingInterval) clearInterval(matchmakingInterval);
+    matchmakingInterval = setInterval(() => {
+        matchmakingSeconds++;
+        const m = String(Math.floor(matchmakingSeconds / 60)).padStart(2, '0');
+        const s = String(matchmakingSeconds % 60).padStart(2, '0');
+        matchmakingTimer.textContent = `${m}:${s}`;
+    }, 1000);
+}
+
+function stopMatchmakingTimer() {
+    if (matchmakingInterval) clearInterval(matchmakingInterval);
+    matchmakingControls.style.display = 'none';
+}
+
+btnCancelMatchmaking.addEventListener('click', () => {
+    stopMatchmakingTimer();
+    lobbyStatus.textContent = '';
+    socket.emit('cancelMatchmaking', { roomId: myRoomId });
+    myRoomId = null;
+});
 
 // State
 let currentChoices = [];
@@ -72,11 +103,13 @@ let timerInterval;
 // Lobby Actions
 document.getElementById('btn-random').addEventListener('click', () => {
     lobbyStatus.textContent = "Joining random queue...";
+    startMatchmakingTimer();
     socket.emit('joinTripleRandom', user);
 });
 
 document.getElementById('btn-create').addEventListener('click', () => {
     lobbyStatus.textContent = "Creating room...";
+    startMatchmakingTimer();
     socket.emit('createTripleCustom', user);
 });
 
@@ -100,10 +133,12 @@ socket.on('roomCreated', (roomId) => {
 });
 
 socket.on('errorMsg', (msg) => {
+    stopMatchmakingTimer();
     lobbyStatus.textContent = msg;
 });
 
 socket.on('tripleGameStarted', (data) => {
+    stopMatchmakingTimer();
     lobbyScreen.style.display = 'none';
     draftScreen.style.display = 'block';
     

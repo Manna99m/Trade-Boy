@@ -63,6 +63,37 @@ const heroesPool = document.getElementById('heroes-pool');
 const petsPool = document.getElementById('pets-pool');
 const turnIndicator = document.getElementById('turn-indicator');
 const picksLeftEl = document.getElementById('picks-left');
+const matchmakingControls = document.getElementById('matchmaking-controls');
+const matchmakingTimer = document.getElementById('matchmaking-timer');
+const btnCancelMatchmaking = document.getElementById('btn-cancel-matchmaking');
+
+let matchmakingInterval;
+let matchmakingSeconds = 0;
+
+function startMatchmakingTimer() {
+    matchmakingControls.style.display = 'block';
+    matchmakingSeconds = 0;
+    matchmakingTimer.textContent = '00:00';
+    if (matchmakingInterval) clearInterval(matchmakingInterval);
+    matchmakingInterval = setInterval(() => {
+        matchmakingSeconds++;
+        const m = String(Math.floor(matchmakingSeconds / 60)).padStart(2, '0');
+        const s = String(matchmakingSeconds % 60).padStart(2, '0');
+        matchmakingTimer.textContent = `${m}:${s}`;
+    }, 1000);
+}
+
+function stopMatchmakingTimer() {
+    if (matchmakingInterval) clearInterval(matchmakingInterval);
+    matchmakingControls.style.display = 'none';
+}
+
+btnCancelMatchmaking.addEventListener('click', () => {
+    stopMatchmakingTimer();
+    lobbyStatus.textContent = '';
+    socket.emit('cancelMatchmaking', { roomId: myRoomId });
+    myRoomId = null;
+});
 
 // State
 let myRoomId = null;
@@ -86,11 +117,13 @@ for (let i = 0; i < 6; i++) {
 // Lobby Actions
 document.getElementById('btn-random').addEventListener('click', () => {
     lobbyStatus.textContent = "Joining random queue...";
+    startMatchmakingTimer();
     socket.emit('joinMegaRandom', user);
 });
 
 document.getElementById('btn-create').addEventListener('click', () => {
     lobbyStatus.textContent = "Creating custom room...";
+    startMatchmakingTimer();
     socket.emit('createMegaCustom', user);
 });
 
@@ -113,10 +146,12 @@ socket.on('megaRoomCreated', (roomId) => {
 });
 
 socket.on('errorMsg', (msg) => {
+    stopMatchmakingTimer();
     lobbyStatus.textContent = msg;
 });
 
 socket.on('megaGameStarted', (data) => {
+    stopMatchmakingTimer();
     lobbyScreen.style.display = 'none';
     draftScreen.style.display = 'block';
     
