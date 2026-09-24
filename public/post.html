@@ -59,22 +59,64 @@
 
         // Simple mock data for posts
         const postData = {
-            'archdemon-teams': { title: 'Best Team for Archdemon', img: 'archdemon-teams.jpg', content: 'Archdemon requires high single-target DPS. Try pairing heroes like...' },
+            'archdemon-teams': { 
+                title: 'Best Team for Archdemon', 
+                img: 'archdemon-teams.jpg', 
+                content: `
+                <div style="margin-bottom: 30px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 10px; border: 1px solid #aef649;">
+                    <h3 style="color: #aef649; margin-bottom: 15px; text-transform: uppercase;">Team 1</h3>
+                    <p style="color: #d8b4fe; margin-bottom: 5px;">Buff: 140</p>
+                    <p style="color: #d8b4fe; margin-bottom: 5px;">Chapter: 1</p>
+                    <p style="margin-bottom: 15px; font-weight: bold; color: #ffeb3b;">Damage: 1,800,000,000 (1.8 Billion)</p>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <h4 style="color: #fff; margin-bottom: 10px;">Heroes & Pet:</h4>
+                        <img src="teams/archdemon_team1.png" style="width: 100%; max-width: 600px; border-radius: 8px; border: 1px solid #4a148c;" alt="Team 1 Heroes">
+                    </div>
+
+                    <div>
+                        <h4 style="color: #fff; margin-bottom: 10px;">Talisman:</h4>
+                        <img src="teams/archdemon_talisman1.png" style="width: 100%; max-width: 300px; border-radius: 8px; border: 1px solid #4a148c;" alt="Team 1 Talisman">
+                    </div>
+                </div>
+                `
+            },
             'event-teams': { 
                 title: 'Event Teams - EVA Chapters', 
                 img: 'event-teams.jpg', 
                 content: `
-                <div style="margin-bottom: 30px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 10px; border: 1px dashed #aef649; text-align: center;">
-                    <h3 style="color: #aef649; margin-bottom: 10px;">Chapter 1 - System Error</h3>
-                    <h4 style="color: #ffeb3b; font-size: 1.1rem; font-weight: normal;"><em>Coming soon...</em></h4>
+                                <div style="margin-bottom: 30px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 10px; border: 1px solid #aef649;">
+                    <h3 style="color: #aef649; margin-bottom: 15px;">Chapter 1 - System Error</h3>
+                    <div style="margin-bottom: 15px;">
+                        <h4 style="color: #fff; margin-bottom: 10px;">Heroes & Pet:</h4>
+                        <img src="teams/event_team1.png" style="width: 100%; max-width: 600px; border-radius: 8px; border: 1px solid #4a148c;" alt="Chapter 1 Team">
+                    </div>
+                    <div>
+                        <h4 style="color: #fff; margin-bottom: 10px;">Talisman:</h4>
+                        <img src="teams/event_talisman1.png" style="width: 100%; max-width: 300px; border-radius: 8px; border: 1px solid #4a148c;" alt="Chapter 1 Talisman">
+                    </div>
                 </div>
-                <div style="margin-bottom: 30px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 10px; border: 1px dashed #aef649; text-align: center;">
-                    <h3 style="color: #aef649; margin-bottom: 10px;">Chapter 2 - Another's Will</h3>
-                    <h4 style="color: #ffeb3b; font-size: 1.1rem; font-weight: normal;"><em>Coming soon...</em></h4>
+                                <div style="margin-bottom: 30px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 10px; border: 1px solid #aef649;">
+                    <h3 style="color: #aef649; margin-bottom: 15px;">Chapter 2 - Another's Will</h3>
+                    <div style="margin-bottom: 15px;">
+                        <h4 style="color: #fff; margin-bottom: 10px;">Heroes & Pet:</h4>
+                        <img src="teams/event_team2.png" style="width: 100%; max-width: 600px; border-radius: 8px; border: 1px solid #4a148c;" alt="Chapter 2 Team">
+                    </div>
+                    <div>
+                        <h4 style="color: #fff; margin-bottom: 10px;">Talisman:</h4>
+                        <img src="teams/event_talisman2.png" style="width: 100%; max-width: 300px; border-radius: 8px; border: 1px solid #4a148c;" alt="Chapter 2 Talisman">
+                    </div>
                 </div>
-                <div style="margin-bottom: 30px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 10px; border: 1px dashed #aef649; text-align: center;">
-                    <h3 style="color: #aef649; margin-bottom: 10px;">Chapter 3 - Broken Chain</h3>
-                    <h4 style="color: #ffeb3b; font-size: 1.1rem; font-weight: normal;"><em>Coming soon...</em></h4>
+                                <div style="margin-bottom: 30px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 10px; border: 1px solid #aef649;">
+                    <h3 style="color: #aef649; margin-bottom: 15px;">Chapter 3 - Broken Chain</h3>
+                    <div style="margin-bottom: 15px;">
+                        <h4 style="color: #fff; margin-bottom: 10px;">Heroes & Pet:</h4>
+                        <img src="teams/event_team3.png" style="width: 100%; max-width: 600px; border-radius: 8px; border: 1px solid #4a148c;" alt="Chapter 3 Team">
+                    </div>
+                    <div>
+                        <h4 style="color: #fff; margin-bottom: 10px;">Talisman:</h4>
+                        <img src="teams/event_talisman3.png" style="width: 100%; max-width: 300px; border-radius: 8px; border: 1px solid #4a148c;" alt="Chapter 3 Talisman">
+                    </div>
                 </div>
                 <div style="margin-bottom: 30px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 10px; border: 1px dashed #aef649; text-align: center;">
                     <h3 style="color: #aef649; margin-bottom: 10px;">Chapter 4 - Beyond the Program</h3>
