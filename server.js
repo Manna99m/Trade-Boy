@@ -11,6 +11,35 @@ const PORT = process.env.PORT || 3000;
 const USERS_FILE = path.join(__dirname, 'users.json');
 
 app.use(express.json());
+
+// Dynamic OG tags for /post
+const POST_DATA = {
+    'archdemon-teams': { title: 'Best Team for Archdemon', img: 'archdemon-teams.jpg' },
+    'event-teams': { title: 'Event Teams - EVA Chapters', img: 'event-teams.jpg' },
+    'team-build': { title: 'Team Build', img: 'team-build.jpg' },
+    'heroes': { title: 'Heroes Tier List', img: 'heroes.jpg' },
+    'titans': { title: 'Titans Guide', img: 'titans.jpg' },
+    'maestro-teams': { title: 'Best Team for Maestro', img: 'maestro-teams.jpg' },
+    'osh-teams': { title: 'Osh Teams', img: 'osh-teams.png' }
+};
+
+app.get('/post', (req, res, next) => {
+    const id = req.query.id;
+    if (id && POST_DATA[id]) {
+        const filePath = path.join(__dirname, 'public', 'post.html');
+        fs.readFile(filePath, 'utf8', (err, data) => {
+            if (err) return next();
+            const title = POST_DATA[id].title + ' - Trade Boy';
+            const img = 'https://trade-boy.onrender.com/' + POST_DATA[id].img;
+            let html = data.replace(/content="Trade Boy - Hero Wars Guide"/g, 'content="' + title + '"');
+            html = html.replace(/content="https:\/\/trade-boy\.onrender\.com\/logo\.jpg"/g, 'content="' + img + '"');
+            res.send(html);
+        });
+    } else {
+        next();
+    }
+});
+
 app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] }));
 
 // Initialize users.json if it doesn't exist
