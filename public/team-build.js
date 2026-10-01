@@ -14,7 +14,7 @@ const heroes = [
 ];
 
 const pets = [
-    "Albus.png", "Axel.png", "Biscuit.png", "Cain.png", "Fenris.png", "Khorus.png", "Mara.png", "Merlin.png", "Oliver.png", "Vex.png"
+    "Albus.png", "Axel.png", "Biscuit.png", "Cain.png", "Fenris.png", "Khorus.png", "Mara.png", "Merlin.png", "Oliver.png", "Vex.png", "Robin.png"
 ];
 
 // Sort alphabetically regardless of case
@@ -44,11 +44,322 @@ closeModalBtn.addEventListener('click', () => {
     modalTargetHero = null;
 });
 
+const patronRules = {
+    "Albus.png": [
+        "Augustus.png",
+        "Aidan.png",
+        "Arachne.png",
+        "Dare Devil.png",
+        "corvus.png",
+        "Chabba.png",
+        "Cleaver.png",
+        "Galahad.png",
+        "Heidi.png",
+        "Iris.png",
+        "Jhu.png",
+        "Kayla.png",
+        "Keira.png",
+        "Lian.png",
+        "Maya.png",
+        "Sebastian.png",
+        "Phobos.png",
+        "Rufus.png",
+        "Quing Mao.png",
+        "yasmine.png"
+    ],
+    "Axel.png": [
+        "Augustus.png",
+        "Astaroth.png",
+        "Arachne.png",
+        "Amira.png",
+        "byrna.webp",
+        "Aurora.png",
+        "Cascade.png",
+        "Celeste.png",
+        "Cornelious.png",
+        "Electra.png",
+        "Dorian.png",
+        "fluffy.webp",
+        "Faceless.png",
+        "Folio.png",
+        "Heidi.png",
+        "Helios.png",
+        "Guus.png",
+        "isaac.png",
+        "Jet.png",
+        "Judge.png",
+        "Lars.png",
+        "Jordgen.png",
+        "Kai.png",
+        "Julias.png",
+        "Krista.png",
+        "Mojo.png",
+        "Lian.png",
+        "Martha.png",
+        "Mushy and Shroom.png",
+        "Maya.png",
+        "Markus.png",
+        "morrigan.png",
+        "Phobos.png",
+        "Satori.png",
+        "Rufus.png",
+        "Orion.png",
+        "Peppy.png",
+        "somna.webp",
+        "Thea.png"
+    ],
+    "Biscuit.png": [
+        "adam.webp",
+        "Augustus.png",
+        "Astaroth.png",
+        "Amira.png",
+        "byrna.webp",
+        "corvus.png",
+        "Aurora.png",
+        "Cascade.png",
+        "Celeste.png",
+        "Chabba.png",
+        "Cornelious.png",
+        "Cleaver.png",
+        "Electra.png",
+        "eva.webp",
+        "fluffy.webp",
+        "Faceless.png",
+        "Folio.png",
+        "Galahad.png",
+        "Heidi.png",
+        "Helios.png",
+        "Iris.png",
+        "Judge.png",
+        "Lars.png",
+        "Kai.png",
+        "Kayla.png",
+        "Julias.png",
+        "Krista.png",
+        "Mojo.png",
+        "Lian.png",
+        "Lilith.png",
+        "Maya.png",
+        "Lyria.png",
+        "Phobos.png",
+        "Satori.png",
+        "Rufus.png",
+        "Orion.png",
+        "Peppy.png",
+        "Polaris.png",
+        "Ninja Turtles.png",
+        "Ziri.png"
+    ],
+    "Cain.png": [
+        "adam.webp",
+        "Dante.png",
+        "Aurora.png",
+        "Elmir.png",
+        "Dark star.png",
+        "Heidi.png",
+        "Jet.png",
+        "Nebula.png",
+        "Quing Mao.png",
+        "yasmine.png"
+    ],
+    "Fenris.png": [
+        "adam.webp",
+        "Astrid.png",
+        "Artemis.png",
+        "Andvari.png",
+        "Dare Devil.png",
+        "Dante.png",
+        "Chabba.png",
+        "Cleaver.png",
+        "Fox.png",
+        "Elmir.png",
+        "eva.webp",
+        "Dark star.png",
+        "Galahad.png",
+        "Guus.png",
+        "Ginger.png",
+        "Ishmael.png",
+        "Jhu.png",
+        "Lara Croft.png",
+        "Karkh.png",
+        "Keira.png",
+        "Lyria.png",
+        "Sebastian.png",
+        "Ninja Turtles.png",
+        "Quing Mao.png",
+        "yasmine.png",
+        "somna.webp",
+        "Ziri.png",
+        "Tristan.png"
+    ],
+    "Khorus.png": [
+        "Augustus.png",
+        "Aidan.png",
+        "byrna.webp",
+        "Cascade.png",
+        "Celeste.png",
+        "fluffy.webp",
+        "Faceless.png",
+        "Folio.png",
+        "Helios.png",
+        "Guus.png",
+        "Judge.png",
+        "Lars.png",
+        "Kai.png",
+        "Krista.png",
+        "Mojo.png",
+        "Lian.png",
+        "Lilith.png",
+        "Phobos.png",
+        "Satori.png",
+        "Orion.png",
+        "Peppy.png",
+        "Polaris.png"
+    ],
+    "Mara.png": [
+        "Astrid.png",
+        "Andvari.png",
+        "Arachne.png",
+        "Dare Devil.png",
+        "Fox.png",
+        "Fafnir.png",
+        "Dark star.png",
+        "Faceless.png",
+        "isaac.png",
+        "Ishmael.png",
+        "Judge.png",
+        "Lars.png",
+        "Lara Croft.png",
+        "Karkh.png",
+        "Mojo.png",
+        "Lian.png",
+        "Lilith.png",
+        "Orion.png",
+        "Peppy.png",
+        "Polaris.png",
+        "Thea.png"
+    ],
+    "Merlin.png": [
+        "Augustus.png",
+        "Aidan.png",
+        "byrna.webp",
+        "Aurora.png",
+        "Cascade.png",
+        "Celeste.png",
+        "Electra.png",
+        "Dorian.png",
+        "fluffy.webp",
+        "Faceless.png",
+        "Folio.png",
+        "Helios.png",
+        "Lars.png",
+        "Kai.png",
+        "Krista.png",
+        "Mojo.png",
+        "Lilith.png",
+        "Markus.png",
+        "Phobos.png",
+        "Satori.png",
+        "Orion.png",
+        "Peppy.png",
+        "Thea.png"
+    ],
+    "Oliver.png": [
+        "Astaroth.png",
+        "Andvari.png",
+        "Amira.png",
+        "corvus.png",
+        "Aurora.png",
+        "Chabba.png",
+        "Cornelious.png",
+        "Cleaver.png",
+        "Fafnir.png",
+        "Electra.png",
+        "Galahad.png",
+        "Guus.png",
+        "Iris.png",
+        "isaac.png",
+        "Ishmael.png",
+        "Jet.png",
+        "Judge.png",
+        "Jordgen.png",
+        "Julias.png",
+        "Lilith.png",
+        "Martha.png",
+        "Mushy and Shroom.png",
+        "Markus.png",
+        "Lyria.png",
+        "morrigan.png",
+        "Sebastian.png",
+        "Rufus.png",
+        "Ninja Turtles.png",
+        "somna.webp",
+        "Ziri.png"
+    ],
+    "Robin.png": [
+        "Astaroth.png",
+        "Andvari.png",
+        "Amira.png",
+        "Dare Devil.png",
+        "byrna.webp",
+        "Cornelious.png",
+        "Fox.png",
+        "Fafnir.png",
+        "Dorian.png",
+        "Dark star.png",
+        "Faceless.png",
+        "Folio.png",
+        "Guus.png",
+        "Ginger.png",
+        "Jet.png",
+        "Judge.png",
+        "Mojo.png",
+        "Lian.png",
+        "Lilith.png",
+        "Martha.png",
+        "Maya.png",
+        "Markus.png",
+        "morrigan.png",
+        "Phobos.png",
+        "Satori.png",
+        "Peppy.png",
+        "Nebula.png",
+        "somna.webp",
+        "Thea.png"
+    ],
+    "Vex.png": [
+        "adam.webp",
+        "Astrid.png",
+        "Artemis.png",
+        "Dare Devil.png",
+        "Fox.png",
+        "Elmir.png",
+        "eva.webp",
+        "Dark star.png",
+        "Ginger.png",
+        "Jhu.png",
+        "Lara Croft.png",
+        "Karkh.png",
+        "Keira.png"
+    ]
+};
+
 function openPetModal(heroImg) {
     modalTargetHero = heroImg;
     petModalGrid.innerHTML = '';
     
-    pets.forEach(pet => {
+    // Filter pets based on rules
+    const allowedPets = pets.filter(pet => {
+        const rules = patronRules[pet];
+        if (!rules || rules.length === 0) return true; // No restrictions defined
+        return rules.includes(heroImg);
+    });
+
+    if (allowedPets.length === 0) {
+        petModalGrid.innerHTML = '<div style="color: white; padding: 20px; text-align: center; width: 100%;">No pets can patron this hero.</div>';
+    }
+
+    allowedPets.forEach(pet => {
         const item = document.createElement('div');
         item.className = 'pet-list-item';
         
@@ -214,10 +525,12 @@ function updateBottomBar() {
             badge.className = 'patron-badge';
             if (patronPets[hero]) {
                 const badgeImg = document.createElement('img');
-                badgeImg.src = `pets/${patronPets[hero]}`;
+                badgeImg.src = `patrons/${patronPets[hero]}`;
                 badge.appendChild(badgeImg);
+                badge.classList.add('has-patron');
             } else {
                 badge.innerHTML = '<span>+</span>';
+                badge.classList.remove('has-patron');
             }
             
             badge.addEventListener('click', (e) => {
