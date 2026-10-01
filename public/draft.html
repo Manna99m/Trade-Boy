@@ -54,7 +54,6 @@
                     <div class="lang-option" onclick="selectLanguage(this, 'TH')">TH - ภาษาไทย</div>
                 </div>
             </div>
-            
             <div class="profile-container" style="margin-left: 10px;">
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <img src="" id="user-avatar" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #aef649; display: none;">
@@ -64,22 +63,18 @@
             </div>
         </div>
     </nav>
-
     <main class="main-content" style="max-width: 900px; text-align: center;">
         <div style="text-align: left; margin-bottom: 20px;">
             <a href="/" class="action-btn" data-i18n="back_to_home">&larr; Back to Home</a>
         </div>
-        
         <!-- LOBBY SCREEN -->
         <div id="lobby-screen">
             <h1 class="page-title" data-i18n="draft_title">Draft Battle Mode</h1>
             <p style="color: #ffffff; font-size: 1.1rem; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); margin-bottom: 30px;" data-i18n="draft_desc">Queue up to draft 5 Heroes and 1 Pet against an opponent!</p>
-            
             <div style="display: flex; gap: 20px; justify-content: center; margin-bottom: 30px;">
                 <button class="action-btn" id="btn-random" data-i18n="join_random">Join Random Match</button>
                 <button class="action-btn" id="btn-create" data-i18n="create_custom">Create Custom Match</button>
             </div>
-            
             <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
                 <p style="color: #ffffff; font-weight: bold; margin-bottom: 15px;" data-i18n="join_existing">Or join an existing custom match:</p>
                 <div style="display: flex; gap: 10px; justify-content: center; align-items: center;">
@@ -93,7 +88,6 @@
                 <button id="btn-cancel-matchmaking" class="nav-icon-btn" style="background: rgba(255,82,82,0.8); border: 2px solid #ff5252; color: #fff; padding: 8px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: all 0.2s; margin: 0 auto; display: block;" onmouseover="this.style.background='#ff5252'; this.style.transform='scale(1.05)'" onmouseout="this.style.background='rgba(255,82,82,0.8)'; this.style.transform='scale(1)'">Cancel Matchmaking</button>
             </div>
         </div>
-
         <!-- DRAFTING SCREEN -->
         <div id="draft-screen" style="display: none;">
             <!-- Opponent Team (Top Center, Small) -->
@@ -110,7 +104,6 @@
                     <div class="draft-slot">?</div>
                     <div class="draft-slot">?</div>
                 </div>
-                
                 <div id="opponent-cards-container" class="draft-cards-container" style="transform: scale(0.6); margin-top: -10px; margin-bottom: 20px; display: none;">
                     <div class="draft-card" style="padding: 10px;">
                         <img id="opp-img-0" src="" alt="Option 1" style="width: 80px; height: 80px;">
@@ -120,7 +113,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- Your Team (Center, Normal Size) -->
             <div style="text-align: center; margin-bottom: 30px;">
                 <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px;">
@@ -137,13 +129,11 @@
                 </div>
             </div>
             <h2 id="draft-title" style="margin-bottom: 20px; text-shadow: 1px 1px 3px rgba(0,0,0,0.8);">Choose a <span id="draft-type">Hero</span>!</h2>
-            
             <div class="timer-container" id="timer-container">
                 <div class="timer-bar" id="timer-bar"></div>
                 <span id="timer-text">30s</span>
             </div>
             <p style="color: #ffffff; font-size: 1.1rem; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); margin-bottom: 30px;">The option you don't pick will be given to <span id="opponent-name" style="color: #fef08a;">your opponent</span>.</p>
-            
             <div class="draft-cards-container">
                 <div class="draft-card" id="card-0">
                     <img id="img-0" src="" alt="Option 1">
@@ -154,14 +144,11 @@
                     <button class="select-btn" onclick="selectCard(1)" data-i18n="select">Select</button>
                 </div>
             </div>
-            
             <p id="draft-waiting" style="display: none; margin-top: 30px; color: #d8b4fe; font-size: 1.2rem; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.8);" data-i18n="waiting_opponent">Waiting for opponent to finish drafting...</p>
         </div>
-
         <!-- RESULTS SCREEN -->
         <div id="results-screen" style="display: none; padding-bottom: 50px;">
             <h1 class="page-title" data-i18n="draft_complete">Draft Complete!</h1>
-            
             <div class="results-container">
                 <div class="team-result" id="my-final-team">
                     <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 20px;">
@@ -170,7 +157,6 @@
                     </div>
                     <div class="team-grid" id="my-team-grid"></div>
                 </div>
-                
                 <div class="team-result" id="opponent-final-team">
                     <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 20px;">
                         <img id="opponent-final-avatar" src="" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 3px solid #ef4444; display: none;">
@@ -179,7 +165,6 @@
                     <div class="team-grid" id="opponent-team-grid"></div>
                 </div>
             </div>
-            
             <div style="margin-top: 50px; background: rgba(0,0,0,0.4); padding: 30px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1);">
                 <h2 style="color: #aef649; margin-bottom: 15px; font-size: 1.5rem;" data-i18n="draft_finished_msg">Draft is finished, now open Hero Wars,</h2>
                 <h3 style="color: #fff; margin-bottom: 25px; font-weight: normal;" data-i18n="run_friendly_battle">and, Run your friendly Battle:</h3>
@@ -188,14 +173,11 @@
                     <a href="https://herowars.me/TradeBoy_FB" target="_blank" class="action-btn" style="text-decoration: none; display: inline-block; background: linear-gradient(to bottom, #3b82f6 0%, #1d4ed8 100%); border-color: #1e3a8a; box-shadow: inset 0px 3px 0px 0px #60a5fa, inset 0px -2px 0px 0px rgba(0,0,0,0.2), 0px 4px 6px rgba(0,0,0,0.5);" data-i18n="facebook">Open on Facebook</a>
                 </div>
             </div>
-            
             <div style="margin-top: 40px;">
                 <a href="draft.html" class="action-btn" style="text-decoration: none; display: inline-block; background: #555; box-shadow: none; border-color: #333;" data-i18n="play_again">Play Again</a>
             </div>
         </div>
-
     </main>
-
     <script src="draft.js"></script>
 </body>
 </html>

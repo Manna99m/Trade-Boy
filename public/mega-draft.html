@@ -55,7 +55,6 @@
                     <div class="lang-option" onclick="selectLanguage(this, 'TH')">TH - ภาษาไทย</div>
                 </div>
             </div>
-            
             <div class="profile-container" style="margin-left: 10px;">
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <img src="" id="user-avatar" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #aef649; display: none;">
@@ -65,12 +64,10 @@
             </div>
         </div>
     </nav>
-
     <main class="main-content" style="max-width: 900px; text-align: center;">
         <div style="text-align: left; margin-bottom: 10px;">
             <a href="/" class="action-btn" data-i18n="back_to_home">&larr; Back to Home</a>
         </div>
-
         <!-- LOBBY SCREEN -->
         <div id="lobby-screen">
             <h1 class="page-title" data-i18n="mega_draft_title" style="margin-bottom: 5px;">Mega Draft Battle</h1>
@@ -79,7 +76,6 @@
                 <button class="action-btn" id="btn-random" data-i18n="join_random">Join Random Match</button>
                 <button class="action-btn" id="btn-create" data-i18n="create_custom">Create Custom Match</button>
             </div>
-            
             <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
                 <p style="color: white; font-weight: bold; margin-bottom: 15px;" data-i18n="join_existing">Or join an existing custom match:</p>
                 <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
@@ -87,18 +83,15 @@
                     <button class="action-btn" id="btn-join" data-i18n="join">Join</button>
                 </div>
             </div>
-
             <p id="lobby-status" style="margin-top: 20px; color: #d8b4fe; font-size: 1.2rem; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.8);"></p>
             <div id="matchmaking-controls" style="display: none; margin-top: 15px;">
                 <p id="matchmaking-timer" style="color: #aef649; font-size: 1.5rem; font-weight: bold; font-family: monospace; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); margin-bottom: 15px;">00:00</p>
                 <button id="btn-cancel-matchmaking" class="nav-icon-btn" style="background: rgba(255,82,82,0.8); border: 2px solid #ff5252; color: #fff; padding: 8px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: all 0.2s; margin: 0 auto; display: block;" onmouseover="this.style.background='#ff5252'; this.style.transform='scale(1.05)'" onmouseout="this.style.background='rgba(255,82,82,0.8)'; this.style.transform='scale(1)'">Cancel Matchmaking</button>
             </div>
         </div>
-
         <!-- DRAFTING SCREEN -->
         <div id="draft-screen" class="draft-container" style="display: none;">
             <div class="draft-header" style="display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; width: 100%;">
-                
                 <!-- Opponent Team (Top Center, Small) -->
                 <div class="team-section" style="text-align: center; margin-bottom: 10px; width: 100%;">
                     <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px;">
@@ -109,18 +102,15 @@
                         <!-- opponent picks -->
                     </div>
                 </div>
-
                 <!-- Status / Turn Indicator -->
                 <div class="draft-status" style="padding: 10px 0; text-align: center; width: 100%;">
                     <h2 id="turn-indicator" style="margin-bottom: 5px; color: #fef08a; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); font-size: 1.5rem;" data-i18n="your_turn">Your Turn!</h2>
                     <h3 id="picks-left" style="color: #60a5fa; margin-bottom: 10px; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); font-size: 1.1rem;">Picks left: 1</h3>
-                    
                     <div class="timer-container" id="timer-container" style="display: none; margin: 0 auto;">
                         <div class="timer-bar" id="timer-bar"></div>
                         <span id="timer-text">30s</span>
                     </div>
                 </div>
-
                 <!-- Your Team (Center, Normal Size) -->
                 <div class="team-section" style="text-align: center; margin-top: 10px; margin-bottom: 20px; width: 100%;">
                     <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px;">
@@ -132,20 +122,16 @@
                     </div>
                 </div>
             </div>
-            
             <div class="pool-container">
                 <h3 style="text-align: left; margin-bottom: 15px;" data-i18n="available_heroes">Available Heroes</h3>
                 <div class="pool-grid" id="heroes-pool"></div>
-                
                 <h3 style="text-align: left; margin-top: 30px; margin-bottom: 15px;" data-i18n="available_pets">Available Pets</h3>
                 <div class="pool-grid" id="pets-pool"></div>
             </div>
         </div>
-
         <!-- RESULTS SCREEN -->
         <div id="results-screen" style="display: none; padding-bottom: 10px;">
             <h1 class="page-title" data-i18n="mega_draft_complete" style="margin-bottom: 15px; font-size: 2.2rem;">Mega Draft Complete!</h1>
-            
             <div class="results-container" style="margin-top: 10px;">
                 <div class="team-result" id="my-final-team">
                     <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 20px;">
@@ -154,7 +140,6 @@
                     </div>
                     <div class="team-grid" id="my-team-grid"></div>
                 </div>
-                
                 <div class="team-result" id="opponent-final-team">
                     <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 20px;">
                         <img id="opponent-final-avatar" src="" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 3px solid #ef4444; display: none;">
@@ -163,7 +148,6 @@
                     <div class="team-grid" id="opponent-team-grid"></div>
                 </div>
             </div>
-            
             <div style="margin-top: 20px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1);">
                 <h2 style="color: #aef649; margin-bottom: 10px; font-size: 1.3rem;" data-i18n="draft_finished_msg">Draft is finished, now open Hero Wars,</h2>
                 <h3 style="color: #fff; margin-bottom: 15px; font-weight: normal; font-size: 1.1rem;" data-i18n="run_friendly_battle">and, Run your friendly Battle:</h3>
@@ -172,14 +156,11 @@
                     <a href="https://herowars.me/TradeBoy_FB" target="_blank" class="action-btn" style="text-decoration: none; display: inline-block; background: linear-gradient(to bottom, #3b82f6 0%, #1d4ed8 100%); border-color: #1e3a8a; box-shadow: inset 0px 3px 0px 0px #60a5fa, inset 0px -2px 0px 0px rgba(0,0,0,0.2), 0px 4px 6px rgba(0,0,0,0.5); padding: 8px 20px;" data-i18n="facebook">Open on Facebook</a>
                 </div>
             </div>
-            
             <div style="text-align: center; margin-top: 20px;">
                 <button class="action-btn" onclick="location.reload()" style="display: inline-block; background: #555; box-shadow: none; border-color: #333;" data-i18n="play_again">Play Again</button>
             </div>
         </div>
-
     </main>
-
     <script src="mega-draft.js"></script>
 </body>
 </html>
