@@ -21,7 +21,86 @@ const pets = [
 heroes.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
 pets.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
 
+
 let currentTab = 'heroes'; // 'heroes' or 'pets'
+const HERO_POSITIONS = {
+  "adam.webp": 47,
+  "Aidan.png": 58,
+  "Amira.png": 35,
+  "Andvari.png": 19,
+  "Arachne.png": 27,
+  "Artemis.png": 65,
+  "Astaroth.png": 10,
+  "Astrid.png": 57,
+  "Augustus.png": 56,
+  "Aurora.png": 2,
+  "Avalon.png": 25,
+  "byrna.webp": 42,
+  "Cascade.png": 45,
+  "Celeste.png": 34,
+  "Chabba.png": 1,
+  "Cleaver.png": 3,
+  "Cornelious.png": 60,
+  "corvus.png": 5,
+  "Dante.png": 29,
+  "Dare Devil.png": 52,
+  "Dark star.png": 54,
+  "Dorian.png": 66,
+  "Electra.png": 4,
+  "Elmir.png": 21,
+  "eva.webp": 67,
+  "Faceless.png": 61,
+  "Fafnir.png": 72,
+  "fluffy.webp": 46,
+  "Folio.png": 49,
+  "Fox.png": 62,
+  "Galahad.png": 12,
+  "Ginger.png": 50,
+  "Guus.png": 28,
+  "Heidi.png": 43,
+  "Helios.png": 73,
+  "Iris.png": 59,
+  "isaac.png": 37,
+  "Ishmael.png": 16,
+  "Jet.png": 70,
+  "Jhu.png": 38,
+  "Jordgen.png": 44,
+  "Judge.png": 32,
+  "Julias.png": 9,
+  "Kai.png": 36,
+  "Karkh.png": 17,
+  "Kayla.png": 13,
+  "Keira.png": 31,
+  "Krista.png": 30,
+  "Lara Croft.png": 53,
+  "Lars.png": 55,
+  "Lian.png": 63,
+  "Lilith.png": 74,
+  "Lyria.png": 14,
+  "Markus.png": 18,
+  "Martha.png": 75,
+  "Maya.png": 26,
+  "Mojo.png": 41,
+  "morrigan.png": 33,
+  "Mushy and Shroom.png": 11,
+  "Nebula.png": 39,
+  "Ninja Turtles.png": 22,
+  "Omen.png": 999,
+  "Orion.png": 48,
+  "Peppy.png": 69,
+  "Phobos.png": 64,
+  "Polaris.png": 68,
+  "Quing Mao.png": 23,
+  "Rufus.png": 8,
+  "Satori.png": 24,
+  "Sebastian.png": 40,
+  "somna.webp": 51,
+  "Thea.png": 71,
+  "Tristan.png": 15,
+  "yasmine.png": 20,
+  "Ziri.png": 7
+};
+
 const selectedHeroes = [];
 let selectedPet = null;
 const patronPets = {}; // maps heroImg -> petImg
@@ -467,6 +546,7 @@ function toggleItem(itemImg) {
             // Select if under 5
             if (selectedHeroes.length < 5) {
                 selectedHeroes.push(itemImg);
+                selectedHeroes.sort((a, b) => (HERO_POSITIONS[b] || 0) - (HERO_POSITIONS[a] || 0));
             } else {
                 alert('You can only select up to 5 heroes!');
                 return;
