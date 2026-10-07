@@ -3,62 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terms & Conditions - Trade Boy</title>
+    <title>Terms of Service - Trade Boy</title>
     <link rel="stylesheet" href="home.css">
-    <script src="translations.js"></script>
-    <style>
-        .policy-container {
-            max-width: 800px;
-            margin: 100px auto 40px auto;
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            color: #ddd;
-            line-height: 1.6;
-        }
-        .policy-container h1 {
-            color: #fff;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        .policy-container h2 {
-            color: #3b82f6;
-            margin-top: 30px;
-            margin-bottom: 15px;
-        }
-        .policy-container p {
-            margin-bottom: 15px;
-        }
-        .policy-container ul {
-            margin-bottom: 15px;
-            padding-left: 20px;
-        }
-        .policy-container li {
-            margin-bottom: 8px;
-        }
-        .policy-container a {
-            color: #3b82f6;
-            text-decoration: none;
-        }
-        .policy-container a:hover {
-            text-decoration: underline;
-        }
-    </style>
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7790482039975365" crossorigin="anonymous"></script>
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Trade Boy - Hero Wars Guide" />
-    <meta property="og:description" content="Your ultimate Hero Wars companion for real-time Draft Battles, Team Builds, and Tier Lists." />
-    <meta property="og:image" content="https://trade-boy.onrender.com/logo.jpg" />
-    <meta property="og:url" content="https://trade-boy.onrender.com/" />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content="#aef649" />
+    <style>
+        .legal-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background: rgba(0,0,0,0.7);
+            border-radius: 10px;
+            color: #ddd;
+            line-height: 1.6;
+            font-family: Arial, sans-serif;
+            border: 1px solid #444;
+        }
+        .legal-container h1 { color: #aef649; margin-bottom: 20px; text-align: center; }
+        .legal-container h2 { color: #fff; margin-top: 25px; margin-bottom: 10px; border-bottom: 1px solid #555; padding-bottom: 5px;}
+        .legal-container p { margin-bottom: 15px; }
+        .legal-container ul { margin-left: 20px; margin-bottom: 15px; }
+        .nav-header { text-align: center; margin-top: 20px; }
+        .nav-header a { color: #aef649; text-decoration: none; font-weight: bold; margin: 0 10px; }
+        .nav-header a:hover { text-decoration: underline; }
+    </style>
 </head>
 <body>
+    
     <nav class="top-nav">
-        <a href="/" class="logo-container" style="text-decoration: none;">
+        <a href="index.html" class="logo-container" style="text-decoration: none;">
             <img src="logo.jpg" alt="Trade Boy Logo" class="logo-img">
             <span class="logo" style="display: flex; align-items: center; gap: 8px;">Trade Boy 
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#aef649" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="Home">
@@ -67,119 +40,174 @@
                 </svg>
             </span>
         </a>
+        <div class="search-container">
+            <input type="text" class="search-bar" placeholder="Search guides, heroes, teams..." onkeypress="if(event.key === 'Enter') window.location.href='index.html'">
+        </div>
         <div style="display: flex; align-items: center; gap: 25px;">
             <div class="lang-menu-container" style="position: relative;">
-                <button class="nav-icon-btn" onclick="const m = document.getElementById('lang-dropdown'); m.style.display = m.style.display === 'none' ? 'block' : 'none';" data-i18n="lang_en">
+                <button class="nav-icon-btn" onclick="document.getElementById('lang-dropdown').style.display = document.getElementById('lang-dropdown').style.display === 'none' ? 'block' : 'none';">
                     EN <span style="font-size: 1.2em; margin-top: -2px;">🌐</span>
                 </button>
-                <div id="lang-dropdown" class="lang-dropdown">
-                    <div class="lang-option active" onclick="selectLanguage(this, 'EN')">🇺🇸 English</div>
-                    <div class="lang-option" onclick="selectLanguage(this, 'ID')">🇮🇩 Indonesia</div>
-                    <div class="lang-option" onclick="selectLanguage(this, 'RU')">🇷🇺 Русский</div>
+                <div id="lang-dropdown" class="lang-dropdown" style="display: none;">
+                    <div class="lang-option active">EN - English</div>
                 </div>
             </div>
-            <div id="user-info" style="display: flex; align-items: center; gap: 15px;">
-                <span id="user-display" style="font-weight: bold; color: #aef649;"></span>
-                <img id="user-avatar" src="" alt="Avatar" style="width: 40px; height: 40px; border-radius: 50%; display: none; border: 2px solid #aef649; cursor: pointer;">
-                <button id="logout-btn" class="nav-icon-btn" style="padding: 6px 15px; font-size: 0.8rem;" data-i18n="logout">Logout</button>
+            
+            <div class="profile-container" style="margin-left: 10px;">
+                <div id="profile-btn" style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 5px 10px; border-radius: 20px; transition: background 0.2s;">
+                    <img src="" id="user-avatar" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #aef649; display: none;">
+                    <span id="user-display" style="font-weight: bold;"></span>
+                </div>
+                <button class="logout-btn" id="logout-btn">Logout</button>
             </div>
         </div>
     </nav>
 
-    <main class="main-content">
-        <div class="policy-container">
-            <h1>Terms & Conditions</h1>
-            <p><strong>Last Updated:</strong> September 2026</p>
 
-            <p>Welcome to Trade Boy. By accessing this website, we assume you accept these terms and conditions. Do not continue to use Trade Boy if you do not agree to take all of the terms and conditions stated on this page.</p>
-
-            <h2>1. Copyright & Intellectual Property Disclaimer</h2>
-            <p>Trade Boy is an independent fan website and tool provider created for the community of the game. <strong>This website is NOT associated with Nexters, not sponsored by Nexters, and Nexters is not liable for any content on this site.</strong> All game-related assets, character names, and images belong to their respective copyright holders (Nexters). They are used here under the principles of fair use for educational, strategic, and community-building purposes.</p>
-
-            <h2>2. Use of Website Tools</h2>
-            <p>The tools provided on this website (including but not limited to the Draft Battle and Mega Draft simulators) are provided "as is" and "as available". We do not guarantee that the tools will be completely free of errors, bugs, or downtime.</p>
-
-            <h2>3. User Conduct</h2>
-            <p>By using our community tools, you agree to:
-            <ul>
-                <li>Not use the website in any way that causes, or may cause, damage to the website or impairment of the availability or accessibility of Trade Boy.</li>
-                <li>Not use the website in any way which is unlawful, illegal, fraudulent or harmful.</li>
-                <li>Not engage in any automated data collection activities (including scraping, data mining, data extraction) without express written consent.</li>
-            </ul>
-            </p>
-
-            <h2>4. Advertisements</h2>
-            <p>During use of the Website, you may enter into correspondence with or participate in promotions of advertisers or sponsors showing their goods or services through the Website. Any such activity, and any terms, conditions, warranties or representations associated with such activity, is solely between you and the applicable third-party.</p>
-
-            <h2>5. Modifications</h2>
-            <p>We reserve the right to revise these terms and conditions at any time without prior notice. By using this website, you are agreeing to be bound by the current version of these Terms and Conditions.</p>
-
-            <h2>6. Contact</h2>
-            <p>For any questions or concerns regarding these terms, please reach out to us via our official Discord or YouTube channel.</p>
-        </div>
-    </main>
-
-    
-    
-    <script>
-        document.addEventListener('click', (e) => {
-            const container = document.querySelector('.lang-menu-container');
-            const menu = document.getElementById('lang-dropdown');
-            if (container && menu && !container.contains(e.target)) {
-                menu.style.display = 'none';
-            }
-        });
+    <div class="legal-container">
+        <h1>Terms of Service</h1>
         
-        function selectLanguage(element, langCode) {
-            const btn = element.closest('.lang-menu-container').querySelector('.nav-icon-btn');
-            btn.innerHTML = langCode + ' <span style="font-size: 1.2em; margin-top: -2px;">🌐</span>';
-            const options = element.parentElement.querySelectorAll('.lang-option');
-            options.forEach(opt => opt.classList.remove('active'));
-            element.classList.add('active');
-            localStorage.setItem('selectedLang', langCode);
-            element.parentElement.style.display = 'none';
-            if (window.applyTranslations) window.applyTranslations(langCode);
+<p><strong>Effective Date: October 2026</strong></p>
+<h2>1. Acceptance of Terms</h2>
+<p>By accessing and using Trade Boy (the "Website"), you accept and agree to be bound by the terms and provision of this agreement. In addition, when using this Website's particular services, you shall be subject to any posted guidelines or rules applicable to such services. Any participation in this service will constitute acceptance of this agreement. If you do not agree to abide by the above, please do not use this service.</p>
+
+<h2>2. Description of Service</h2>
+<p>Trade Boy provides users with access to a rich collection of resources related to the game Hero Wars, including but not limited to draft battle tools, team building guides, and tier lists (the "Service"). You understand and agree that the Service is provided "AS-IS" and that Trade Boy assumes no responsibility for the timeliness, deletion, mis-delivery or failure to store any user communications or personalization settings.</p>
+
+<h2>3. User Conduct</h2>
+<p>You agree to use the Website only for lawful purposes. You agree not to take any action that might compromise the security of the Website, render the Website inaccessible to others or otherwise cause damage to the Website or the Content. You agree not to add to, subtract from, or otherwise modify the Content, or to attempt to access any Content that is not intended for you.</p>
+
+<h2>4. Intellectual Property</h2>
+<p>The Website and its original content, features, and functionality are owned by Trade Boy and are protected by international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws. Hero Wars and all associated characters, images, and trademarks are the property of their respective owners (Nexters). Trade Boy is an unofficial fan site and is not affiliated with or endorsed by Nexters.</p>
+
+<h2>5. Advertisements and Links</h2>
+<p>The Website may contain advertisements and links to third-party web sites or services that are not owned or controlled by Trade Boy. Trade Boy has no control over, and assumes no responsibility for, the content, privacy policies, or practices of any third party web sites or services. You further acknowledge and agree that Trade Boy shall not be responsible or liable, directly or indirectly, for any damage or loss caused or alleged to be caused by or in connection with use of or reliance on any such content, goods or services available on or through any such web sites or services.</p>
+
+<h2>6. Disclaimer of Warranties</h2>
+<p>Your use of the Website is at your sole risk. The Website is provided on an "AS IS" and "AS AVAILABLE" basis. The Website is provided without warranties of any kind, whether express or implied, including, but not limited to, implied warranties of merchantability, fitness for a particular purpose, non-infringement or course of performance.</p>
+
+<h2>7. Limitation of Liability</h2>
+<p>In no event shall Trade Boy, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from (i) your access to or use of or inability to access or use the Website; (ii) any conduct or content of any third party on the Website; (iii) any content obtained from the Website; and (iv) unauthorized access, use or alteration of your transmissions or content, whether based on warranty, contract, tort (including negligence) or any other legal theory, whether or not we have been informed of the possibility of such damage.</p>
+
+    </div>
+
+    <!-- Avatar Change Modal -->
+    <div id="avatar-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center;">
+        <div style="background: #1a1a1a; padding: 30px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.2); width: 400px; text-align: center;">
+            <h2 style="color: #fff; margin-bottom: 20px;">Change Avatar</h2>
+            <div id="modal-avatar-grid" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 25px;"></div>
+            <button id="save-avatar-btn" style="padding: 10px 20px; border-radius: 8px; border: none; background: #aef649; color: #000; font-weight: bold; cursor: pointer;">Save</button>
+            <button id="cancel-avatar-btn" style="padding: 10px 20px; border-radius: 8px; border: none; background: #555; color: #fff; font-weight: bold; cursor: pointer; margin-left: 10px;">Cancel</button>
+        </div>
+    </div>
+
+    <footer class="site-footer" style="margin-top: 50px;">
+        <div class="footer-content">
+            <div class="footer-left">
+                <a href="index.html" class="footer-logo-container">
+                    <img src="logo.jpg" alt="Trade Boy Logo" class="footer-logo-img" style="width: 40px; border-radius: 50%;">
+                    <span class="footer-logo-text" style="color: #fff; font-weight: bold; font-size: 1.2rem; margin-left: 10px;">Trade Boy</span>
+                </a>
+                <p class="footer-slogan" style="color: #888; font-size: 0.8rem; margin-top: 5px;">ELEVATE YOUR HERO WARS STRATEGY.</p>
+            </div>
+            
+            <div class="footer-center" style="text-align: center;">
+                <div class="footer-links" style="margin-bottom: 10px;">
+                    <a href="privacy.html" style="color: #888; text-decoration: none; margin: 0 10px;">Privacy Policy</a> | 
+                    <a href="terms.html" style="color: #888; text-decoration: none; margin: 0 10px;">Terms & Conditions</a> | 
+                    <a href="contact.html" style="color: #888; text-decoration: none; margin: 0 10px;">Contact</a> | 
+                    <a href="about.html" style="color: #888; text-decoration: none; margin: 0 10px;">About Us</a>
+                </div>
+                <p class="footer-copyright" style="color: #555; font-size: 0.8rem;">TRADE BOY &copy; 2026 ALL RIGHTS RESERVED</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const user = localStorage.getItem('user');
+        const userAvatarEl = document.getElementById('user-avatar');
+        const profileBtn = document.getElementById('profile-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        
+        if (!user) {
+            profileBtn.style.display = 'none';
+            logoutBtn.textContent = 'Login';
+            logoutBtn.addEventListener('click', () => {
+                window.location.href = 'login.html';
+            });
+        } else {
+            document.getElementById('user-display').textContent = user;
+            
+            const localAvatar = localStorage.getItem('avatar');
+            if (localAvatar) {
+                userAvatarEl.src = 'avatars/' + localAvatar;
+                userAvatarEl.style.display = 'block';
+            }
+            
+            logoutBtn.addEventListener('click', () => {
+                if(confirm('Are you sure you want to logout?')) {
+                    localStorage.removeItem('user');
+                    localStorage.removeItem('avatar');
+                    window.location.href = 'login.html';
+                }
+            });
         }
         
-        document.addEventListener('DOMContentLoaded', () => {
-            const savedLang = localStorage.getItem('selectedLang') || 'EN';
-            const option = Array.from(document.querySelectorAll('.lang-option')).find(o => o.textContent.includes(savedLang));
-            if (option) {
-                selectLanguage(option, savedLang);
-            }
+        // Avatar Modal Logic
+        const avatarModal = document.getElementById('avatar-modal');
+        const modalGrid = document.getElementById('modal-avatar-grid');
+        let newSelectedAvatar = null;
+        
+        profileBtn.addEventListener('click', () => {
+            avatarModal.style.display = 'flex';
+            modalGrid.innerHTML = '';
+            newSelectedAvatar = localStorage.getItem('avatar');
             
-            const user = localStorage.getItem('user');
-            const userAvatarEl = document.getElementById('user-avatar');
-            const logoutBtn = document.getElementById('logout-btn');
-            const profileBtn = document.getElementById('user-avatar');
-            
-            if(!user) {
-                document.getElementById('user-display').textContent = 'Guest';
-                profileBtn.style.display = 'none';
-                logoutBtn.textContent = 'Login';
-                logoutBtn.removeAttribute('data-i18n'); // Remove data-i18n so translations don't override it to 'Logout'
-                logoutBtn.addEventListener('click', () => {
-                    window.location.href = '/login';
-                });
-            } else {
-                document.getElementById('user-display').textContent = user;
+            for(let i=1; i<=10; i++) {
+                const img = document.createElement('img');
+                img.src = `avatars/avatar${i}.jpg`;
+                img.style.width = '60px';
+                img.style.height = '60px';
+                img.style.borderRadius = '50%';
+                img.style.cursor = 'pointer';
+                img.style.objectFit = 'cover';
+                img.style.border = `3px solid ${newSelectedAvatar === 'avatar'+i+'.jpg' ? '#aef649' : 'transparent'}`;
                 
-                const localAvatar = localStorage.getItem('avatar');
-                if (localAvatar) {
-                    userAvatarEl.src = 'avatars/' + localAvatar;
-                    userAvatarEl.style.display = 'block';
-                }
-                
-                logoutBtn.addEventListener('click', () => {
-                    if(confirm('Are you sure you want to logout?')) {
-                        localStorage.removeItem('user');
-                        localStorage.removeItem('avatar');
-                        window.location.href = '/login';
-                    }
+                img.addEventListener('click', () => {
+                    Array.from(modalGrid.children).forEach(el => el.style.border = '3px solid transparent');
+                    img.style.border = '3px solid #aef649';
+                    newSelectedAvatar = `avatar${i}.jpg`;
                 });
+                modalGrid.appendChild(img);
             }
         });
+        
+        document.getElementById('cancel-avatar-btn').addEventListener('click', () => {
+            avatarModal.style.display = 'none';
+        });
+        
+        document.getElementById('save-avatar-btn').addEventListener('click', async () => {
+            if(!newSelectedAvatar) return;
+            try {
+                await fetch('/api/user/avatar', {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({username: user, avatar: newSelectedAvatar})
+                });
+                localStorage.setItem('avatar', newSelectedAvatar);
+                userAvatarEl.src = 'avatars/' + newSelectedAvatar;
+                avatarModal.style.display = 'none';
+            } catch(e) {
+                // If API fails, just update local for now
+                localStorage.setItem('avatar', newSelectedAvatar);
+                userAvatarEl.src = 'avatars/' + newSelectedAvatar;
+                avatarModal.style.display = 'none';
+            }
+        });
+
+        profileBtn.addEventListener('mouseover', () => profileBtn.style.background = 'rgba(255,255,255,0.1)');
+        profileBtn.addEventListener('mouseout', () => profileBtn.style.background = 'transparent');
     </script>
-<script src="hero-framer.js"></script>
 </body>
+
 </html>

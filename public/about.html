@@ -5,56 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us - Trade Boy</title>
     <link rel="stylesheet" href="home.css">
-    <script src="translations.js"></script>
-    <style>
-        .policy-container {
-            max-width: 800px;
-            margin: 100px auto 40px auto;
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            color: #ddd;
-            line-height: 1.6;
-            text-align: center;
-        }
-        .policy-container h1 {
-            color: #fff;
-            margin-bottom: 20px;
-        }
-        .policy-container h2 {
-            color: #aef649;
-            margin-top: 30px;
-            margin-bottom: 15px;
-        }
-        .policy-container p {
-            margin-bottom: 20px;
-            font-size: 1.1rem;
-        }
-        .about-logo {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            margin: 0 auto 20px auto;
-            display: block;
-            border: 3px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-        }
-    </style>
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7790482039975365" crossorigin="anonymous"></script>
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Trade Boy - Hero Wars Guide" />
-    <meta property="og:description" content="Your ultimate Hero Wars companion for real-time Draft Battles, Team Builds, and Tier Lists." />
-    <meta property="og:image" content="https://trade-boy.onrender.com/logo.jpg" />
-    <meta property="og:url" content="https://trade-boy.onrender.com/" />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content="#aef649" />
+    <style>
+        .legal-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background: rgba(0,0,0,0.7);
+            border-radius: 10px;
+            color: #ddd;
+            line-height: 1.6;
+            font-family: Arial, sans-serif;
+            border: 1px solid #444;
+        }
+        .legal-container h1 { color: #aef649; margin-bottom: 20px; text-align: center; }
+        .legal-container h2 { color: #fff; margin-top: 25px; margin-bottom: 10px; border-bottom: 1px solid #555; padding-bottom: 5px;}
+        .legal-container p { margin-bottom: 15px; }
+        .legal-container ul { margin-left: 20px; margin-bottom: 15px; }
+        .nav-header { text-align: center; margin-top: 20px; }
+        .nav-header a { color: #aef649; text-decoration: none; font-weight: bold; margin: 0 10px; }
+        .nav-header a:hover { text-decoration: underline; }
+    </style>
 </head>
 <body>
+    
     <nav class="top-nav">
-        <a href="/" class="logo-container" style="text-decoration: none;">
+        <a href="index.html" class="logo-container" style="text-decoration: none;">
             <img src="logo.jpg" alt="Trade Boy Logo" class="logo-img">
             <span class="logo" style="display: flex; align-items: center; gap: 8px;">Trade Boy 
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#aef649" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="Home">
@@ -63,104 +40,174 @@
                 </svg>
             </span>
         </a>
+        <div class="search-container">
+            <input type="text" class="search-bar" placeholder="Search guides, heroes, teams..." onkeypress="if(event.key === 'Enter') window.location.href='index.html'">
+        </div>
         <div style="display: flex; align-items: center; gap: 25px;">
             <div class="lang-menu-container" style="position: relative;">
-                <button class="nav-icon-btn" onclick="const m = document.getElementById('lang-dropdown'); m.style.display = m.style.display === 'none' ? 'block' : 'none';" data-i18n="lang_en">
+                <button class="nav-icon-btn" onclick="document.getElementById('lang-dropdown').style.display = document.getElementById('lang-dropdown').style.display === 'none' ? 'block' : 'none';">
                     EN <span style="font-size: 1.2em; margin-top: -2px;">🌐</span>
                 </button>
-                <div id="lang-dropdown" class="lang-dropdown">
-                    <div class="lang-option active" onclick="selectLanguage(this, 'EN')">🇺🇸 English</div>
-                    <div class="lang-option" onclick="selectLanguage(this, 'ID')">🇮🇩 Indonesia</div>
-                    <div class="lang-option" onclick="selectLanguage(this, 'RU')">🇷🇺 Русский</div>
+                <div id="lang-dropdown" class="lang-dropdown" style="display: none;">
+                    <div class="lang-option active">EN - English</div>
                 </div>
             </div>
-            <div id="user-info" style="display: flex; align-items: center; gap: 15px;">
-                <span id="user-display" style="font-weight: bold; color: #aef649;"></span>
-                <img id="user-avatar" src="" alt="Avatar" style="width: 40px; height: 40px; border-radius: 50%; display: none; border: 2px solid #aef649; cursor: pointer;">
-                <button id="logout-btn" class="nav-icon-btn" style="padding: 6px 15px; font-size: 0.8rem;" data-i18n="logout">Logout</button>
+            
+            <div class="profile-container" style="margin-left: 10px;">
+                <div id="profile-btn" style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 5px 10px; border-radius: 20px; transition: background 0.2s;">
+                    <img src="" id="user-avatar" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #aef649; display: none;">
+                    <span id="user-display" style="font-weight: bold;"></span>
+                </div>
+                <button class="logout-btn" id="logout-btn">Logout</button>
             </div>
         </div>
     </nav>
 
-    <main class="main-content">
-        <div class="policy-container">
-            <img src="logo.jpg" alt="Trade Boy Logo" class="about-logo">
-            <h1>About Trade Boy</h1>
-            
-            <p>Welcome to <strong>Trade Boy</strong>, your ultimate destination for everything Hero Wars!</p>
-            
-            <h2>Who We Are</h2>
-            <p>Created by a passionate veteran of the game (<strong>tradeboy_yt</strong>), this website was born out of a desire to build a central hub where the community could access top-tier strategies, team synergies, and advanced tools completely free of charge.</p>
-            
-            <h2>Our Mission</h2>
-            <p>Our mission is simple: to help you elevate your Hero Wars strategy. Whether you're trying to crush the Archdemon, dominate in the Arena, or master the complex mechanics of Mega Drafts, Trade Boy is here to provide the insights and simulators you need to build the ultimate team.</p>
-            
-            <h2>Join the Community</h2>
-            <p>We are constantly expanding our guides and tools based on community feedback. Be sure to check out our YouTube channel for in-depth video guides, follow our Facebook page for updates, and join our Discord to talk strategy with fellow legends!</p>
-        </div>
-    </main>
 
-    
-    
-    <script>
-        document.addEventListener('click', (e) => {
-            const container = document.querySelector('.lang-menu-container');
-            const menu = document.getElementById('lang-dropdown');
-            if (container && menu && !container.contains(e.target)) {
-                menu.style.display = 'none';
-            }
-        });
+    <div class="legal-container">
+        <h1>About Us</h1>
         
-        function selectLanguage(element, langCode) {
-            const btn = element.closest('.lang-menu-container').querySelector('.nav-icon-btn');
-            btn.innerHTML = langCode + ' <span style="font-size: 1.2em; margin-top: -2px;">🌐</span>';
-            const options = element.parentElement.querySelectorAll('.lang-option');
-            options.forEach(opt => opt.classList.remove('active'));
-            element.classList.add('active');
-            localStorage.setItem('selectedLang', langCode);
-            element.parentElement.style.display = 'none';
-            if (window.applyTranslations) window.applyTranslations(langCode);
+<p>Welcome to <strong>Trade Boy</strong>, your ultimate companion and strategy hub for the popular mobile and web game, Hero Wars.</p>
+
+<h2>Our Mission</h2>
+<p>Our mission is simple: to provide the Hero Wars community with the most accurate, up-to-date, and powerful tools available. Whether you are a brand new player trying to figure out which Titans to level up, or a veteran Guild Master optimizing your Guild War defense lines, Trade Boy is designed to give you the competitive edge.</p>
+
+<h2>What We Offer</h2>
+<p>Trade Boy is a comprehensive suite of utilities tailored specifically for the complex mechanics of Hero Wars. We offer:</p>
+<ul>
+    <li><strong>Interactive Draft Battles:</strong> Practice and perfect your drafting strategies against opponents in simulated environments.</li>
+    <li><strong>Advanced Team Builders:</strong> Analyze synergies, counters, and overall team power before committing your valuable in-game resources.</li>
+    <li><strong>Comprehensive Tier Lists:</strong> Stay ahead of the meta with constantly updated rankings for Heroes and Titans.</li>
+    <li><strong>Detailed Strategy Guides:</strong> Learn how to tackle the toughest event bosses, such as the Archdemon or OSH, with optimal team compositions.</li>
+</ul>
+
+<h2>The Story Behind Trade Boy</h2>
+<p>Trade Boy was created out of a passion for the deep strategic elements of Hero Wars. We realized that as the game grew more complex, players needed better tools outside of the game client to plan their moves. What started as a small personal project has evolved into a robust platform serving thousands of players.</p>
+
+<h2>Community Driven</h2>
+<p>We believe that the best tools are built through collaboration. We constantly listen to feedback from our users and top players across various servers to ensure our data is accurate and our tools meet the real needs of the community. If you have suggestions or find a new counter-meta team, we want to hear about it!</p>
+
+<p>Thank you for using Trade Boy. May your drops be legendary and your guild wars victorious!</p>
+
+    </div>
+
+    <!-- Avatar Change Modal -->
+    <div id="avatar-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center;">
+        <div style="background: #1a1a1a; padding: 30px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.2); width: 400px; text-align: center;">
+            <h2 style="color: #fff; margin-bottom: 20px;">Change Avatar</h2>
+            <div id="modal-avatar-grid" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 25px;"></div>
+            <button id="save-avatar-btn" style="padding: 10px 20px; border-radius: 8px; border: none; background: #aef649; color: #000; font-weight: bold; cursor: pointer;">Save</button>
+            <button id="cancel-avatar-btn" style="padding: 10px 20px; border-radius: 8px; border: none; background: #555; color: #fff; font-weight: bold; cursor: pointer; margin-left: 10px;">Cancel</button>
+        </div>
+    </div>
+
+    <footer class="site-footer" style="margin-top: 50px;">
+        <div class="footer-content">
+            <div class="footer-left">
+                <a href="index.html" class="footer-logo-container">
+                    <img src="logo.jpg" alt="Trade Boy Logo" class="footer-logo-img" style="width: 40px; border-radius: 50%;">
+                    <span class="footer-logo-text" style="color: #fff; font-weight: bold; font-size: 1.2rem; margin-left: 10px;">Trade Boy</span>
+                </a>
+                <p class="footer-slogan" style="color: #888; font-size: 0.8rem; margin-top: 5px;">ELEVATE YOUR HERO WARS STRATEGY.</p>
+            </div>
+            
+            <div class="footer-center" style="text-align: center;">
+                <div class="footer-links" style="margin-bottom: 10px;">
+                    <a href="privacy.html" style="color: #888; text-decoration: none; margin: 0 10px;">Privacy Policy</a> | 
+                    <a href="terms.html" style="color: #888; text-decoration: none; margin: 0 10px;">Terms & Conditions</a> | 
+                    <a href="contact.html" style="color: #888; text-decoration: none; margin: 0 10px;">Contact</a> | 
+                    <a href="about.html" style="color: #888; text-decoration: none; margin: 0 10px;">About Us</a>
+                </div>
+                <p class="footer-copyright" style="color: #555; font-size: 0.8rem;">TRADE BOY &copy; 2026 ALL RIGHTS RESERVED</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const user = localStorage.getItem('user');
+        const userAvatarEl = document.getElementById('user-avatar');
+        const profileBtn = document.getElementById('profile-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        
+        if (!user) {
+            profileBtn.style.display = 'none';
+            logoutBtn.textContent = 'Login';
+            logoutBtn.addEventListener('click', () => {
+                window.location.href = 'login.html';
+            });
+        } else {
+            document.getElementById('user-display').textContent = user;
+            
+            const localAvatar = localStorage.getItem('avatar');
+            if (localAvatar) {
+                userAvatarEl.src = 'avatars/' + localAvatar;
+                userAvatarEl.style.display = 'block';
+            }
+            
+            logoutBtn.addEventListener('click', () => {
+                if(confirm('Are you sure you want to logout?')) {
+                    localStorage.removeItem('user');
+                    localStorage.removeItem('avatar');
+                    window.location.href = 'login.html';
+                }
+            });
         }
         
-        document.addEventListener('DOMContentLoaded', () => {
-            const savedLang = localStorage.getItem('selectedLang') || 'EN';
-            const option = Array.from(document.querySelectorAll('.lang-option')).find(o => o.textContent.includes(savedLang));
-            if (option) {
-                selectLanguage(option, savedLang);
-            }
+        // Avatar Modal Logic
+        const avatarModal = document.getElementById('avatar-modal');
+        const modalGrid = document.getElementById('modal-avatar-grid');
+        let newSelectedAvatar = null;
+        
+        profileBtn.addEventListener('click', () => {
+            avatarModal.style.display = 'flex';
+            modalGrid.innerHTML = '';
+            newSelectedAvatar = localStorage.getItem('avatar');
             
-            const user = localStorage.getItem('user');
-            const userAvatarEl = document.getElementById('user-avatar');
-            const logoutBtn = document.getElementById('logout-btn');
-            const profileBtn = document.getElementById('user-avatar');
-            
-            if(!user) {
-                document.getElementById('user-display').textContent = 'Guest';
-                profileBtn.style.display = 'none';
-                logoutBtn.textContent = 'Login';
-                logoutBtn.removeAttribute('data-i18n'); // Remove data-i18n so translations don't override it to 'Logout'
-                logoutBtn.addEventListener('click', () => {
-                    window.location.href = '/login';
-                });
-            } else {
-                document.getElementById('user-display').textContent = user;
+            for(let i=1; i<=10; i++) {
+                const img = document.createElement('img');
+                img.src = `avatars/avatar${i}.jpg`;
+                img.style.width = '60px';
+                img.style.height = '60px';
+                img.style.borderRadius = '50%';
+                img.style.cursor = 'pointer';
+                img.style.objectFit = 'cover';
+                img.style.border = `3px solid ${newSelectedAvatar === 'avatar'+i+'.jpg' ? '#aef649' : 'transparent'}`;
                 
-                const localAvatar = localStorage.getItem('avatar');
-                if (localAvatar) {
-                    userAvatarEl.src = 'avatars/' + localAvatar;
-                    userAvatarEl.style.display = 'block';
-                }
-                
-                logoutBtn.addEventListener('click', () => {
-                    if(confirm('Are you sure you want to logout?')) {
-                        localStorage.removeItem('user');
-                        localStorage.removeItem('avatar');
-                        window.location.href = '/login';
-                    }
+                img.addEventListener('click', () => {
+                    Array.from(modalGrid.children).forEach(el => el.style.border = '3px solid transparent');
+                    img.style.border = '3px solid #aef649';
+                    newSelectedAvatar = `avatar${i}.jpg`;
                 });
+                modalGrid.appendChild(img);
             }
         });
+        
+        document.getElementById('cancel-avatar-btn').addEventListener('click', () => {
+            avatarModal.style.display = 'none';
+        });
+        
+        document.getElementById('save-avatar-btn').addEventListener('click', async () => {
+            if(!newSelectedAvatar) return;
+            try {
+                await fetch('/api/user/avatar', {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({username: user, avatar: newSelectedAvatar})
+                });
+                localStorage.setItem('avatar', newSelectedAvatar);
+                userAvatarEl.src = 'avatars/' + newSelectedAvatar;
+                avatarModal.style.display = 'none';
+            } catch(e) {
+                // If API fails, just update local for now
+                localStorage.setItem('avatar', newSelectedAvatar);
+                userAvatarEl.src = 'avatars/' + newSelectedAvatar;
+                avatarModal.style.display = 'none';
+            }
+        });
+
+        profileBtn.addEventListener('mouseover', () => profileBtn.style.background = 'rgba(255,255,255,0.1)');
+        profileBtn.addEventListener('mouseout', () => profileBtn.style.background = 'transparent');
     </script>
-<script src="hero-framer.js"></script>
 </body>
+
 </html>

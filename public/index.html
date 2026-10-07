@@ -67,6 +67,12 @@
     <main class="main-content">
         <h1 class="page-title" data-i18n="latest_guides">Latest Guides & Updates</h1>
         
+        <div style="width: 100%; box-sizing: border-box; margin: 0 auto 30px auto; padding: 20px; background: rgba(0,0,0,0.6); border-radius: 10px; border-left: 4px solid #aef649; color: #ddd; font-family: Arial, sans-serif; line-height: 1.6; text-align: left;">
+            <h2 style="color: #aef649; margin-top: 0; font-size: 1.4rem;">Welcome to Trade Boy - The Ultimate Hero Wars Strategy Hub</h2>
+            <p style="margin-bottom: 10px;">Are you struggling to climb the Arena ranks, build the perfect Guild War defense, or defeat the Archdemon? You've come to the right place. Trade Boy is the premier destination for serious Hero Wars players looking to elevate their gameplay. We provide completely free, real-time interactive tools including the renowned Draft Battle simulator, advanced Team Builders, and up-to-date Meta Tier Lists.</p>
+            <p>Our goal is to give you the strategic edge over your opponents without wasting your hard-earned Emeralds. Explore our in-depth strategy guides below, test your drafted teams against the current meta, and stay ahead of the competition. Check out our <a href="articles.html" style="color: #aef649; font-weight: bold; text-decoration: none;">New Strategy Blog</a> for deep-dives into Titan building and beginner tips!</p>
+        </div>
+
         <div class="grid" id="posts-grid">
             <!-- Posts will be generated here -->
         </div>
@@ -94,11 +100,11 @@
             
             <div class="footer-center">
                 <div class="footer-links">
-                    <a href="/privacy">Privacy Policy</a> | 
-                    <a href="/terms">Terms & Conditions</a> | 
+                    <a href="privacy.html">Privacy Policy</a> | 
+                    <a href="terms.html">Terms & Conditions</a> | 
                     <a href="/disclaimer">Disclaimer</a> | 
-                    <a href="/contact">Contact</a> | 
-                    <a href="/about">About Us</a>
+                    <a href="contact.html">Contact</a> | 
+                    <a href="about.html">About Us</a>
                 </div>
                 <p class="footer-copyright">TRADE BOY &copy; 2026 ALL RIGHTS RESERVED</p>
             </div>
@@ -264,6 +270,7 @@
         // ... (Posts logic follows)
 
         const posts = [
+            { id: 'blog', title: 'Blog & Strategy Guides', desc: 'Read our full text guides on Hero Wars strategies, beginner tips, and titan building.', link: 'articles.html', img: 'blog-thumbnail.jpg' },
             { id: 'event-teams', title: 'Event Teams', desc: 'Top tier combinations for the current events.', img: 'event-teams.jpg' },
             { id: 'archdemon-teams', title: 'Archdemon Teams', desc: 'Best formations to tackle the Archdemon.', img: 'archdemon-teams.jpg' },
             { id: 'draft-battle', title: 'Draft Battle', desc: 'Strategies and tips for dominating in Draft Battles.', link: 'draft', img: 'draft-thumb.jpg' },

@@ -8,8 +8,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to wrap a hero or pet image
     function wrapHeroImage(img) {
+        if (img.classList.contains('no-frame') || img.closest('.no-frame')) return;
         if (img.classList.contains('hero-framed-portrait')) return;
         if (img.closest('.hero-frame-container') || img.closest('.hero-frame-wrapper')) return;
+
 
         const src = img.getAttribute('src');
         if (!src) return;

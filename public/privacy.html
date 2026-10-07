@@ -5,60 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy - Trade Boy</title>
     <link rel="stylesheet" href="home.css">
-    <script src="translations.js"></script>
-    <style>
-        .policy-container {
-            max-width: 800px;
-            margin: 100px auto 40px auto;
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            color: #ddd;
-            line-height: 1.6;
-        }
-        .policy-container h1 {
-            color: #fff;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        .policy-container h2 {
-            color: #3b82f6;
-            margin-top: 30px;
-            margin-bottom: 15px;
-        }
-        .policy-container p {
-            margin-bottom: 15px;
-        }
-        .policy-container ul {
-            margin-bottom: 15px;
-            padding-left: 20px;
-        }
-        .policy-container li {
-            margin-bottom: 8px;
-        }
-        .policy-container a {
-            color: #3b82f6;
-            text-decoration: none;
-        }
-        .policy-container a:hover {
-            text-decoration: underline;
-        }
-    </style>
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7790482039975365" crossorigin="anonymous"></script>
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Trade Boy - Hero Wars Guide" />
-    <meta property="og:description" content="Your ultimate Hero Wars companion for real-time Draft Battles, Team Builds, and Tier Lists." />
-    <meta property="og:image" content="https://trade-boy.onrender.com/logo.jpg" />
-    <meta property="og:url" content="https://trade-boy.onrender.com/" />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content="#aef649" />
+    <style>
+        .legal-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background: rgba(0,0,0,0.7);
+            border-radius: 10px;
+            color: #ddd;
+            line-height: 1.6;
+            font-family: Arial, sans-serif;
+            border: 1px solid #444;
+        }
+        .legal-container h1 { color: #aef649; margin-bottom: 20px; text-align: center; }
+        .legal-container h2 { color: #fff; margin-top: 25px; margin-bottom: 10px; border-bottom: 1px solid #555; padding-bottom: 5px;}
+        .legal-container p { margin-bottom: 15px; }
+        .legal-container ul { margin-left: 20px; margin-bottom: 15px; }
+        .nav-header { text-align: center; margin-top: 20px; }
+        .nav-header a { color: #aef649; text-decoration: none; font-weight: bold; margin: 0 10px; }
+        .nav-header a:hover { text-decoration: underline; }
+    </style>
 </head>
 <body>
+    
     <nav class="top-nav">
-        <a href="/" class="logo-container" style="text-decoration: none;">
+        <a href="index.html" class="logo-container" style="text-decoration: none;">
             <img src="logo.jpg" alt="Trade Boy Logo" class="logo-img">
             <span class="logo" style="display: flex; align-items: center; gap: 8px;">Trade Boy 
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#aef649" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="Home">
@@ -67,115 +40,187 @@
                 </svg>
             </span>
         </a>
+        <div class="search-container">
+            <input type="text" class="search-bar" placeholder="Search guides, heroes, teams..." onkeypress="if(event.key === 'Enter') window.location.href='index.html'">
+        </div>
         <div style="display: flex; align-items: center; gap: 25px;">
             <div class="lang-menu-container" style="position: relative;">
-                <button class="nav-icon-btn" onclick="const m = document.getElementById('lang-dropdown'); m.style.display = m.style.display === 'none' ? 'block' : 'none';" data-i18n="lang_en">
+                <button class="nav-icon-btn" onclick="document.getElementById('lang-dropdown').style.display = document.getElementById('lang-dropdown').style.display === 'none' ? 'block' : 'none';">
                     EN <span style="font-size: 1.2em; margin-top: -2px;">🌐</span>
                 </button>
-                <div id="lang-dropdown" class="lang-dropdown">
-                    <div class="lang-option active" onclick="selectLanguage(this, 'EN')">🇺🇸 English</div>
-                    <div class="lang-option" onclick="selectLanguage(this, 'ID')">🇮🇩 Indonesia</div>
-                    <div class="lang-option" onclick="selectLanguage(this, 'RU')">🇷🇺 Русский</div>
+                <div id="lang-dropdown" class="lang-dropdown" style="display: none;">
+                    <div class="lang-option active">EN - English</div>
                 </div>
             </div>
-            <div id="user-info" style="display: flex; align-items: center; gap: 15px;">
-                <span id="user-display" style="font-weight: bold; color: #aef649;"></span>
-                <img id="user-avatar" src="" alt="Avatar" style="width: 40px; height: 40px; border-radius: 50%; display: none; border: 2px solid #aef649; cursor: pointer;">
-                <button id="logout-btn" class="nav-icon-btn" style="padding: 6px 15px; font-size: 0.8rem;" data-i18n="logout">Logout</button>
+            
+            <div class="profile-container" style="margin-left: 10px;">
+                <div id="profile-btn" style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 5px 10px; border-radius: 20px; transition: background 0.2s;">
+                    <img src="" id="user-avatar" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #aef649; display: none;">
+                    <span id="user-display" style="font-weight: bold;"></span>
+                </div>
+                <button class="logout-btn" id="logout-btn">Logout</button>
             </div>
         </div>
     </nav>
 
-    <main class="main-content">
-        <div class="policy-container">
-            <h1>Privacy Policy</h1>
-            <p><strong>Last Updated:</strong> September 2026</p>
 
-            <p>Welcome to Trade Boy. This Privacy Policy outlines how we collect, use, and protect your information when you visit our website.</p>
-
-            <h2>1. Information We Collect Locally</h2>
-            <p>To enhance your experience, our website uses your browser's Local Storage to save your display name and chosen avatar. This data is strictly stored on your own device and is <strong>not</strong> transmitted to, collected by, or sold to any external servers or third parties.</p>
-
-            <h2>2. Google AdSense and Third-Party Cookies</h2>
-            <p>We use Google AdSense to display advertisements to our users. Regarding these advertisements, please be aware of the following:</p>
-            <ul>
-                <li>Third-party vendors, including Google, use cookies to serve ads based on your prior visits to this website or other websites.</li>
-                <li>Google's use of advertising cookies enables it and its partners to serve ads to you based on your visit to our site and/or other sites on the Internet.</li>
-                <li>You may opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank">Google Ads Settings</a>. (Alternatively, you can opt out of a third-party vendor's use of cookies for personalized advertising by visiting <a href="https://www.aboutads.info" target="_blank">www.aboutads.info</a>).</li>
-            </ul>
-
-            <h2>3. External Links</h2>
-            <p>Our website may contain links to external sites (such as Discord, YouTube, or Facebook). If you click on a third-party link, you will be directed to that site. Note that these external sites are not operated by us. Therefore, we strongly advise you to review the Privacy Policy of these websites. We have no control over and assume no responsibility for the content, privacy policies, or practices of any third-party sites or services.</p>
-
-            <h2>4. Consent</h2>
-            <p>By using our website, you hereby consent to our Privacy Policy and agree to its Terms and Conditions.</p>
-
-            <h2>5. Contact Us</h2>
-            <p>If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us through our official Discord or YouTube channel.</p>
-        </div>
-    </main>
-
-    
-    
-    <script>
-        document.addEventListener('click', (e) => {
-            const container = document.querySelector('.lang-menu-container');
-            const menu = document.getElementById('lang-dropdown');
-            if (container && menu && !container.contains(e.target)) {
-                menu.style.display = 'none';
-            }
-        });
+    <div class="legal-container">
+        <h1>Privacy Policy</h1>
         
-        function selectLanguage(element, langCode) {
-            const btn = element.closest('.lang-menu-container').querySelector('.nav-icon-btn');
-            btn.innerHTML = langCode + ' <span style="font-size: 1.2em; margin-top: -2px;">🌐</span>';
-            const options = element.parentElement.querySelectorAll('.lang-option');
-            options.forEach(opt => opt.classList.remove('active'));
-            element.classList.add('active');
-            localStorage.setItem('selectedLang', langCode);
-            element.parentElement.style.display = 'none';
-            if (window.applyTranslations) window.applyTranslations(langCode);
+<p><strong>Effective Date: October 2026</strong></p>
+<h2>1. Introduction</h2>
+<p>Welcome to Trade Boy ("we", "our", or "us"). We respect your privacy and are committed to protecting your personal data. This Privacy Policy will inform you as to how we look after your personal data when you visit our website (regardless of where you visit it from) and tell you about your privacy rights and how the law protects you.</p>
+
+<h2>2. The Data We Collect About You</h2>
+<p>Personal data, or personal information, means any information about an individual from which that person can be identified. It does not include data where the identity has been removed (anonymous data). We may collect, use, store and transfer different kinds of personal data about you which we have grouped together as follows:</p>
+<ul>
+    <li><strong>Identity Data</strong> includes first name, last name, username or similar identifier.</li>
+    <li><strong>Contact Data</strong> includes email address and telephone numbers.</li>
+    <li><strong>Technical Data</strong> includes internet protocol (IP) address, your login data, browser type and version, time zone setting and location, browser plug-in types and versions, operating system and platform, and other technology on the devices you use to access this website.</li>
+    <li><strong>Usage Data</strong> includes information about how you use our website, products and services.</li>
+</ul>
+
+<h2>3. How We Collect Your Data</h2>
+<p>We use different methods to collect data from and about you including through:</p>
+<ul>
+    <li><strong>Direct interactions.</strong> You may give us your Identity and Contact by filling in forms or by corresponding with us by post, phone, email or otherwise. This includes personal data you provide when you create an account on our website.</li>
+    <li><strong>Automated technologies or interactions.</strong> As you interact with our website, we will automatically collect Technical Data about your equipment, browsing actions and patterns. We collect this personal data by using cookies, server logs and other similar technologies.</li>
+</ul>
+
+<h2>4. How We Use Your Personal Data</h2>
+<p>We will only use your personal data when the law allows us to. Most commonly, we will use your personal data in the following circumstances:</p>
+<ul>
+    <li>Where we need to perform the contract we are about to enter into or have entered into with you.</li>
+    <li>Where it is necessary for our legitimate interests (or those of a third party) and your interests and fundamental rights do not override those interests.</li>
+    <li>Where we need to comply with a legal obligation.</li>
+</ul>
+<p>We use Google AdSense Advertising on our website. Google, as a third-party vendor, uses cookies to serve ads on our site. Google's use of the DART cookie enables it to serve ads to our users based on previous visits to our site and other sites on the Internet. Users may opt-out of the use of the DART cookie by visiting the Google Ad and Content Network privacy policy.</p>
+
+<h2>5. Data Security</h2>
+<p>We have put in place appropriate security measures to prevent your personal data from being accidentally lost, used or accessed in an unauthorized way, altered or disclosed. In addition, we limit access to your personal data to those employees, agents, contractors and other third parties who have a business need to know. They will only process your personal data on our instructions and they are subject to a duty of confidentiality.</p>
+
+<h2>6. Contact Details</h2>
+<p>If you have any questions about this Privacy Policy, please contact us using the information provided on our Contact Us page.</p>
+
+    </div>
+
+    <!-- Avatar Change Modal -->
+    <div id="avatar-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center;">
+        <div style="background: #1a1a1a; padding: 30px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.2); width: 400px; text-align: center;">
+            <h2 style="color: #fff; margin-bottom: 20px;">Change Avatar</h2>
+            <div id="modal-avatar-grid" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 25px;"></div>
+            <button id="save-avatar-btn" style="padding: 10px 20px; border-radius: 8px; border: none; background: #aef649; color: #000; font-weight: bold; cursor: pointer;">Save</button>
+            <button id="cancel-avatar-btn" style="padding: 10px 20px; border-radius: 8px; border: none; background: #555; color: #fff; font-weight: bold; cursor: pointer; margin-left: 10px;">Cancel</button>
+        </div>
+    </div>
+
+    <footer class="site-footer" style="margin-top: 50px;">
+        <div class="footer-content">
+            <div class="footer-left">
+                <a href="index.html" class="footer-logo-container">
+                    <img src="logo.jpg" alt="Trade Boy Logo" class="footer-logo-img" style="width: 40px; border-radius: 50%;">
+                    <span class="footer-logo-text" style="color: #fff; font-weight: bold; font-size: 1.2rem; margin-left: 10px;">Trade Boy</span>
+                </a>
+                <p class="footer-slogan" style="color: #888; font-size: 0.8rem; margin-top: 5px;">ELEVATE YOUR HERO WARS STRATEGY.</p>
+            </div>
+            
+            <div class="footer-center" style="text-align: center;">
+                <div class="footer-links" style="margin-bottom: 10px;">
+                    <a href="privacy.html" style="color: #888; text-decoration: none; margin: 0 10px;">Privacy Policy</a> | 
+                    <a href="terms.html" style="color: #888; text-decoration: none; margin: 0 10px;">Terms & Conditions</a> | 
+                    <a href="contact.html" style="color: #888; text-decoration: none; margin: 0 10px;">Contact</a> | 
+                    <a href="about.html" style="color: #888; text-decoration: none; margin: 0 10px;">About Us</a>
+                </div>
+                <p class="footer-copyright" style="color: #555; font-size: 0.8rem;">TRADE BOY &copy; 2026 ALL RIGHTS RESERVED</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const user = localStorage.getItem('user');
+        const userAvatarEl = document.getElementById('user-avatar');
+        const profileBtn = document.getElementById('profile-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        
+        if (!user) {
+            profileBtn.style.display = 'none';
+            logoutBtn.textContent = 'Login';
+            logoutBtn.addEventListener('click', () => {
+                window.location.href = 'login.html';
+            });
+        } else {
+            document.getElementById('user-display').textContent = user;
+            
+            const localAvatar = localStorage.getItem('avatar');
+            if (localAvatar) {
+                userAvatarEl.src = 'avatars/' + localAvatar;
+                userAvatarEl.style.display = 'block';
+            }
+            
+            logoutBtn.addEventListener('click', () => {
+                if(confirm('Are you sure you want to logout?')) {
+                    localStorage.removeItem('user');
+                    localStorage.removeItem('avatar');
+                    window.location.href = 'login.html';
+                }
+            });
         }
         
-        document.addEventListener('DOMContentLoaded', () => {
-            const savedLang = localStorage.getItem('selectedLang') || 'EN';
-            const option = Array.from(document.querySelectorAll('.lang-option')).find(o => o.textContent.includes(savedLang));
-            if (option) {
-                selectLanguage(option, savedLang);
-            }
+        // Avatar Modal Logic
+        const avatarModal = document.getElementById('avatar-modal');
+        const modalGrid = document.getElementById('modal-avatar-grid');
+        let newSelectedAvatar = null;
+        
+        profileBtn.addEventListener('click', () => {
+            avatarModal.style.display = 'flex';
+            modalGrid.innerHTML = '';
+            newSelectedAvatar = localStorage.getItem('avatar');
             
-            const user = localStorage.getItem('user');
-            const userAvatarEl = document.getElementById('user-avatar');
-            const logoutBtn = document.getElementById('logout-btn');
-            const profileBtn = document.getElementById('user-avatar');
-            
-            if(!user) {
-                document.getElementById('user-display').textContent = 'Guest';
-                profileBtn.style.display = 'none';
-                logoutBtn.textContent = 'Login';
-                logoutBtn.removeAttribute('data-i18n'); // Remove data-i18n so translations don't override it to 'Logout'
-                logoutBtn.addEventListener('click', () => {
-                    window.location.href = '/login';
-                });
-            } else {
-                document.getElementById('user-display').textContent = user;
+            for(let i=1; i<=10; i++) {
+                const img = document.createElement('img');
+                img.src = `avatars/avatar${i}.jpg`;
+                img.style.width = '60px';
+                img.style.height = '60px';
+                img.style.borderRadius = '50%';
+                img.style.cursor = 'pointer';
+                img.style.objectFit = 'cover';
+                img.style.border = `3px solid ${newSelectedAvatar === 'avatar'+i+'.jpg' ? '#aef649' : 'transparent'}`;
                 
-                const localAvatar = localStorage.getItem('avatar');
-                if (localAvatar) {
-                    userAvatarEl.src = 'avatars/' + localAvatar;
-                    userAvatarEl.style.display = 'block';
-                }
-                
-                logoutBtn.addEventListener('click', () => {
-                    if(confirm('Are you sure you want to logout?')) {
-                        localStorage.removeItem('user');
-                        localStorage.removeItem('avatar');
-                        window.location.href = '/login';
-                    }
+                img.addEventListener('click', () => {
+                    Array.from(modalGrid.children).forEach(el => el.style.border = '3px solid transparent');
+                    img.style.border = '3px solid #aef649';
+                    newSelectedAvatar = `avatar${i}.jpg`;
                 });
+                modalGrid.appendChild(img);
             }
         });
+        
+        document.getElementById('cancel-avatar-btn').addEventListener('click', () => {
+            avatarModal.style.display = 'none';
+        });
+        
+        document.getElementById('save-avatar-btn').addEventListener('click', async () => {
+            if(!newSelectedAvatar) return;
+            try {
+                await fetch('/api/user/avatar', {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({username: user, avatar: newSelectedAvatar})
+                });
+                localStorage.setItem('avatar', newSelectedAvatar);
+                userAvatarEl.src = 'avatars/' + newSelectedAvatar;
+                avatarModal.style.display = 'none';
+            } catch(e) {
+                // If API fails, just update local for now
+                localStorage.setItem('avatar', newSelectedAvatar);
+                userAvatarEl.src = 'avatars/' + newSelectedAvatar;
+                avatarModal.style.display = 'none';
+            }
+        });
+
+        profileBtn.addEventListener('mouseover', () => profileBtn.style.background = 'rgba(255,255,255,0.1)');
+        profileBtn.addEventListener('mouseout', () => profileBtn.style.background = 'transparent');
     </script>
-<script src="hero-framer.js"></script>
 </body>
+
 </html>
