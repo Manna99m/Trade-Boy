@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tournament Arena - Trade Boy</title>
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="draft.css">
+    <link rel="stylesheet" href="mega-draft.css">
+    <link rel="stylesheet" href="tournament.css">
+    <script src="translations.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7790482039975365" crossorigin="anonymous"></script>
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Tournament Arena - Trade Boy" />
+    <meta property="og:description" content="Host and join live 4/8/16/32 player Hero Wars tournaments! Draft battles, bracket progression, and Combat Training showdowns." />
+    <meta property="og:image" content="https://trade-boy.onrender.com/tournament-thumb.jpg" />
+    <meta property="og:url" content="https://trade-boy.onrender.com/tournament" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#aef649" />
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="/" class="logo-container" style="text-decoration: none;">
+            <img src="logo.jpg" alt="Trade Boy Logo" class="logo-img">
+            <span class="logo" style="display: flex; align-items: center; gap: 8px;">Trade Boy 
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#aef649" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="Home">
+                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+            </span>
+        </a>
+        <div class="search-container">
+            <input type="text" class="search-bar" placeholder="Search guides, heroes, teams..." disabled>
+        </div>
+        <div style="display: flex; align-items: center; gap: 25px;">
+            <div class="lang-menu-container" style="position: relative;">
+                <button class="nav-icon-btn" onclick="document.getElementById('lang-dropdown').style.display = document.getElementById('lang-dropdown').style.display === 'none' ? 'block' : 'none';">
+                    EN <span style="font-size: 1.2em; margin-top: -2px;">🌐</span>
+                </button>
+                <div id="lang-dropdown" class="lang-dropdown" style="display: none;">
+                    <div class="lang-option active" onclick="selectLanguage(this, 'EN')">EN - English</div>
+                    <div class="lang-option" onclick="selectLanguage(this, 'RU')">RU - Русский</div>
+                    <div class="lang-option" onclick="selectLanguage(this, 'PT')">PT - Português</div>
+                    <div class="lang-option" onclick="selectLanguage(this, 'FR')">FR - Français</div>
+                    <div class="lang-option" onclick="selectLanguage(this, 'IT')">IT - Italiano</div>
+                    <div class="lang-option" onclick="selectLanguage(this, 'DE')">DE - Deutsch</div>
+                    <div class="lang-option" onclick="selectLanguage(this, 'ES')">ES - Español</div>
+                    <div class="lang-option" onclick="selectLanguage(this, 'PL')">PL - Polski</div>
+                    <div class="lang-option" onclick="selectLanguage(this, 'Zh-CN')">Zh-CN - 简体字</div>
+                    <div class="lang-option" onclick="selectLanguage(this, 'Zh-TW')">Zh-TW - 繁體中文</div>
+                    <div class="lang-option" onclick="selectLanguage(this, 'JA')">JA - 日本語</div>
+                    <div class="lang-option" onclick="selectLanguage(this, 'KO')">KO - 한국어</div>
+                    <div class="lang-option" onclick="selectLanguage(this, 'TH')">TH - ภาษาไทย</div>
+                </div>
+            </div>
+            <div class="profile-container" style="margin-left: 10px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <img src="" id="user-avatar" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #aef649; display: none;">
+                    <span id="user-display" style="font-weight: bold;"></span>
+                </div>
+                <button class="logout-btn" id="logout-btn">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="tour-main-content">
+        <!-- Back Navigation & Quick Header -->
+        <div class="tour-header-nav">
+            <a href="/" class="action-btn" style="text-decoration: none;">&larr; Back to Home</a>
+            <div id="spectator-banner" class="spectator-banner" style="display: none;">
+                <span>👁️ Spectator Mode Active</span>
+                <button id="btn-leave-spectate" class="tour-btn-danger-sm">Leave Tournament</button>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SCREEN 1: ENTRANCE (JOIN TOUR / HOST MODE) -->
+        <!-- ========================================== -->
+        <div id="screen-entrance" class="tour-card-panel">
+            <div class="tour-hero-header">
+                <div class="tour-badge-pill">ESPORTS CHAMPIONSHIP</div>
+                <h1 class="tour-title">Hero Wars Tournament Arena</h1>
+                <p class="tour-subtitle">Enter a tournament with your custom Tour ID or host an official championship with bracket progression and draft showdowns.</p>
+            </div>
+
+            <div class="entrance-grid">
+                <!-- Card A: Player Join -->
+                <div class="entrance-card">
+                    <div class="entrance-card-icon">⚔️</div>
+                    <h2 class="entrance-card-title">Join Tournament</h2>
+                    <p class="entrance-card-desc">Have a Tournament ID from a host or streamer? Enter your details below to secure your spot.</p>
+                    
+                    <div class="input-action-group">
+                        <input type="text" id="input-join-tour-id" class="tour-input" placeholder="Enter Tour ID (e.g. TB-8492)" maxlength="16">
+                        <input type="text" id="input-join-player-id" class="tour-input" placeholder="In-Game Player ID (e.g. 12345678)" maxlength="20">
+                        
+                        <div class="platform-selector-group">
+                            <span class="platform-label">Platform:</span>
+                            <div class="platform-buttons" id="join-platform-buttons">
+                                <button type="button" class="platform-btn active" data-platform="WEB">WEB</button>
+                                <button type="button" class="platform-btn" data-platform="FB">FB (Facebook)</button>
+                            </div>
+                        </div>
+
+                        <button id="btn-join-tour" class="tour-btn-primary">Join Tournament</button>
+                    </div>
+                    <div id="join-status-msg" class="tour-status-text"></div>
+                </div>
+
+                <!-- Card B: Host Mode -->
+                <div class="entrance-card host-mode-card">
+                    <div class="entrance-card-icon">👑</div>
+                    <div class="host-pill">HOST PRIVILEGES</div>
+                    <h2 class="entrance-card-title">Host Mode</h2>
+                    <p class="entrance-card-desc">Manage brackets, draft selections, and combat training results for your audience.</p>
+                    
+                    <div class="input-action-group">
+                        <input type="password" id="input-host-key" class="tour-input" placeholder="Enter Host Key / Password">
+                        <button id="btn-enter-host-mode" class="tour-btn-gold">Host a Tournament</button>
+                    </div>
+                    
+                    <div class="host-help-link">
+                        <span>Need a Host ID?</span>
+                        <a href="javascript:void(0)" onclick="openHostRequestModal()">Request Host Permission &rarr;</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SCREEN 2: HOST SETUP (CREATE TOURNAMENT)   -->
+        <!-- ========================================== -->
+        <div id="screen-host-setup" class="tour-card-panel" style="display: none;">
+            <div class="panel-top-bar">
+                <button id="btn-back-to-entrance" class="tour-btn-ghost">&larr; Back</button>
+                <span class="tour-badge-pill">Host Control Panel</span>
+            </div>
+
+            <h2 class="tour-title-md">Create New Tournament</h2>
+            <p class="tour-subtitle">Configure your tournament settings, player bracket size, and custom rewards.</p>
+
+            <form id="form-create-tour" class="tour-form">
+                <!-- Player Limit (Required: 4, 8, 16, 32) -->
+                <div class="form-group">
+                    <label class="form-label">Select Player Limit <span class="required">*</span></label>
+                    <div class="player-limit-selector" id="player-limit-group">
+                        <button type="button" class="limit-btn" data-limit="4">
+                            <span class="limit-num">4</span>
+                            <span class="limit-label">Semi-Finals</span>
+                        </button>
+                        <button type="button" class="limit-btn active" data-limit="8">
+                            <span class="limit-num">8</span>
+                            <span class="limit-label">Quarter-Finals</span>
+                        </button>
+                        <button type="button" class="limit-btn" data-limit="16">
+                            <span class="limit-num">16</span>
+                            <span class="limit-label">Round of 16</span>
+                        </button>
+                        <button type="button" class="limit-btn" data-limit="32">
+                            <span class="limit-num">32</span>
+                            <span class="limit-label">Round of 32</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tournament Name (Required) -->
+                <div class="form-group">
+                    <label class="form-label" for="tour-name-input">Tournament Name <span class="required">*</span></label>
+                    <input type="text" id="tour-name-input" class="tour-input" placeholder="e.g. Trade Boy Masters Championship" required maxlength="50">
+                </div>
+
+                <!-- Initial Game Mode -->
+                <div class="form-group">
+                    <label class="form-label">Initial Game Mode (Round 1)</label>
+                    <div class="mode-select-grid" id="create-mode-group">
+                        <div class="mode-card active" data-mode="draft">
+                            <div class="mode-icon">⚡</div>
+                            <div class="mode-info">
+                                <div class="mode-name">Draft Battle</div>
+                                <div class="mode-desc">Fast 1v1 draft pick & pass</div>
+                            </div>
+                        </div>
+                        <div class="mode-card" data-mode="triple">
+                            <div class="mode-icon">🎯</div>
+                            <div class="mode-info">
+                                <div class="mode-name">Triple Draft</div>
+                                <div class="mode-desc">Pick 1 from 3 each round</div>
+                            </div>
+                        </div>
+                        <div class="mode-card" data-mode="mega">
+                            <div class="mode-icon">🔥</div>
+                            <div class="mode-info">
+                                <div class="mode-name">Mega Draft</div>
+                                <div class="mode-desc">Shared 18-hero pool snake draft</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Details (Optional) -->
+                <div class="form-group">
+                    <label class="form-label" for="tour-details-input">Tournament Details / Rules <span class="optional">(Optional)</span></label>
+                    <textarea id="tour-details-input" class="tour-textarea" rows="3" placeholder="e.g. Best of 1 Combat Training rules. No Titan buffs allowed. Join stream on Discord."></textarea>
+                </div>
+
+                <!-- Rewards (Optional) -->
+                <div class="form-group">
+                    <label class="form-label" for="tour-rewards-input">Rewards for Winners <span class="optional">(Optional)</span></label>
+                    <input type="text" id="tour-rewards-input" class="tour-input" placeholder="e.g. 1st Place: 2,000 Emeralds + Discord VIP Role | 2nd Place: 500 Emeralds">
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" id="btn-submit-create" class="tour-btn-primary-lg">Create Tournament & Generate Tour ID</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SCREEN 3: TOURNAMENT LOBBY                 -->
+        <!-- ========================================== -->
+        <div id="screen-lobby" class="tour-card-panel" style="display: none;">
+            <!-- Lobby Header Banner -->
+            <div class="lobby-header-banner">
+                <div class="lobby-header-left">
+                    <div class="lobby-title-row">
+                        <h2 id="lobby-tour-name" class="lobby-tour-name">Tournament Name</h2>
+                        <span id="lobby-status-pill" class="tour-badge-pill">Lobby Open</span>
+                    </div>
+                    <div class="tour-id-container">
+                        <span class="tour-id-label">Tour ID:</span>
+                        <span id="lobby-tour-id" class="tour-id-value">TB-0000</span>
+                        <button id="btn-copy-tour-id" class="tour-btn-sm" title="Copy Tour ID">📋 Copy ID</button>
+                        <button id="btn-copy-tour-link" class="tour-btn-sm" title="Copy Invite Link">🔗 Copy Link</button>
+                    </div>
+                    <div id="lobby-details-box" class="lobby-info-text"></div>
+                    <div id="lobby-rewards-box" class="lobby-rewards-badge"></div>
+                </div>
+                <div class="lobby-header-right">
+                    <div class="player-count-display">
+                        <span id="lobby-player-count">0</span> / <span id="lobby-player-limit">8</span>
+                        <div class="player-count-sub">PLAYERS JOINED</div>
+                    </div>
+                    <button id="btn-leave-lobby" class="tour-btn-ghost-sm">Leave Lobby</button>
+                </div>
+            </div>
+
+            <!-- View Switcher Tabs (Lobby Slots vs Bracket) -->
+            <div class="tour-nav-tabs">
+                <button class="tour-tab active" data-tab="slots">Player Slots Grid</button>
+                <button class="tour-tab" data-tab="bracket">Interactive Bracket</button>
+            </div>
+
+            <!-- TAB 1: Player Slots Grid -->
+            <div id="tab-slots" class="tab-pane active">
+                <div class="slots-grid" id="slots-container">
+                    <!-- Dynamically generated slots (4, 8, 16, or 32) -->
+                </div>
+
+                <!-- HOST CONTROLS BAR (Visible only to Host) -->
+                <div id="host-lobby-controls" class="host-control-card" style="display: none;">
+                    <div class="host-card-header">
+                        <span class="host-crown-icon">👑</span>
+                        <div>
+                            <div class="host-card-title">Host Command Station</div>
+                            <div class="host-card-sub">Select the battle format and start when players are ready</div>
+                        </div>
+                    </div>
+
+                    <div class="host-mode-selection">
+                        <div class="host-mode-label">Select Game Mode for Round 1:</div>
+                        <div class="host-mode-buttons">
+                            <button type="button" class="mode-toggle-btn active" data-mode="draft">Draft Battle</button>
+                            <button type="button" class="mode-toggle-btn" data-mode="triple">Triple Draft</button>
+                            <button type="button" class="mode-toggle-btn" data-mode="mega">Mega Draft</button>
+                        </div>
+                    </div>
+
+                    <div class="host-start-row">
+                        <div id="host-start-hint" class="host-hint-text">Waiting for all player slots to fill...</div>
+                        <button id="btn-start-tournament" class="tour-btn-start">🚀 Start Tournament</button>
+                    </div>
+                </div>
+
+                <!-- PLAYER WAITING BAR (Visible to non-host players) -->
+                <div id="player-waiting-notice" class="player-waiting-card">
+                    <div class="spinner-pulse"></div>
+                    <div>
+                        <div class="wait-title">Waiting for Host to Launch Tournament</div>
+                        <div id="wait-mode-preview" class="wait-sub">Game Mode: Draft Battle</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: Interactive Bracket -->
+            <div id="tab-bracket" class="tab-pane">
+                <div class="bracket-wrapper" id="bracket-view">
+                    <!-- Dynamic Bracket Columns -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SCREEN 4: LIVE DRAFT ARENA (FOR PLAYERS)   -->
+        <!-- ========================================== -->
+        <div id="screen-draft-arena" class="tour-card-panel" style="display: none;">
+            <div class="arena-top-bar">
+                <div class="arena-match-title" id="arena-match-info">Round 1 • Match #1</div>
+                <div class="arena-game-mode-badge" id="arena-mode-badge">Draft Battle</div>
+            </div>
+
+            <!-- NORMAL DRAFT CONTAINER -->
+            <div id="normal-draft-container" style="display: none;">
+                <!-- Opponent Deck Mini-View -->
+                <div class="arena-opp-header">
+                    <img id="arena-opp-avatar" src="" class="arena-avatar-sm">
+                    <span id="arena-opp-name" class="arena-opp-title">Opponent's Team</span>
+                    <div id="arena-opp-progress" class="draft-progress arena-scale">
+                        <div class="draft-slot">?</div>
+                        <div class="draft-slot">?</div>
+                        <div class="draft-slot">?</div>
+                        <div class="draft-slot">?</div>
+                        <div class="draft-slot">?</div>
+                        <div class="draft-slot pet-slot">?</div>
+                    </div>
+                </div>
+
+                <!-- Draft Pick Cards Container -->
+                <div id="normal-draft-pick-area">
+                    <div class="draft-round-text" id="arena-round-indicator">Pick 1 of 3: Choose 1 Hero</div>
+                    <div class="timer-container" id="normal-draft-timer-container" style="margin: 0 auto 15px auto;">
+                        <div class="timer-bar" id="normal-draft-timer-bar"></div>
+                        <span id="normal-draft-timer-text">30s</span>
+                    </div>
+                    <div class="draft-cards-container" id="arena-cards-container">
+                        <div class="draft-card" id="arena-card-1">
+                            <img src="" class="card-img" id="arena-card-1-img">
+                            <span class="card-name" id="arena-card-1-name">Hero 1</span>
+                        </div>
+                        <div class="draft-card" id="arena-card-2">
+                            <img src="" class="card-img" id="arena-card-2-img">
+                            <span class="card-name" id="arena-card-2-name">Hero 2</span>
+                        </div>
+                    </div>
+                    <div id="arena-draft-waiting" class="arena-waiting-text" style="display: none;">Waiting for opponent's turn...</div>
+                </div>
+
+                <!-- My Team Deck -->
+                <div class="arena-my-header">
+                    <div class="arena-my-title">Your Team</div>
+                    <div id="arena-my-progress" class="draft-progress">
+                        <div class="draft-slot">?</div>
+                        <div class="draft-slot">?</div>
+                        <div class="draft-slot">?</div>
+                        <div class="draft-slot">?</div>
+                        <div class="draft-slot">?</div>
+                        <div class="draft-slot pet-slot">?</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TRIPLE DRAFT CONTAINER -->
+            <div id="triple-draft-container" style="display: none;">
+                <div class="arena-opp-header">
+                    <img id="arena-triple-opp-avatar" src="" class="arena-avatar-sm">
+                    <span id="arena-triple-opp-name" class="arena-opp-title">Opponent's Team</span>
+                    <div id="arena-triple-opp-progress" class="draft-progress arena-scale">
+                        <div class="draft-slot">?</div>
+                        <div class="draft-slot">?</div>
+                        <div class="draft-slot">?</div>
+                        <div class="draft-slot">?</div>
+                        <div class="draft-slot">?</div>
+                        <div class="draft-slot pet-slot">?</div>
+                    </div>
+                </div>
+
+                <div id="triple-draft-pick-area">
+                    <div class="draft-round-text" id="arena-triple-round-indicator">Round 1 of 6: Choose 1 Option</div>
+                    <div class="timer-container" id="triple-draft-timer-container" style="margin: 0 auto 15px auto;">
+                        <div class="timer-bar" id="triple-draft-timer-bar"></div>
+                        <span id="triple-draft-timer-text">35s</span>
+                    </div>
+                    <div class="draft-cards-container triple-grid" id="arena-triple-cards-container">
+                        <div class="draft-card" id="arena-tcard-1">
+                            <img src="" class="card-img" id="arena-tcard-1-img">
+                            <span class="card-name" id="arena-tcard-1-name"></span>
+                        </div>
+                        <div class="draft-card" id="arena-tcard-2">
+                            <img src="" class="card-img" id="arena-tcard-2-img">
+                            <span class="card-name" id="arena-tcard-2-name"></span>
+                        </div>
+                        <div class="draft-card" id="arena-tcard-3">
+                            <img src="" class="card-img" id="arena-tcard-3-img">
+                            <span class="card-name" id="arena-tcard-3-name"></span>
+                        </div>
+                    </div>
+                    <div id="arena-triple-waiting" class="arena-waiting-text" style="display: none;">Waiting for opponent...</div>
+                </div>
+
+                <div class="arena-my-header">
+                    <div class="arena-my-title">Your Team</div>
+                    <div id="arena-triple-my-progress" class="draft-progress">
+                        <div class="draft-slot">?</div>
+                        <div class="draft-slot">?</div>
+                        <div class="draft-slot">?</div>
+                        <div class="draft-slot">?</div>
+                        <div class="draft-slot">?</div>
+                        <div class="draft-slot pet-slot">?</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MEGA DRAFT CONTAINER (EXACT ORIGINAL MEGA DRAFT LOOK & FEEL) -->
+            <div id="mega-draft-container" class="draft-container" style="display: none; width: 100%; max-width: 900px; margin: 0 auto; text-align: center;">
+                <div class="draft-header" style="display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; width: 100%;">
+                    <!-- Opponent Team (Top Center, Small) -->
+                    <div class="team-section" style="text-align: center; margin-bottom: 10px; width: 100%;">
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px;">
+                            <img id="mega-opp-team-avatar" src="" style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid #ff4444; object-fit: cover; display: none;">
+                            <h3 id="mega-opp-team-title" style="color: #ff4444; margin: 0; font-size: 1rem;">Opponent's Team</h3>
+                        </div>
+                        <div class="team-grid" id="mega-opp-team" style="transform: scale(0.7); transform-origin: top center; justify-content: center;">
+                            <div class="slot">?</div>
+                            <div class="slot">?</div>
+                            <div class="slot">?</div>
+                            <div class="slot">?</div>
+                            <div class="slot">?</div>
+                            <div class="slot">?</div>
+                        </div>
+                    </div>
+                    <!-- Status / Turn Indicator -->
+                    <div class="draft-status" style="padding: 10px 0; text-align: center; width: 100%;">
+                        <h2 id="mega-turn-indicator" style="margin-bottom: 5px; color: #fef08a; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); font-size: 1.5rem;" class="turn-active">Your Turn!</h2>
+                        <h3 id="mega-picks-left" style="color: #60a5fa; margin-bottom: 10px; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); font-size: 1.1rem;">Picks left: 1</h3>
+                        <div class="timer-container" id="mega-timer-container" style="display: none; margin: 0 auto;">
+                            <div class="timer-bar" id="mega-timer-bar"></div>
+                            <span id="mega-timer-text">12s</span>
+                        </div>
+                    </div>
+                    <!-- Your Team (Center, Normal Size) -->
+                    <div class="team-section" style="text-align: center; margin-top: 10px; margin-bottom: 20px; width: 100%;">
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px;">
+                            <img id="mega-my-team-avatar" src="" style="width: 30px; height: 30px; border-radius: 50%; border: 2px solid #aef649; object-fit: cover; display: none;">
+                            <h3 id="mega-my-team-title" style="color: #aef649; margin: 0; font-size: 1.2rem;">Your Team</h3>
+                        </div>
+                        <div class="team-grid" id="mega-my-team" style="justify-content: center;">
+                            <div class="slot">?</div>
+                            <div class="slot">?</div>
+                            <div class="slot">?</div>
+                            <div class="slot">?</div>
+                            <div class="slot">?</div>
+                            <div class="slot">?</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pool-container">
+                    <h3 style="text-align: left; margin-bottom: 15px; color: #e2e8f0; font-size: 1.25rem; font-weight: 600;">Available Heroes</h3>
+                    <div class="pool-grid" id="mega-heroes-pool"></div>
+                    <h3 style="text-align: left; margin-top: 30px; margin-bottom: 15px; color: #e2e8f0; font-size: 1.25rem; font-weight: 600;">Available Pets</h3>
+                    <div class="pool-grid" id="mega-pets-pool"></div>
+                </div>
+            </div>
+
+            <!-- MATCH DRAFT COMPLETED WAITING STATE -->
+            <div id="arena-draft-completed-box" class="draft-complete-waiting" style="display: none;">
+                <div class="complete-icon">✅</div>
+                <h3 class="complete-title">Draft Complete! Teams Locked.</h3>
+                <p class="complete-desc">The Host is now inspecting your drafted deck and running the combat battle in Hero Wars Combat Training. Results will appear automatically!</p>
+                <div class="completed-decks-showcase" id="arena-completed-decks"></div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SCREEN 5: HOST COMBAT COMMAND CENTER       -->
+        <!-- ========================================== -->
+        <div id="screen-host-command" class="tour-card-panel" style="display: none;">
+            <div class="command-top-bar">
+                <div>
+                    <span class="tour-badge-pill">Host Combat Center</span>
+                    <h2 class="command-title" id="command-round-title">Combat Training Battles • Round 1</h2>
+                </div>
+                <div class="command-nav-actions">
+                    <button id="btn-toggle-host-bracket" class="tour-btn-ghost-sm">View Bracket</button>
+                </div>
+            </div>
+
+            <p class="command-subtitle">
+                Inspect each match group's drafted 5 Heroes and 1 Pet. Run the battle in original <strong>Hero Wars - Combat Training</strong>, then declare the winner below to advance them to the next round!
+            </p>
+
+            <!-- MATCH GROUPS LIST -->
+            <div class="match-groups-list" id="command-matches-list">
+                <!-- Dynamically populated match group cards -->
+            </div>
+
+            <!-- ROUND ADVANCEMENT PANEL -->
+            <div id="host-round-advance-box" class="round-advance-card" style="display: none;">
+                <div class="round-advance-header">
+                    <div class="advance-trophy">🏆</div>
+                    <div>
+                        <div class="advance-title">All Round Battles Completed!</div>
+                        <div class="advance-sub" id="advance-sub-text">All winners for this round have been decided. Choose the game mode for the next round and start!</div>
+                    </div>
+                </div>
+
+                <div class="next-mode-selector">
+                    <span class="next-mode-label">Next Round Game Mode:</span>
+                    <div class="next-mode-buttons">
+                        <button type="button" class="next-mode-btn active" data-mode="draft">Draft Battle</button>
+                        <button type="button" class="next-mode-btn" data-mode="triple">Triple Draft</button>
+                        <button type="button" class="next-mode-btn" data-mode="mega">Mega Draft</button>
+                    </div>
+                </div>
+
+                <button id="btn-start-next-round" class="tour-btn-primary-lg">🚀 Launch Next Round</button>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SCREEN 6: CHAMPION VICTORY CELEBRATION     -->
+        <!-- ========================================== -->
+        <div id="screen-champion" class="tour-card-panel" style="display: none;">
+            <div class="champion-confetti-canvas" id="confetti-container"></div>
+            <div class="champion-content">
+                <div class="champion-crown">👑</div>
+                <h1 class="champion-heading">TOURNAMENT CHAMPION</h1>
+                
+                <div class="champion-avatar-wrap">
+                    <img id="champ-avatar" src="avatars/avatar1.jpg" class="champion-avatar">
+                    <div class="champion-badge">#1</div>
+                </div>
+                
+                <div class="champion-name" id="champ-username">ChampionPlayer</div>
+
+                <!-- Winner In-Game Player ID Card (So Host & Everyone Can Send Gifts) -->
+                <div class="winner-id-showcase" id="winner-id-card">
+                    <div class="winner-id-header">
+                        <span class="winner-id-label">🏆 CHAMPION IN-GAME ACCOUNT</span>
+                        <span id="champ-platform-badge" class="platform-badge web">WEB</span>
+                    </div>
+                    <div class="winner-id-details">
+                        <span class="winner-id-title">Player ID:</span>
+                        <span class="winner-id-num" id="champ-player-id">--</span>
+                        <button id="btn-copy-champ-id" class="tour-btn-sm btn-copy-gold" title="Copy Winner ID for Gifts">📋 Copy Winner ID</button>
+                    </div>
+                </div>
+
+                <div class="runner-up-box">
+                    <span>Runner-Up (2nd Place):</span>
+                    <strong id="runner-up-username">RunnerUpPlayer</strong>
+                    <span id="runner-up-id-box" style="margin-left: 10px; display: none;">
+                        <span id="runner-platform-badge" class="platform-badge web">WEB</span>
+                        <span class="player-id-tag" id="runner-player-id-tag">ID: -- 📋</span>
+                    </span>
+                </div>
+
+                <div id="champ-rewards-box" class="champ-rewards-box" style="display: none;">
+                    <div class="rewards-title">🎁 Tournament Rewards for Winner</div>
+                    <div class="rewards-text" id="champ-rewards-text"></div>
+                    <div class="rewards-host-hint">💡 <strong>Host Tip:</strong> Use the <em>Winner Player ID</em> above to send emeralds, skins, or gifts directly in Hero Wars!</div>
+                </div>
+
+                <div class="champion-actions">
+                    <button id="btn-champ-view-bracket" class="tour-btn-gold">View Final Bracket</button>
+                    <a href="/tournament" class="tour-btn-ghost">Return to Arena Hub</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ========================================== -->
+    <!-- MODAL: 5-SECOND COUNTDOWN OVERLAY          -->
+    <!-- ========================================== -->
+    <div id="modal-countdown" class="countdown-modal" style="display: none;">
+        <div class="countdown-card">
+            <div class="countdown-badge">MATCH STARTING</div>
+            <div class="countdown-timer" id="countdown-num">5</div>
+            <div class="countdown-text">Prepare your picks!</div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL: REQUEST HOST ACCESS DIALOG          -->
+    <!-- ========================================== -->
+    <div id="modal-host-request" class="tour-modal" style="display: none;">
+        <div class="tour-modal-content">
+            <h3 class="modal-title">Request Host Permission</h3>
+            <p class="modal-text">To prevent unauthorized tournaments, Host Access is granted directly by Trade Boy. Contact the administrator below to receive your official Host Key:</p>
+            <div class="host-contact-box">
+                <div class="contact-item">
+                    <span class="contact-icon">💬</span>
+                    <div>
+                        <strong>Discord</strong>
+                        <div class="contact-val">tradeboy_yt</div>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-icon">✉️</span>
+                    <div>
+                        <strong>Email</strong>
+                        <div class="contact-val">fihadmunna10@gmail.com</div>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-icon">🔑</span>
+                    <div>
+                        <strong>Community Host Key</strong>
+                        <div class="contact-val">tradeboy2026</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="tour-btn-primary" onclick="useDefaultHostKey()">Use Community Key (tradeboy2026)</button>
+                <button class="tour-btn-ghost" onclick="closeHostRequestModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Beep Engine & Tournament Client Logic -->
+    <script src="tournament.js"></script>
+    <script src="hero-framer.js"></script>
+</body>
+</html>
