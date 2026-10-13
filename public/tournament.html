@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="draft.css">
     <link rel="stylesheet" href="mega-draft.css">
     <link rel="stylesheet" href="tournament.css">
+    <link rel="stylesheet" href="patron-selection.css">
     <script src="translations.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <!-- Google AdSense -->
@@ -296,6 +297,9 @@
 
             <!-- TAB 2: Interactive Bracket -->
             <div id="tab-bracket" class="tab-pane">
+                <div class="bracket-nav-bar" id="bracket-nav-bar" style="display: none; margin-bottom: 15px; text-align: left;">
+                    <button id="btn-back-to-combat-center" class="tour-btn-ghost-sm">&larr; Return to Combat Center</button>
+                </div>
                 <div class="bracket-wrapper" id="bracket-view">
                     <!-- Dynamic Bracket Columns -->
                 </div>
@@ -310,6 +314,9 @@
                 <div class="arena-match-title" id="arena-match-info">Round 1 • Match #1</div>
                 <div class="arena-game-mode-badge" id="arena-mode-badge">Draft Battle</div>
             </div>
+
+            <!-- PATRON SELECTION CONTAINER (40s LIMIT) -->
+            <div id="patron-screen" style="display: none;"></div>
 
             <!-- NORMAL DRAFT CONTAINER -->
             <div id="normal-draft-container" style="display: none;">
@@ -473,12 +480,12 @@
         </div>
 
         <!-- ========================================== -->
-        <!-- SCREEN 5: HOST COMBAT COMMAND CENTER       -->
+        <!-- SCREEN 5: HOST & SPECTATOR COMBAT CENTER   -->
         <!-- ========================================== -->
         <div id="screen-host-command" class="tour-card-panel" style="display: none;">
             <div class="command-top-bar">
                 <div>
-                    <span class="tour-badge-pill">Host Combat Center</span>
+                    <span class="tour-badge-pill" id="command-badge-pill">Host Combat Center</span>
                     <h2 class="command-title" id="command-round-title">Combat Training Battles • Round 1</h2>
                 </div>
                 <div class="command-nav-actions">
@@ -486,7 +493,10 @@
                 </div>
             </div>
 
-            <p class="command-subtitle">
+            <!-- PLAYER STATUS NOTICE (DEFEATED / VICTORY BANNER) -->
+            <div id="player-combat-notice" style="display: none; margin-bottom: 20px;"></div>
+
+            <p class="command-subtitle" id="command-subtitle-text">
                 Inspect each match group's drafted 5 Heroes and 1 Pet. Run the battle in original <strong>Hero Wars - Combat Training</strong>, then declare the winner below to advance them to the next round!
             </p>
 
@@ -619,6 +629,7 @@
     </div>
 
     <!-- Audio Beep Engine & Tournament Client Logic -->
+    <script src="patron-selection.js"></script>
     <script src="tournament.js"></script>
     <script src="hero-framer.js"></script>
 </body>

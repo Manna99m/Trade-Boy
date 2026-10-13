@@ -305,6 +305,10 @@ tabButtons.forEach(btn => {
         const targetTab = btn.dataset.tab;
         document.getElementById('tab-slots').classList.toggle('active', targetTab === 'slots');
         document.getElementById('tab-bracket').classList.toggle('active', targetTab === 'bracket');
+        const navBar = document.getElementById('bracket-nav-bar');
+        if (navBar) {
+            navBar.style.display = (targetTab === 'bracket' && currentTourState && (currentTourState.status === 'in_round' || currentTourState.status === 'round_completed')) ? 'block' : 'none';
+        }
     });
 });
 
@@ -467,21 +471,56 @@ function updateTournamentState(state) {
 
     // Check if player is eliminated
     const myPlayer = state.players.find(p => p.username === currentUser);
-    if (myPlayer && myPlayer.eliminated) {
-        document.getElementById('spectator-banner').style.display = 'flex';
+    const isEliminated = !!(myPlayer && myPlayer.eliminated);
+    if (isEliminated) {
+        const specBanner = document.getElementById('spectator-banner');
+        if (specBanner) specBanner.style.display = 'flex';
     }
 
     // Render Bracket View
     renderBracket(state);
 
-    // Update Host Command Center if host and in round
-    if (isHost && (state.status === 'in_round' || state.status === 'round_completed')) {
-        renderHostCommandCenter(state);
-    }
-
     // If tournament finished, show champion celebration screen with Winner Player ID
     if (state.status === 'finished' && state.champion) {
         renderChampionScreen(state.champion, state.runnerUp, state.rewards);
+        return;
+    }
+
+    // Handle Screen Transitions for in_round or round_completed
+    if (state.status === 'in_round' || state.status === 'round_completed') {
+        const curRound = state.rounds && state.rounds[state.currentRoundIndex];
+        let myCurrentMatch = null;
+        if (curRound) {
+            myCurrentMatch = curRound.matches.find(m => 
+                (m.p1 && m.p1.username === currentUser) || 
+                (m.p2 && m.p2.username === currentUser)
+            );
+        }
+
+        if (isHost) {
+            showScreen('screen-host-command');
+            renderHostCommandCenter(state);
+        } else {
+            // Player or Spectator
+            const isMyMatchActive = myCurrentMatch && myCurrentMatch.status !== 'completed' && !isEliminated;
+
+            if (isMyMatchActive) {
+                // Keep player on active draft/patron/locked teams screens while their battle is pending
+            } else if (myCurrentMatch && myCurrentMatch.status === 'completed') {
+                showScreen('screen-host-command');
+                const didWin = (myCurrentMatch.winner === currentUser);
+                renderHostCommandCenter(state, {
+                    defeated: !didWin || isEliminated,
+                    victory: didWin && !isEliminated
+                });
+            } else if (isEliminated) {
+                showScreen('screen-host-command');
+                renderHostCommandCenter(state, { defeated: true });
+            } else {
+                showScreen('screen-host-command');
+                renderHostCommandCenter(state, { spectator: true });
+            }
+        }
     }
 }
 
@@ -1210,11 +1249,73 @@ function animateMegaCard(item, container, previousTeam) {
     }, 500);
 }
 
+// 4. PATRON SELECTION PHASE (40s LIMIT)
+socket.on('tourMatchPatronPhase', (data) => {
+    if (normalDraftTimer) { clearInterval(normalDraftTimer); normalDraftTimer = null; }
+    if (tripleDraftTimer) { clearInterval(tripleDraftTimer); tripleDraftTimer = null; }
+    if (megaLocalTimer) { clearInterval(megaLocalTimer); megaLocalTimer = null; }
+
+    showScreen('screen-draft-arena');
+    document.getElementById('arena-match-info').textContent = `${currentTourState?.currentRoundName || 'Match'} • Patron Pet Selection`;
+    document.getElementById('arena-mode-badge').textContent = '40s Pet Patron Phase';
+
+    document.getElementById('normal-draft-container').style.display = 'none';
+    document.getElementById('triple-draft-container').style.display = 'none';
+    document.getElementById('mega-draft-container').style.display = 'none';
+    document.getElementById('arena-draft-completed-box').style.display = 'none';
+
+    const patronScreen = document.getElementById('patron-screen');
+    if (patronScreen) patronScreen.style.display = 'block';
+
+    if (window.PatronSelector && typeof window.PatronSelector.cleanup === 'function') {
+        window.PatronSelector.cleanup();
+    }
+
+    const heroes = (data && data.yourTeam && data.yourTeam.heroes) ? data.yourTeam.heroes : [];
+    const tId = (data && data.tourId) ? data.tourId : currentTourId;
+    const mId = (data && data.matchId) ? data.matchId : activeMatchId;
+
+    PatronSelector.start({
+        containerElement: patronScreen,
+        heroes: heroes,
+        timeLimit: (data && data.timeLimit) ? data.timeLimit : 40,
+        onSubmit: (patrons) => {
+            socket.emit('submitTourPatrons', {
+                tourId: tId,
+                matchId: mId,
+                patrons: patrons || {}
+            });
+            if (patronScreen) patronScreen.style.display = 'none';
+            const completeBox = document.getElementById('arena-draft-completed-box');
+            if (completeBox) {
+                completeBox.style.display = 'block';
+                const showcase = document.getElementById('arena-completed-decks');
+                if (showcase) {
+                    showcase.innerHTML = `
+                        <div style="padding: 25px; text-align: center;">
+                            <div class="drafting-spinner-sm" style="margin: 0 auto 15px auto;"></div>
+                            <h3 style="color: #aef649; font-size: 1.2rem; margin-bottom: 8px;">Patrons Submitted!</h3>
+                            <p style="color: #9ca3af; font-size: 0.95rem;">Waiting for opponent to finalize their patron selections...</p>
+                        </div>
+                    `;
+                }
+            }
+        }
+    });
+});
+
 // MATCH DRAFT COMPLETE
 function showMatchDraftCompleted(yourTeam, opponentTeam) {
     if (normalDraftTimer) { clearInterval(normalDraftTimer); normalDraftTimer = null; }
     if (tripleDraftTimer) { clearInterval(tripleDraftTimer); tripleDraftTimer = null; }
     if (megaLocalTimer) { clearInterval(megaLocalTimer); megaLocalTimer = null; }
+
+    if (window.PatronSelector && typeof window.PatronSelector.cleanup === 'function') {
+        window.PatronSelector.cleanup();
+    }
+    const patronScreen = document.getElementById('patron-screen');
+    if (patronScreen) patronScreen.style.display = 'none';
+
     playFanfare();
     document.getElementById('normal-draft-container').style.display = 'none';
     document.getElementById('triple-draft-container').style.display = 'none';
@@ -1229,22 +1330,19 @@ function showMatchDraftCompleted(yourTeam, opponentTeam) {
                 <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 15px;">
                     <h3 style="color: #aef649; margin: 0; font-size: 1.3rem;">Your Team</h3>
                 </div>
-                <div class="team-grid" style="justify-content: center; display: flex; flex-wrap: wrap; gap: 10px;">
-                    ${(yourTeam.heroes || []).map(h => `<img src="heroes/${h}" title="${cleanItemName(h)}" style="width: 75px; height: 75px; border-radius: 10px; border: 3px solid #3b82f6; object-fit: cover;">`).join('')}
-                    ${yourTeam.pet ? `<img src="pets/${yourTeam.pet}" title="${cleanItemName(yourTeam.pet)}" style="width: 75px; height: 75px; border-radius: 10px; border: 3px solid #a855f7; object-fit: cover;">` : ''}
-                </div>
+                <div id="tour-my-result-grid" class="team-grid" style="justify-content: center; display: flex; flex-wrap: wrap; gap: 10px;"></div>
             </div>
             <div class="team-result" style="text-align: center; min-width: 320px; max-width: 440px;">
                 <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 15px;">
                     <h3 style="color: #ef4444; margin: 0; font-size: 1.3rem;">Opponent's Team</h3>
                 </div>
-                <div class="team-grid" style="justify-content: center; display: flex; flex-wrap: wrap; gap: 10px;">
-                    ${(opponentTeam.heroes || []).map(h => `<img src="heroes/${h}" title="${cleanItemName(h)}" style="width: 75px; height: 75px; border-radius: 10px; border: 3px solid #3b82f6; object-fit: cover;">`).join('')}
-                    ${opponentTeam.pet ? `<img src="pets/${opponentTeam.pet}" title="${cleanItemName(opponentTeam.pet)}" style="width: 75px; height: 75px; border-radius: 10px; border: 3px solid #a855f7; object-fit: cover;">` : ''}
-                </div>
+                <div id="tour-opp-result-grid" class="team-grid" style="justify-content: center; display: flex; flex-wrap: wrap; gap: 10px;"></div>
             </div>
         </div>
     `;
+
+    renderTeamResultsWithPatrons(yourTeam, document.getElementById('tour-my-result-grid'), '#3b82f6');
+    renderTeamResultsWithPatrons(opponentTeam, document.getElementById('tour-opp-result-grid'), '#ef4444');
 }
 
 socket.on('tourMatchDraftComplete', ({ yourTeam, opponentTeam }) => {
@@ -1263,11 +1361,75 @@ socket.on('tourMegaDraftComplete', ({ yourTeam, opponentTeam }) => {
 // SCREEN 5: HOST COMBAT TRAINING COMMAND CENTER
 // ============================================================
 
-function renderHostCommandCenter(state) {
+function renderHostCommandCenter(state, playerStatus = {}) {
+    if (!state || !state.rounds) return;
     const curRound = state.rounds[state.currentRoundIndex];
     if (!curRound) return;
 
-    document.getElementById('command-round-title').textContent = `${curRound.roundName || 'Round'} Battles • Combat Training Center`;
+    // Header updates: Role badge pill & subtitle text
+    const badgePill = document.getElementById('command-badge-pill');
+    const subtitleText = document.getElementById('command-subtitle-text');
+    const playerNotice = document.getElementById('player-combat-notice');
+
+    const myPlayer = (state.players || []).find(p => p.username === currentUser);
+    const userIsEliminated = !!(myPlayer && myPlayer.eliminated);
+    const isDefeated = !!(playerStatus.defeated || userIsEliminated);
+    const isVictor = !!(playerStatus.victory && !userIsEliminated);
+
+    const roundTitleEl = document.getElementById('command-round-title');
+    if (roundTitleEl) {
+        roundTitleEl.textContent = `${curRound.roundName || 'Round'} Battles • Combat Center`;
+    }
+
+    if (isHost) {
+        if (badgePill) badgePill.textContent = 'Host Combat Center';
+        if (subtitleText) {
+            subtitleText.innerHTML = `Inspect each match group's drafted 5 Heroes and 1 Pet. Run the battle in original <strong>Hero Wars - Combat Training</strong>, then declare the winner below to advance them to the next round!`;
+        }
+        if (playerNotice) {
+            playerNotice.style.display = 'none';
+            playerNotice.innerHTML = '';
+        }
+    } else {
+        if (badgePill) badgePill.textContent = 'Tournament Arena • Spectator';
+        if (subtitleText) {
+            subtitleText.innerHTML = `Live overview of all active tournament matches in this round. Inspect player formations, pet patrons, and track battle progress live!`;
+        }
+
+        if (isDefeated) {
+            if (playerNotice) {
+                playerNotice.style.display = 'block';
+                playerNotice.innerHTML = `
+                    <div class="player-defeated-banner">
+                        <div class="defeated-banner-icon">💀</div>
+                        <div class="defeated-banner-content">
+                            <div class="defeated-banner-title">You have been defeated.</div>
+                            <div class="defeated-banner-desc">You fought valiantly! You are now in spectator mode. Follow the remaining tournament battles and track the bracket live below!</div>
+                        </div>
+                    </div>
+                `;
+            }
+        } else if (isVictor) {
+            if (playerNotice) {
+                playerNotice.style.display = 'block';
+                playerNotice.innerHTML = `
+                    <div class="player-victory-banner">
+                        <div class="victory-banner-icon">🏆</div>
+                        <div class="victory-banner-content">
+                            <div class="victory-banner-title">VICTORY! Match Won!</div>
+                            <div class="victory-banner-desc">Congratulations! You advanced to the next round. Sit back and watch other matches while the host prepares the next round.</div>
+                        </div>
+                    </div>
+                `;
+            }
+        } else {
+            if (playerNotice) {
+                playerNotice.style.display = 'none';
+                playerNotice.innerHTML = '';
+            }
+        }
+    }
+
     const container = document.getElementById('command-matches-list');
     container.innerHTML = '';
 
@@ -1277,10 +1439,11 @@ function renderHostCommandCenter(state) {
 
         const isCompleted = (match.status === 'completed' && match.winner);
         const isDecksReady = !isCompleted && match.p1Deck && match.p2Deck;
-        const isDrafting = !isCompleted && !isDecksReady;
+        const isPatronSelection = !isCompleted && match.draftStatus === 'patron_selection';
+        const isDrafting = !isCompleted && !isDecksReady && !isPatronSelection;
 
-        const statusClass = isCompleted ? 'done' : (isDecksReady ? 'ready' : 'drafting');
-        const statusText = isCompleted ? `Winner: ${match.winner}` : (isDecksReady ? 'Decks Ready For Combat' : 'Drafting In Progress');
+        const statusClass = isCompleted ? 'done' : (isDecksReady ? 'ready' : (isPatronSelection ? 'patron' : 'drafting'));
+        const statusText = isCompleted ? `Winner: ${match.winner}` : (isDecksReady ? 'Decks Ready For Combat' : (isPatronSelection ? 'Patron Pet Selection (40s)' : 'Drafting In Progress'));
 
         card.innerHTML = `
             <div class="match-group-header">
@@ -1303,7 +1466,7 @@ function renderHostCommandCenter(state) {
                             </div>
                             ${match.p1?.playerId ? `
                                 <div class="player-id-tag" onclick="copyPlayerId('${match.p1.playerId}')" title="Click to copy Player ID">
-                                    ID: ${match.p1.playerId} 📋
+                                     ID: ${match.p1.playerId} 📋
                                 </div>
                             ` : ''}
                         </div>
@@ -1329,7 +1492,7 @@ function renderHostCommandCenter(state) {
                             </div>
                             ${match.p2?.playerId ? `
                                 <div class="player-id-tag" onclick="copyPlayerId('${match.p2.playerId}')" title="Click to copy Player ID">
-                                    ID: ${match.p2.playerId} 📋
+                                     ID: ${match.p2.playerId} 📋
                                 </div>
                             ` : ''}
                         </div>
@@ -1352,24 +1515,40 @@ function renderHostCommandCenter(state) {
                 </div>
             ` : ''}
 
+            ${isPatronSelection ? `
+                <div class="combat-drafting-notice" style="background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.5); color: #d8b4fe;">
+                    <div class="drafting-spinner-sm" style="border-top-color: #c084fc;"></div>
+                    <div class="drafting-notice-content">
+                        <div class="drafting-notice-title" style="color: #e9d5ff;">🐾 Patron Pet Selection (40s)</div>
+                        <div class="drafting-notice-desc">Players are assigning patron pets to their drafted heroes. Winner selection will unlock once both teams submit!</div>
+                    </div>
+                </div>
+            ` : ''}
+
             ${isDecksReady ? `
-                <div class="combat-ready-notice">
-                    ⚔️ Both formations locked! Copy codes above to run Hero Wars Combat Training, then declare the winner:
-                </div>
-                <div class="combat-actions-row">
-                    ${match.p1 ? `
-                        <button class="btn-winner-select" 
-                            onclick="declareMatchWinner('${match.id}', '${match.p1.username}')">
-                            👑 Declare Winner: ${match.p1.username}
-                        </button>
-                    ` : ''}
-                    ${match.p2 ? `
-                        <button class="btn-winner-select" 
-                            onclick="declareMatchWinner('${match.id}', '${match.p2.username}')">
-                            👑 Declare Winner: ${match.p2.username}
-                        </button>
-                    ` : ''}
-                </div>
+                ${isHost ? `
+                    <div class="combat-ready-notice">
+                        ⚔️ Both formations locked! Copy codes above to run Hero Wars Combat Training, then declare the winner:
+                    </div>
+                    <div class="combat-actions-row">
+                        ${match.p1 ? `
+                            <button class="btn-winner-select" 
+                                onclick="declareMatchWinner('${match.id}', '${match.p1.username}')">
+                                👑 Declare Winner: ${match.p1.username}
+                            </button>
+                        ` : ''}
+                        ${match.p2 ? `
+                            <button class="btn-winner-select" 
+                                onclick="declareMatchWinner('${match.id}', '${match.p2.username}')">
+                                👑 Declare Winner: ${match.p2.username}
+                            </button>
+                        ` : ''}
+                    </div>
+                ` : `
+                    <div class="combat-ready-notice spectator">
+                        ⚔️ Both formations locked! Host is currently conducting this battle in Hero Wars Combat Training. The result will appear automatically!
+                    </div>
+                `}
             ` : ''}
 
             ${isCompleted ? `
@@ -1384,11 +1563,15 @@ function renderHostCommandCenter(state) {
         container.appendChild(card);
     });
 
-    // Check if all matches in round are done
+    // Check if all matches in round are done - only show controls to Host
     const advanceBox = document.getElementById('host-round-advance-box');
     if (state.status === 'round_completed') {
-        advanceBox.style.display = 'block';
-        document.getElementById('advance-sub-text').textContent = `All battles for ${curRound.roundName} have concluded! Select game mode and proceed.`;
+        if (isHost) {
+            advanceBox.style.display = 'block';
+            document.getElementById('advance-sub-text').textContent = `All battles for ${curRound.roundName} have concluded! Select game mode and proceed.`;
+        } else {
+            advanceBox.style.display = 'none';
+        }
     } else {
         advanceBox.style.display = 'none';
     }
@@ -1398,11 +1581,17 @@ function renderDeckImages(deck) {
     if (!deck) {
         return '<span style="color: #9ca3af; font-size: 0.85rem;">Drafting in progress...</span>';
     }
-    const heroCards = (deck.heroes || []).map(h => `
-        <img src="heroes/${h}" class="hero-mini-card" title="${cleanItemName(h)}">
-    `).join('');
+    const heroCards = (deck.heroes || []).map(h => {
+        const patron = (deck.patrons && deck.patrons[h]) ? deck.patrons[h] : null;
+        return `
+            <div class="hero-patron-badge-wrap" style="position: relative; display: inline-block;">
+                <img src="heroes/${h}" class="hero-mini-card" title="${cleanItemName(h)}">
+                ${patron ? `<img src="patrons/${patron}" class="patron-mini-badge" title="Patron: ${cleanItemName(patron)}" style="width: 22px; height: 22px; bottom: -3px; right: -3px;">` : ''}
+            </div>
+        `;
+    }).join('');
     const petCard = deck.pet ? `
-        <img src="pets/${deck.pet}" class="hero-mini-card pet-mini-card" title="${cleanItemName(deck.pet)} (Pet)">
+        <img src="pets/${deck.pet}" class="hero-mini-card pet-mini-card" title="${cleanItemName(deck.pet)} (Team Pet)">
     ` : '';
     return heroCards + petCard;
 }
@@ -1414,10 +1603,14 @@ function escapeJson(obj) {
 window.copyTeamFormation = function(username, encodedDeck, playerId, platform) {
     try {
         const deck = JSON.parse(decodeURIComponent(encodedDeck));
-        const heroes = (deck.heroes || []).map(cleanItemName).join(', ');
+        const heroList = (deck.heroes || []).map(h => {
+            const hName = cleanItemName(h);
+            const pName = (deck.patrons && deck.patrons[h]) ? cleanItemName(deck.patrons[h]) : null;
+            return pName ? `${hName} (Patron: ${pName})` : hName;
+        }).join(', ');
         const pet = deck.pet ? cleanItemName(deck.pet) : 'None';
         const idInfo = playerId ? ` (ID: ${playerId}, Platform: ${platform || 'WEB'})` : '';
-        const text = `${username}${idInfo}\nHeroes: ${heroes}\nPet: ${pet}`;
+        const text = `${username}${idInfo}\nHeroes & Patrons: ${heroList}\nTeam Pet: ${pet}`;
         navigator.clipboard.writeText(text);
         alert(`Copied team for ${username} to clipboard!\n\n${text}`);
     } catch(e) {}
@@ -1430,6 +1623,7 @@ window.copyPlayerId = function(id) {
 };
 
 window.declareMatchWinner = function(matchId, winnerUsername) {
+    if (!isHost) return;
     if (!confirm(`Confirm ${winnerUsername} as the winner of this match?`)) return;
     playFanfare();
     socket.emit('declareWinner', {
@@ -1462,7 +1656,16 @@ document.getElementById('btn-start-next-round').addEventListener('click', () => 
 document.getElementById('btn-toggle-host-bracket').addEventListener('click', () => {
     showScreen('screen-lobby');
     document.querySelector('.tour-tab[data-tab="bracket"]').click();
+    const navBar = document.getElementById('bracket-nav-bar');
+    if (navBar) navBar.style.display = 'block';
 });
+
+const btnBackToCombatCenter = document.getElementById('btn-back-to-combat-center');
+if (btnBackToCombatCenter) {
+    btnBackToCombatCenter.addEventListener('click', () => {
+        showScreen('screen-host-command');
+    });
+}
 
 // ============================================================
 // INTERACTIVE BRACKET RENDERING

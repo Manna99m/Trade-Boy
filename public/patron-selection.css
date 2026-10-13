@@ -1,0 +1,453 @@
+/* ============================================================
+   PATRON PET SELECTION STYLES
+   ============================================================ */
+
+.patron-screen {
+    max-width: 900px;
+    margin: 20px auto 40px auto;
+    padding: 25px 20px;
+    background: radial-gradient(circle at 50% 20%, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98));
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 18px;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    text-align: center;
+    position: relative;
+    animation: fadeInPatron 0.4s ease-out;
+}
+
+@keyframes fadeInPatron {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.patron-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #ffd700;
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.8);
+    margin: 0 0 6px 0;
+    letter-spacing: 0.5px;
+}
+
+.patron-subtitle {
+    font-size: 0.95rem;
+    color: #94a3b8;
+    margin: 0 0 15px 0;
+}
+
+/* Patron Timer */
+.patron-timer-container {
+    width: 100%;
+    max-width: 260px;
+    height: 24px;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    position: relative;
+    overflow: hidden;
+    margin: 0 auto 25px auto;
+}
+
+.patron-timer-bar {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    border-radius: 12px;
+    transition: width 1s linear;
+}
+
+.patron-timer-bar.warning {
+    background: linear-gradient(90deg, #f59e0b, #ef4444);
+}
+
+.patron-timer-bar.danger {
+    background: linear-gradient(90deg, #ef4444, #991b1b);
+    animation: pulseDanger 1s infinite alternate;
+}
+
+@keyframes pulseDanger {
+    from { filter: brightness(1); }
+    to { filter: brightness(1.3); }
+}
+
+.patron-timer-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+    pointer-events: none;
+}
+
+/* Heroes Lineup for Patron Assignment */
+.patron-heroes-grid {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin: 20px 0 30px 0;
+}
+
+.patron-hero-card {
+    background: rgba(15, 23, 42, 0.7);
+    border: 2px solid rgba(59, 130, 246, 0.4);
+    border-radius: 14px;
+    padding: 12px 10px 14px 10px;
+    width: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.patron-hero-card:hover {
+    border-color: #ffd700;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(255, 215, 0, 0.25);
+    background: rgba(30, 41, 59, 0.85);
+}
+
+.patron-hero-card.has-patron {
+    border-color: #a855f7;
+}
+
+.patron-hero-avatar-wrapper {
+    position: relative;
+    width: 86px;
+    height: 86px;
+    margin-bottom: 8px;
+}
+
+.patron-hero-img {
+    width: 86px;
+    height: 86px;
+    border-radius: 12px;
+    border: 2px solid #3b82f6;
+    object-fit: cover;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Badge on top right of the hero card */
+.patron-slot-badge {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #0f172a;
+    border: 2px solid #64748b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+    z-index: 5;
+}
+
+.patron-slot-badge:hover {
+    transform: scale(1.12);
+}
+
+.patron-slot-badge.empty {
+    background-image: url('frame/add-patron.png');
+    background-size: 80%;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-color: #94a3b8;
+}
+
+.patron-slot-badge.assigned {
+    border-color: #ffd700;
+    background: radial-gradient(circle, #3b0764 0%, #0f172a 100%);
+}
+
+.patron-slot-badge.assigned img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 50%;
+}
+
+.patron-hero-name {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #e2e8f0;
+    margin-bottom: 4px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 130px;
+}
+
+.patron-assigned-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #a855f7;
+    margin-top: 2px;
+}
+
+.patron-hero-card.has-patron .patron-assigned-label {
+    color: #ffd700;
+}
+
+/* Submit Action Button */
+.patron-submit-btn {
+    padding: 12px 35px;
+    font-size: 1.05rem;
+    font-weight: bold;
+    color: #0b0f19;
+    background: linear-gradient(135deg, #aef649 0%, #22c55e 100%);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(174, 246, 73, 0.35);
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.patron-submit-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(174, 246, 73, 0.5);
+    filter: brightness(1.08);
+}
+
+.patron-submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: #475569;
+    color: #94a3b8;
+    box-shadow: none;
+}
+
+/* Modal Popup for Choosing a Pet */
+.patron-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.82);
+    backdrop-filter: blur(5px);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.patron-modal-box {
+    background: #0f172a;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 18px;
+    max-width: 620px;
+    width: 100%;
+    padding: 24px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
+    text-align: center;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.patron-modal-title {
+    font-size: 1.3rem;
+    color: #f8fafc;
+    margin: 0 0 6px 0;
+    font-weight: bold;
+}
+
+.patron-modal-target-hero {
+    color: #ffd700;
+}
+
+.patron-modal-sub {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    margin-bottom: 20px;
+}
+
+.patron-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.patron-picker-item {
+    background: rgba(30, 41, 59, 0.6);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 10px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.patron-picker-item.compatible:hover {
+    border-color: #aef649;
+    transform: scale(1.05);
+    background: rgba(51, 65, 85, 0.9);
+    box-shadow: 0 6px 15px rgba(174, 246, 73, 0.25);
+}
+
+.patron-picker-item.active {
+    border-color: #ffd700;
+    background: rgba(168, 85, 247, 0.2);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+.patron-picker-item.incompatible {
+    opacity: 0.35;
+    filter: grayscale(0.85);
+    cursor: not-allowed;
+    border-color: rgba(239, 68, 68, 0.2);
+}
+
+.patron-picker-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    margin-bottom: 6px;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+}
+
+.patron-picker-name {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #e2e8f0;
+}
+
+.patron-picker-tag {
+    font-size: 0.7rem;
+    margin-top: 3px;
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.patron-picker-tag.assigned-elsewhere {
+    background: rgba(245, 158, 11, 0.2);
+    color: #fbbf24;
+}
+
+.patron-picker-tag.incompatible-tag {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+}
+
+.patron-picker-tag.active-tag {
+    background: rgba(174, 246, 73, 0.2);
+    color: #aef649;
+}
+
+.patron-modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.patron-btn-remove {
+    padding: 8px 18px;
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid #ef4444;
+    color: #fca5a5;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.patron-btn-remove:hover {
+    background: #ef4444;
+    color: #fff;
+}
+
+.patron-btn-close {
+    padding: 8px 22px;
+    background: #334155;
+    border: 1px solid #475569;
+    color: #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.patron-btn-close:hover {
+    background: #475569;
+}
+
+/* Badges on Final Results Display */
+.hero-with-patron {
+    position: relative;
+    display: inline-block;
+    margin: 5px;
+}
+
+.hero-with-patron img.main-hero-img {
+    width: 90px;
+    height: 90px;
+    border-radius: 12px;
+    border: 3px solid #475569;
+    object-fit: cover;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    display: block;
+}
+
+.hero-with-patron .patron-mini-badge {
+    position: absolute;
+    bottom: -10px;
+    right: -10px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #2e1065 0%, #0f172a 100%);
+    border: 2px solid #ffd700;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
+    object-fit: contain;
+    z-index: 10;
+    pointer-events: auto;
+    transition: transform 0.2s;
+}
+
+.hero-with-patron .patron-mini-badge:hover {
+    transform: scale(1.2);
+}
+
+.hero-patron-badge-wrap {
+    position: relative;
+    display: inline-block;
+}
+
+.hero-patron-badge-wrap .patron-mini-badge {
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #2e1065 0%, #0f172a 100%);
+    border: 2px solid #ffd700;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+    object-fit: contain;
+    z-index: 5;
+    pointer-events: none;
+}
+

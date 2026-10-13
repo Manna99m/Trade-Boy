@@ -6,6 +6,7 @@
     <title>Draft Battle - Trade Boy</title>
     <link rel="stylesheet" href="home.css">
     <link rel="stylesheet" href="draft.css">
+    <link rel="stylesheet" href="patron-selection.css">
     <script src="translations.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <!-- Google AdSense -->
@@ -146,6 +147,8 @@
             </div>
             <p id="draft-waiting" style="display: none; margin-top: 30px; color: #d8b4fe; font-size: 1.2rem; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.8);" data-i18n="waiting_opponent">Waiting for opponent to finish drafting...</p>
         </div>
+        <!-- PATRON SELECTION SCREEN -->
+        <div id="patron-screen" style="display: none;"></div>
         <!-- RESULTS SCREEN -->
         <div id="results-screen" style="display: none; padding-bottom: 50px;">
             <h1 class="page-title" data-i18n="draft_complete">Draft Complete!</h1>
@@ -185,12 +188,13 @@
             <p>Practice your drafting mechanics, learn hero synergies, and outsmart your opponents by anticipating their win conditions. Use this tool alongside your guildmates to hone your competitive edge for the next Clash of Worlds or Guild War season.</p>
         </div>
 </main>
+    <script src="patron-selection.js"></script>
     <script src="draft.js"></script>
 
     <footer style="text-align: center; margin-top: 60px; padding: 20px; font-size: 0.85rem; color: #888; border-top: 1px solid #333; width: 100%;">
-        <a href="/privacy" style="color: #888; text-decoration: none; margin: 0 10px;">Privacy Policy</a> |
-        <a href="/terms" style="color: #888; text-decoration: none; margin: 0 10px;">Terms & Conditions</a> |
-        <a href="/contact" style="color: #888; text-decoration: none; margin: 0 10px;">Contact</a>
+        <a href="privacy.html" style="color: #888; text-decoration: none; margin: 0 10px;">Privacy Policy</a> |
+        <a href="terms.html" style="color: #888; text-decoration: none; margin: 0 10px;">Terms & Conditions</a> |
+        <a href="contact.html" style="color: #888; text-decoration: none; margin: 0 10px;">Contact</a>
         <br><br>
         <span style="font-size: 0.75rem;">This website is not associated with Nexters, not sponsored by Nexters, and Nexters is not liable for it.</span>
     </footer>

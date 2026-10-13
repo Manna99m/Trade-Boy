@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="home.css">
     <link rel="stylesheet" href="draft.css">
     <link rel="stylesheet" href="mega-draft.css">
+    <link rel="stylesheet" href="patron-selection.css">
     <script src="translations.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <!-- Google AdSense -->
@@ -129,6 +130,8 @@
                 <div class="pool-grid" id="pets-pool"></div>
             </div>
         </div>
+        <!-- PATRON SELECTION SCREEN -->
+        <div id="patron-screen" style="display: none;"></div>
         <!-- RESULTS SCREEN -->
         <div id="results-screen" style="display: none; padding-bottom: 10px;">
             <h1 class="page-title" data-i18n="mega_draft_complete" style="margin-bottom: 15px; font-size: 2.2rem;">Mega Draft Complete!</h1>
@@ -168,12 +171,13 @@
             <p>Use our Mega Draft simulator to practice these high-stakes scenarios. Learn how to allocate your tanks, split your healers, and distribute your damage dealers across your draft efficiently. Perfecting your Mega Draft strategy is the true mark of a Hero Wars Grandmaster.</p>
         </div>
 </main>
+    <script src="patron-selection.js"></script>
     <script src="mega-draft.js"></script>
 
     <footer style="text-align: center; margin-top: 60px; padding: 20px; font-size: 0.85rem; color: #888; border-top: 1px solid #333; width: 100%;">
-        <a href="/privacy" style="color: #888; text-decoration: none; margin: 0 10px;">Privacy Policy</a> |
-        <a href="/terms" style="color: #888; text-decoration: none; margin: 0 10px;">Terms & Conditions</a> |
-        <a href="/contact" style="color: #888; text-decoration: none; margin: 0 10px;">Contact</a>
+        <a href="privacy.html" style="color: #888; text-decoration: none; margin: 0 10px;">Privacy Policy</a> |
+        <a href="terms.html" style="color: #888; text-decoration: none; margin: 0 10px;">Terms & Conditions</a> |
+        <a href="contact.html" style="color: #888; text-decoration: none; margin: 0 10px;">Contact</a>
         <br><br>
         <span style="font-size: 0.75rem;">This website is not associated with Nexters, not sponsored by Nexters, and Nexters is not liable for it.</span>
     </footer>

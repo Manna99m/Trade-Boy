@@ -330,9 +330,27 @@ socket.on('opponentSelected', () => {
     }
 });
 
+socket.on('draftPatronPhase', (data) => {
+    if (timerInterval) clearInterval(timerInterval);
+    draftScreen.style.display = 'none';
+    const patronScreen = document.getElementById('patron-screen');
+    if (patronScreen) patronScreen.style.display = 'block';
+
+    PatronSelector.start({
+        containerElement: patronScreen,
+        heroes: data.yourTeam.heroes,
+        timeLimit: data.timeLimit || 40,
+        onSubmit: (assignedPatrons) => {
+            socket.emit('submitDraftPatrons', { roomId: myRoomId, patrons: assignedPatrons });
+        }
+    });
+});
+
 socket.on('draftComplete', (data) => {
     if (timerInterval) clearInterval(timerInterval);
     draftScreen.style.display = 'none';
+    const patronScreen = document.getElementById('patron-screen');
+    if (patronScreen) patronScreen.style.display = 'none';
     resultsScreen.style.display = 'block';
     
     document.getElementById('my-final-title').textContent = document.getElementById('my-team-title').textContent;
@@ -350,18 +368,6 @@ socket.on('draftComplete', (data) => {
     const myGrid = document.getElementById('my-team-grid');
     const oppGrid = document.getElementById('opponent-team-grid');
     
-    myGrid.innerHTML = '';
-    oppGrid.innerHTML = '';
-    
-    // Render my team
-    data.yourTeam.heroes.forEach(h => {
-        myGrid.innerHTML += `<img src="heroes/${h}" title="${h.split('.')[0]}">`;
-    });
-    myGrid.innerHTML += `<img src="pets/${data.yourTeam.pet}" title="${data.yourTeam.pet.split('.')[0]}" style="border-color: #a855f7;">`;
-    
-    // Render opponent team
-    data.opponentTeam.heroes.forEach(h => {
-        oppGrid.innerHTML += `<img src="heroes/${h}" title="${h.split('.')[0]}">`;
-    });
-    oppGrid.innerHTML += `<img src="pets/${data.opponentTeam.pet}" title="${data.opponentTeam.pet.split('.')[0]}" style="border-color: #a855f7;">`;
+    renderTeamResultsWithPatrons(data.yourTeam, myGrid, '#3b82f6');
+    renderTeamResultsWithPatrons(data.opponentTeam, oppGrid, '#ef4444');
 });
