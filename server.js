@@ -44,6 +44,10 @@ app.get('/post', (req, res, next) => {
     }
 });
 
+app.get('/heroes/Avalon.png', (req, res) => {
+    res.redirect('/heroes/Alvanor.png');
+});
+
 app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] }));
 
 // Initialize users.json if it doesn't exist
