@@ -154,10 +154,10 @@ function shuffle(array) {
 }
 
 function checkDraftComplete(room) {
-    if (room.status === 'completed') return;
+    if (room.status === 'completed' || room.status === 'patron_selection') return;
     if (room.p1.results.picked.length === 3 && room.p2.results.picked.length === 3) {
-        room.status = 'completed';
         if (room.timer) clearTimeout(room.timer);
+        room.status = 'patron_selection';
         
         let p1Final, p2Final;
         
@@ -181,19 +181,40 @@ function checkDraftComplete(room) {
             };
         }
         
-        const p1Avatar = getUserAvatar(room.p1.username);
-        const p2Avatar = getUserAvatar(room.p2.username);
+        room.p1Final = p1Final;
+        room.p2Final = p2Final;
+        room.p1Patrons = null;
+        room.p2Patrons = null;
         
-        io.to(room.p1.id).emit('draftComplete', { yourTeam: p1Final, opponentTeam: p2Final, p1Name: room.p1.username, p2Name: room.p2.username, opponentAvatar: p2Avatar });
-        io.to(room.p2.id).emit('draftComplete', { yourTeam: p2Final, opponentTeam: p1Final, p1Name: room.p2.username, p2Name: room.p1.username, opponentAvatar: p1Avatar });
+        io.to(room.p1.id).emit('draftPatronPhase', { yourTeam: p1Final, timeLimit: 40 });
+        io.to(room.p2.id).emit('draftPatronPhase', { yourTeam: p2Final, timeLimit: 40 });
+
+        room.patronTimer = setTimeout(() => {
+            finalizeDraftPatrons(room);
+        }, 42000);
     }
 }
 
+function finalizeDraftPatrons(room) {
+    if (!room || room.status === 'completed') return;
+    if (room.patronTimer) clearTimeout(room.patronTimer);
+    room.status = 'completed';
+
+    room.p1Final.patrons = room.p1Patrons || {};
+    room.p2Final.patrons = room.p2Patrons || {};
+
+    const p1Avatar = getUserAvatar(room.p1.username);
+    const p2Avatar = getUserAvatar(room.p2.username);
+
+    io.to(room.p1.id).emit('draftComplete', { yourTeam: room.p1Final, opponentTeam: room.p2Final, p1Name: room.p1.username, p2Name: room.p2.username, opponentAvatar: p2Avatar });
+    io.to(room.p2.id).emit('draftComplete', { yourTeam: room.p2Final, opponentTeam: room.p1Final, p1Name: room.p2.username, p2Name: room.p1.username, opponentAvatar: p1Avatar });
+}
+
 function checkTripleDraftComplete(room) {
-    if (room.status === 'completed') return;
+    if (room.status === 'completed' || room.status === 'patron_selection') return;
     if (room.p1.results.picked.length === 6 && room.p2.results.picked.length === 6) {
-        room.status = 'completed';
         if (room.timer) clearTimeout(room.timer);
+        room.status = 'patron_selection';
         
         const p1Final = {
             heroes: room.p1.results.picked.slice(0, 5),
@@ -204,12 +225,33 @@ function checkTripleDraftComplete(room) {
             pet: room.p2.results.picked[5]
         };
         
-        const p1Avatar = getUserAvatar(room.p1.username);
-        const p2Avatar = getUserAvatar(room.p2.username);
-        
-        io.to(room.p1.id).emit('tripleDraftComplete', { yourTeam: p1Final, opponentTeam: p2Final, p1Name: room.p1.username, p2Name: room.p2.username, opponentAvatar: p2Avatar });
-        io.to(room.p2.id).emit('tripleDraftComplete', { yourTeam: p2Final, opponentTeam: p1Final, p1Name: room.p2.username, p2Name: room.p1.username, opponentAvatar: p1Avatar });
+        room.p1Final = p1Final;
+        room.p2Final = p2Final;
+        room.p1Patrons = null;
+        room.p2Patrons = null;
+
+        io.to(room.p1.id).emit('triplePatronPhase', { yourTeam: p1Final, timeLimit: 40 });
+        io.to(room.p2.id).emit('triplePatronPhase', { yourTeam: p2Final, timeLimit: 40 });
+
+        room.patronTimer = setTimeout(() => {
+            finalizeTriplePatrons(room);
+        }, 42000);
     }
+}
+
+function finalizeTriplePatrons(room) {
+    if (!room || room.status === 'completed') return;
+    if (room.patronTimer) clearTimeout(room.patronTimer);
+    room.status = 'completed';
+
+    room.p1Final.patrons = room.p1Patrons || {};
+    room.p2Final.patrons = room.p2Patrons || {};
+
+    const p1Avatar = getUserAvatar(room.p1.username);
+    const p2Avatar = getUserAvatar(room.p2.username);
+
+    io.to(room.p1.id).emit('tripleDraftComplete', { yourTeam: room.p1Final, opponentTeam: room.p2Final, p1Name: room.p1.username, p2Name: room.p2.username, opponentAvatar: p2Avatar });
+    io.to(room.p2.id).emit('tripleDraftComplete', { yourTeam: room.p2Final, opponentTeam: room.p1Final, p1Name: room.p2.username, p2Name: room.p1.username, opponentAvatar: p1Avatar });
 }
 
 function startGame(roomId) {
@@ -417,12 +459,59 @@ function processMegaPick(roomId, socketId, type, item) {
     
     if (room.totalPicks === 12) {
         if (room.turnTimer) clearTimeout(room.turnTimer);
-        room.status = 'completed';
-        io.to(room.p1.id).emit('megaDraftComplete', { yourTeam: room.p1.results, opponentTeam: room.p2.results, opponentAvatar: p2Avatar });
-        io.to(room.p2.id).emit('megaDraftComplete', { yourTeam: room.p2.results, opponentTeam: room.p1.results, opponentAvatar: p1Avatar });
+        room.status = 'patron_selection';
+
+        const p1Final = {
+            heroes: room.p1.results.heroes,
+            pet: room.p1.results.pets[0]
+        };
+        const p2Final = {
+            heroes: room.p2.results.heroes,
+            pet: room.p2.results.pets[0]
+        };
+
+        room.p1Final = p1Final;
+        room.p2Final = p2Final;
+        room.p1Patrons = null;
+        room.p2Patrons = null;
+
+        io.to(room.p1.id).emit('megaPatronPhase', { yourTeam: p1Final, timeLimit: 40 });
+        io.to(room.p2.id).emit('megaPatronPhase', { yourTeam: p2Final, timeLimit: 40 });
+
+        room.patronTimer = setTimeout(() => {
+            finalizeMegaPatrons(room);
+        }, 42000);
     } else {
         startMegaTurnTimer(roomId);
     }
+}
+
+function finalizeMegaPatrons(room) {
+    if (!room || room.status === 'completed') return;
+    if (room.patronTimer) clearTimeout(room.patronTimer);
+    room.status = 'completed';
+
+    room.p1Final.patrons = room.p1Patrons || {};
+    room.p2Final.patrons = room.p2Patrons || {};
+
+    const p1Avatar = getUserAvatar(room.p1.username);
+    const p2Avatar = getUserAvatar(room.p2.username);
+
+    const p1TeamData = {
+        heroes: room.p1Final.heroes,
+        pet: room.p1Final.pet,
+        pets: [room.p1Final.pet],
+        patrons: room.p1Final.patrons
+    };
+    const p2TeamData = {
+        heroes: room.p2Final.heroes,
+        pet: room.p2Final.pet,
+        pets: [room.p2Final.pet],
+        patrons: room.p2Final.patrons
+    };
+
+    io.to(room.p1.id).emit('megaDraftComplete', { yourTeam: p1TeamData, opponentTeam: p2TeamData, p1Name: room.p1.username, p2Name: room.p2.username, opponentAvatar: p2Avatar });
+    io.to(room.p2.id).emit('megaDraftComplete', { yourTeam: p2TeamData, opponentTeam: p1TeamData, p1Name: room.p2.username, p2Name: room.p1.username, opponentAvatar: p1Avatar });
 }
 
 // ==========================================
@@ -685,14 +774,52 @@ function initMatchDraft(tour, match) {
     }, 32000);
 }
 
+function finalizeTourMatchPatrons(tour, match) {
+    if (!match || match.status === 'awaiting_combat' || match.status === 'completed') return;
+    if (match.patronTimer) clearTimeout(match.patronTimer);
+
+    match.draftStatus = 'completed';
+    match.status = 'awaiting_combat';
+
+    match.p1Final.patrons = match.p1Patrons || {};
+    match.p2Final.patrons = match.p2Patrons || {};
+
+    match.p1Deck = match.p1Final;
+    match.p2Deck = match.p2Final;
+
+    const eventName = match.draftData.type === 'draft' 
+        ? 'tourMatchDraftComplete' 
+        : (match.draftData.type === 'triple' ? 'tourMatchTripleDraftComplete' : 'tourMegaDraftComplete');
+
+    if (match.p1?.socketId) {
+        io.to(match.p1.socketId).emit(eventName, {
+            matchId: match.id,
+            yourTeam: match.p1Final,
+            opponentTeam: match.p2Final,
+            opponentName: match.p2?.username,
+            opponentAvatar: match.p2?.avatar
+        });
+    }
+    if (match.p2?.socketId) {
+        io.to(match.p2.socketId).emit(eventName, {
+            matchId: match.id,
+            yourTeam: match.p2Final,
+            opponentTeam: match.p1Final,
+            opponentName: match.p1?.username,
+            opponentAvatar: match.p1?.avatar
+        });
+    }
+
+    io.to(`tour_${tour.id}`).emit('tourStateUpdate', getTournamentPublicState(tour));
+}
+
 function checkTourDraftComplete(tour, match) {
     if (match.status !== 'drafting') return;
     const { p1, p2, p1GetsPet } = match.draftData;
 
     if (p1.results.picked.length === 3 && p2.results.picked.length === 3) {
         if (match.draftTimer) clearTimeout(match.draftTimer);
-        match.draftStatus = 'completed';
-        match.status = 'awaiting_combat';
+        match.draftStatus = 'patron_selection';
 
         let p1Final, p2Final;
         if (p1GetsPet) {
@@ -715,29 +842,33 @@ function checkTourDraftComplete(tour, match) {
             };
         }
 
-        match.p1Deck = p1Final;
-        match.p2Deck = p2Final;
+        match.p1Final = p1Final;
+        match.p2Final = p2Final;
+        match.p1Patrons = null;
+        match.p2Patrons = null;
 
         if (match.p1?.socketId) {
-            io.to(match.p1.socketId).emit('tourMatchDraftComplete', {
+            io.to(match.p1.socketId).emit('tourMatchPatronPhase', {
+                tourId: tour.id,
                 matchId: match.id,
                 yourTeam: p1Final,
-                opponentTeam: p2Final,
-                opponentName: match.p2.username,
-                opponentAvatar: match.p2.avatar
+                timeLimit: 40
             });
         }
         if (match.p2?.socketId) {
-            io.to(match.p2.socketId).emit('tourMatchDraftComplete', {
+            io.to(match.p2.socketId).emit('tourMatchPatronPhase', {
+                tourId: tour.id,
                 matchId: match.id,
                 yourTeam: p2Final,
-                opponentTeam: p1Final,
-                opponentName: match.p1.username,
-                opponentAvatar: match.p1.avatar
+                timeLimit: 40
             });
         }
 
         io.to(`tour_${tour.id}`).emit('tourStateUpdate', getTournamentPublicState(tour));
+
+        match.patronTimer = setTimeout(() => {
+            finalizeTourMatchPatrons(tour, match);
+        }, 42000);
     }
 }
 
@@ -822,8 +953,7 @@ function checkTourTripleDraftComplete(tour, match) {
 
     if (p1.results.picked.length === 6 && p2.results.picked.length === 6) {
         if (match.draftTimer) clearTimeout(match.draftTimer);
-        match.draftStatus = 'completed';
-        match.status = 'awaiting_combat';
+        match.draftStatus = 'patron_selection';
 
         const p1Final = {
             heroes: p1.results.picked.slice(0, 5),
@@ -834,29 +964,33 @@ function checkTourTripleDraftComplete(tour, match) {
             pet: p2.results.picked[5]
         };
 
-        match.p1Deck = p1Final;
-        match.p2Deck = p2Final;
+        match.p1Final = p1Final;
+        match.p2Final = p2Final;
+        match.p1Patrons = null;
+        match.p2Patrons = null;
 
         if (match.p1?.socketId) {
-            io.to(match.p1.socketId).emit('tourMatchTripleDraftComplete', {
+            io.to(match.p1.socketId).emit('tourMatchPatronPhase', {
+                tourId: tour.id,
                 matchId: match.id,
                 yourTeam: p1Final,
-                opponentTeam: p2Final,
-                opponentName: match.p2.username,
-                opponentAvatar: match.p2.avatar
+                timeLimit: 40
             });
         }
         if (match.p2?.socketId) {
-            io.to(match.p2.socketId).emit('tourMatchTripleDraftComplete', {
+            io.to(match.p2.socketId).emit('tourMatchPatronPhase', {
+                tourId: tour.id,
                 matchId: match.id,
                 yourTeam: p2Final,
-                opponentTeam: p1Final,
-                opponentName: match.p1.username,
-                opponentAvatar: match.p1.avatar
+                timeLimit: 40
             });
         }
 
         io.to(`tour_${tour.id}`).emit('tourStateUpdate', getTournamentPublicState(tour));
+
+        match.patronTimer = setTimeout(() => {
+            finalizeTourMatchPatrons(tour, match);
+        }, 42000);
     }
 }
 
@@ -989,8 +1123,7 @@ function processTourMegaPick(tour, match, socketId, type, item) {
 
     if (match.draftData.totalPicks >= 12) {
         if (match.megaTurnTimer) clearTimeout(match.megaTurnTimer);
-        match.draftStatus = 'completed';
-        match.status = 'awaiting_combat';
+        match.draftStatus = 'patron_selection';
 
         const p1Final = {
             heroes: match.draftData.p1.results.heroes,
@@ -1001,25 +1134,33 @@ function processTourMegaPick(tour, match, socketId, type, item) {
             pet: match.draftData.p2.results.pets[0] || null
         };
 
-        match.p1Deck = p1Final;
-        match.p2Deck = p2Final;
+        match.p1Final = p1Final;
+        match.p2Final = p2Final;
+        match.p1Patrons = null;
+        match.p2Patrons = null;
 
         if (match.p1?.socketId) {
-            io.to(match.p1.socketId).emit('tourMegaDraftComplete', {
+            io.to(match.p1.socketId).emit('tourMatchPatronPhase', {
+                tourId: tour.id,
+                matchId: match.id,
                 yourTeam: p1Final,
-                opponentTeam: p2Final,
-                opponentAvatar: match.p2.avatar
+                timeLimit: 40
             });
         }
         if (match.p2?.socketId) {
-            io.to(match.p2.socketId).emit('tourMegaDraftComplete', {
+            io.to(match.p2.socketId).emit('tourMatchPatronPhase', {
+                tourId: tour.id,
+                matchId: match.id,
                 yourTeam: p2Final,
-                opponentTeam: p1Final,
-                opponentAvatar: match.p1.avatar
+                timeLimit: 40
             });
         }
 
         io.to(`tour_${tour.id}`).emit('tourStateUpdate', getTournamentPublicState(tour));
+
+        match.patronTimer = setTimeout(() => {
+            finalizeTourMatchPatrons(tour, match);
+        }, 42000);
     } else {
         startTourMegaTurnTimer(tour, match);
     }
@@ -1171,6 +1312,39 @@ io.on('connection', (socket) => {
         processMegaPick(roomId, socket.id, type, item);
     });
 
+    socket.on('submitDraftPatrons', ({ roomId, patrons }) => {
+        const room = rooms[roomId];
+        if (!room || room.status !== 'patron_selection') return;
+        if (socket.id === room.p1.id) room.p1Patrons = patrons || {};
+        else if (socket.id === room.p2.id) room.p2Patrons = patrons || {};
+
+        if (room.p1Patrons !== null && room.p2Patrons !== null) {
+            finalizeDraftPatrons(room);
+        }
+    });
+
+    socket.on('submitTriplePatrons', ({ roomId, patrons }) => {
+        const room = tripleRooms[roomId];
+        if (!room || room.status !== 'patron_selection') return;
+        if (socket.id === room.p1.id) room.p1Patrons = patrons || {};
+        else if (socket.id === room.p2.id) room.p2Patrons = patrons || {};
+
+        if (room.p1Patrons !== null && room.p2Patrons !== null) {
+            finalizeTriplePatrons(room);
+        }
+    });
+
+    socket.on('submitMegaPatrons', ({ roomId, patrons }) => {
+        const room = megaRooms[roomId];
+        if (!room || room.status !== 'patron_selection') return;
+        if (socket.id === room.p1.id) room.p1Patrons = patrons || {};
+        else if (socket.id === room.p2.id) room.p2Patrons = patrons || {};
+
+        if (room.p1Patrons !== null && room.p2Patrons !== null) {
+            finalizeMegaPatrons(room);
+        }
+    });
+
     socket.on('cancelMatchmaking', (data) => {
         randomQueue = randomQueue.filter(s => s.id !== socket.id);
         tripleRandomQueue = tripleRandomQueue.filter(s => s.id !== socket.id);
@@ -1193,6 +1367,33 @@ io.on('connection', (socket) => {
         randomQueue = randomQueue.filter(s => s.id !== socket.id);
         tripleRandomQueue = tripleRandomQueue.filter(s => s.id !== socket.id);
         megaRandomQueue = megaRandomQueue.filter(s => s.id !== socket.id);
+
+        for (const [id, room] of Object.entries(rooms)) {
+            if (room.status === 'patron_selection' && (room.p1?.id === socket.id || room.p2?.id === socket.id)) {
+                finalizeDraftPatrons(room);
+            }
+        }
+        for (const [id, room] of Object.entries(tripleRooms)) {
+            if (room.status === 'patron_selection' && (room.p1?.id === socket.id || room.p2?.id === socket.id)) {
+                finalizeTriplePatrons(room);
+            }
+        }
+        for (const [id, room] of Object.entries(megaRooms)) {
+            if (room.status === 'patron_selection' && (room.p1?.id === socket.id || room.p2?.id === socket.id)) {
+                finalizeMegaPatrons(room);
+            }
+        }
+
+        for (const [tId, tour] of Object.entries(tournaments)) {
+            if (tour.rounds && tour.rounds[tour.currentRoundIndex]) {
+                const curRound = tour.rounds[tour.currentRoundIndex];
+                curRound.matches.forEach(match => {
+                    if (match.draftStatus === 'patron_selection' && (match.p1?.socketId === socket.id || match.p2?.socketId === socket.id)) {
+                        finalizeTourMatchPatrons(tour, match);
+                    }
+                });
+            }
+        }
     });
 
     // ==========================================
@@ -1448,6 +1649,22 @@ io.on('connection', (socket) => {
         if (!match || match.status !== 'drafting') return;
 
         processTourMegaPick(tour, match, socket.id, type, item);
+    });
+
+    socket.on('submitTourPatrons', ({ tourId, matchId, patrons }) => {
+        const tour = tournaments[tourId];
+        if (!tour) return;
+        const curRound = tour.rounds[tour.currentRoundIndex];
+        if (!curRound) return;
+        const match = curRound.matches.find(m => m.id === matchId);
+        if (!match || match.draftStatus !== 'patron_selection') return;
+
+        if (match.p1 && match.p1.socketId === socket.id) match.p1Patrons = patrons || {};
+        else if (match.p2 && match.p2.socketId === socket.id) match.p2Patrons = patrons || {};
+
+        if (match.p1Patrons !== null && match.p2Patrons !== null) {
+            finalizeTourMatchPatrons(tour, match);
+        }
     });
 
     socket.on('declareWinner', ({ tourId, matchId, winnerUsername, hostKey }) => {
