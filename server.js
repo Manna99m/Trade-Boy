@@ -14,13 +14,13 @@ app.use(express.json());
 
 // Dynamic OG tags for /post
 const POST_DATA = {
-    'archdemon-teams': { title: 'Best Team for Archdemon', img: 'archdemon-teams.jpg' },
-    'event-teams': { title: 'Event Teams - EVA Chapters', img: 'event-teams.jpg' },
-    'team-build': { title: 'Team Build', img: 'team-build.jpg' },
-    'heroes': { title: 'Heroes Tier List', img: 'heroes.jpg' },
-    'titans': { title: 'Titans Guide', img: 'titans.jpg' },
-    'maestro-teams': { title: 'Best Team for Maestro', img: 'maestro-teams.jpg' },
-    'osh-teams': { title: 'Osh Teams', img: 'osh-teams.png' }
+    'archdemon-teams': { title: 'Best Team for Archdemon', desc: 'Best formations to tackle the Archdemon.', img: 'archdemon-teams.jpg' },
+    'event-teams': { title: 'Event Teams - EVA Chapters', desc: 'Top tier combinations for the current events.', img: 'event-teams.jpg' },
+    'team-build': { title: 'Team Build', desc: 'Comprehensive guide to building a balanced team.', img: 'team-build.jpg' },
+    'heroes': { title: 'Heroes Tier List', desc: 'Tier list and analysis of the best heroes.', img: 'heroes.jpg' },
+    'titans': { title: 'Titans Guide', desc: 'Maximize your titans damage and utility.', img: 'titans.jpg' },
+    'maestro-teams': { title: 'Best Team for Maestro', desc: 'Top strategies and team comps to counter Maestro.', img: 'maestro-teams.jpg' },
+    'osh-teams': { title: 'Best Team for OSH', desc: 'Discover the most effective lineups for defeating OSH.', img: 'osh-teams.jpg' }
 };
 
 app.get('/post', (req, res, next) => {
@@ -29,10 +29,14 @@ app.get('/post', (req, res, next) => {
         const filePath = path.join(__dirname, 'public', 'post.html');
         fs.readFile(filePath, 'utf8', (err, data) => {
             if (err) return next();
-            const title = POST_DATA[id].title + ' - Trade Boy';
-            const img = 'https://trade-boy.onrender.com/' + POST_DATA[id].img;
+            const post = POST_DATA[id];
+            const title = post.title + ' - Trade Boy';
+            const img = 'https://trade-boy.onrender.com/' + post.img;
             let html = data.replace(/content="Trade Boy - Hero Wars Guide"/g, 'content="' + title + '"');
             html = html.replace(/content="https:\/\/trade-boy\.onrender\.com\/logo\.jpg"/g, 'content="' + img + '"');
+            if (post.desc) {
+                html = html.replace(/content="Your ultimate Hero Wars companion for real-time Draft Battles, Team Builds, and Tier Lists\."/g, 'content="' + post.desc + '"');
+            }
             res.send(html);
         });
     } else {
