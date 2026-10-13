@@ -425,6 +425,606 @@ function processMegaPick(roomId, socketId, type, item) {
     }
 }
 
+// ==========================================
+// TOURNAMENT SYSTEM CORE LOGIC & HELPERS
+// ==========================================
+const MASTER_HOST_KEYS = [
+    'tradeboy2026',
+    'TB-HOST-2026',
+    'admin2026',
+    'hero-wars-host',
+    'olympus-hw',
+    'hw-deda',
+    'hw-central',
+    'project-hw',
+    'marzuki-hw',
+    process.env.HOST_KEY
+].filter(Boolean);
+let tournaments = {};
+
+function isValidHostKey(key) {
+    if (!key) return false;
+    const cleanKey = key.trim().toLowerCase();
+    return MASTER_HOST_KEYS.some(k => k.toLowerCase() === cleanKey);
+}
+
+function generateTourId() {
+    return 'TB-' + Math.floor(1000 + Math.random() * 9000);
+}
+
+function getRoundName(totalPlayers, roundIndex) {
+    const remainingMatches = Math.pow(2, Math.log2(totalPlayers) - 1 - roundIndex);
+    if (remainingMatches === 1) return 'Grand Finals';
+    if (remainingMatches === 2) return 'Semi-Finals';
+    if (remainingMatches === 4) return 'Quarter-Finals';
+    if (remainingMatches === 8) return 'Round of 16';
+    if (remainingMatches === 16) return 'Round of 32';
+    return `Round ${roundIndex + 1}`;
+}
+
+function getTournamentPublicState(tour) {
+    if (!tour) return null;
+    return {
+        id: tour.id,
+        name: tour.name,
+        details: tour.details,
+        rewards: tour.rewards,
+        playerLimit: tour.playerLimit,
+        gameMode: tour.gameMode,
+        hostUsername: tour.hostUsername,
+        status: tour.status,
+        currentRoundIndex: tour.currentRoundIndex,
+        totalRounds: tour.totalRounds,
+        currentRoundName: getRoundName(tour.playerLimit, tour.currentRoundIndex),
+        players: tour.players.map(p => ({
+            username: p.username,
+            avatar: p.avatar,
+            playerId: p.playerId || '',
+            platform: p.platform || 'WEB',
+            eliminated: !!p.eliminated,
+            isHost: !!p.isHost,
+            ready: true
+        })),
+        rounds: tour.rounds.map(r => ({
+            roundIndex: r.roundIndex,
+            roundName: r.roundName,
+            gameMode: r.gameMode,
+            status: r.status,
+            matches: r.matches.map(m => ({
+                id: m.id,
+                matchNumber: m.matchNumber,
+                p1: m.p1 ? {
+                    username: m.p1.username,
+                    avatar: m.p1.avatar,
+                    playerId: m.p1.playerId || '',
+                    platform: m.p1.platform || 'WEB'
+                } : null,
+                p2: m.p2 ? {
+                    username: m.p2.username,
+                    avatar: m.p2.avatar,
+                    playerId: m.p2.playerId || '',
+                    platform: m.p2.platform || 'WEB'
+                } : null,
+                p1Deck: m.p1Deck,
+                p2Deck: m.p2Deck,
+                draftStatus: m.draftStatus,
+                winner: m.winner,
+                status: m.status
+            }))
+        })),
+        champion: tour.champion,
+        runnerUp: tour.runnerUp
+    };
+}
+
+function setupInitialRound(tour) {
+    // Pairing: Player 1 vs Player 2, 3 vs 4, ... up to 31 vs 32 as requested
+    const numMatches = tour.playerLimit / 2;
+    const initialMatches = [];
+
+    for (let i = 0; i < numMatches; i++) {
+        const p1Index = i * 2;
+        const p2Index = i * 2 + 1;
+        const p1 = tour.players[p1Index] || null;
+        const p2 = tour.players[p2Index] || null;
+
+        const match = {
+            id: `m_0_${i}`,
+            matchNumber: i + 1,
+            p1: p1 ? {
+                username: p1.username,
+                avatar: p1.avatar,
+                playerId: p1.playerId || '',
+                platform: p1.platform || 'WEB',
+                socketId: p1.socketId
+            } : null,
+            p2: p2 ? {
+                username: p2.username,
+                avatar: p2.avatar,
+                playerId: p2.playerId || '',
+                platform: p2.platform || 'WEB',
+                socketId: p2.socketId
+            } : null,
+            p1Deck: null,
+            p2Deck: null,
+            draftStatus: 'pending',
+            winner: null,
+            status: 'pending'
+        };
+
+        // If a slot has only 1 player (bye), auto-advance
+        if (p1 && !p2) {
+            match.winner = p1.username;
+            match.status = 'completed';
+        }
+
+        initialMatches.push(match);
+    }
+
+    tour.rounds = [{
+        roundIndex: 0,
+        roundName: getRoundName(tour.playerLimit, 0),
+        gameMode: tour.gameMode,
+        status: 'in_progress',
+        matches: initialMatches
+    }];
+}
+
+function startMatchesForRound(tour, roundIndex) {
+    const round = tour.rounds[roundIndex];
+    if (!round) return;
+
+    round.status = 'in_progress';
+    round.gameMode = tour.gameMode;
+
+    round.matches.forEach(match => {
+        if (!match.p1 || !match.p2 || match.status === 'completed') return;
+
+        match.status = 'drafting';
+        match.draftStatus = 'drafting';
+
+        if (tour.gameMode === 'draft') {
+            initMatchDraft(tour, match);
+        } else if (tour.gameMode === 'triple') {
+            initMatchTripleDraft(tour, match);
+        } else if (tour.gameMode === 'mega') {
+            initMatchMegaDraft(tour, match);
+        }
+    });
+}
+
+function initMatchDraft(tour, match) {
+    const shuffledHeroes = shuffle([...allHeroes]);
+    const shuffledPets = shuffle([...allPets]);
+    const draftHeroes = shuffledHeroes.slice(0, 10);
+    const draftPets = shuffledPets.slice(0, 2);
+    const p1GetsPet = Math.random() < 0.5;
+
+    let p1Choices, p2Choices, p1Type, p2Type;
+
+    if (p1GetsPet) {
+        p1Choices = [
+            [draftHeroes[0], draftHeroes[1]],
+            [draftHeroes[2], draftHeroes[3]],
+            [draftPets[0], draftPets[1]]
+        ];
+        p2Choices = [
+            [draftHeroes[4], draftHeroes[5]],
+            [draftHeroes[6], draftHeroes[7]],
+            [draftHeroes[8], draftHeroes[9]]
+        ];
+        p1Type = ['hero', 'hero', 'pet'];
+        p2Type = ['hero', 'hero', 'hero'];
+    } else {
+        p1Choices = [
+            [draftHeroes[0], draftHeroes[1]],
+            [draftHeroes[2], draftHeroes[3]],
+            [draftHeroes[4], draftHeroes[5]]
+        ];
+        p2Choices = [
+            [draftHeroes[6], draftHeroes[7]],
+            [draftHeroes[8], draftHeroes[9]],
+            [draftPets[0], draftPets[1]]
+        ];
+        p1Type = ['hero', 'hero', 'hero'];
+        p2Type = ['hero', 'hero', 'pet'];
+    }
+
+    match.draftData = {
+        type: 'draft',
+        p1GetsPet,
+        p1: { choices: p1Choices, type: p1Type, results: { picked: [], rejected: [] } },
+        p2: { choices: p2Choices, type: p2Type, results: { picked: [], rejected: [] } }
+    };
+
+    if (match.p1 && match.p1.socketId) {
+        io.to(match.p1.socketId).emit('tourMatchDraftStart', {
+            tourId: tour.id,
+            matchId: match.id,
+            mode: 'draft',
+            role: 'p1',
+            choices: p1Choices,
+            opponentChoices: p2Choices,
+            type: p1Type,
+            opponentType: p2Type,
+            opponentName: match.p2.username,
+            opponentAvatar: match.p2.avatar,
+            timeLimit: 30
+        });
+    }
+
+    if (match.p2 && match.p2.socketId) {
+        io.to(match.p2.socketId).emit('tourMatchDraftStart', {
+            tourId: tour.id,
+            matchId: match.id,
+            mode: 'draft',
+            role: 'p2',
+            choices: p2Choices,
+            opponentChoices: p1Choices,
+            type: p2Type,
+            opponentType: p1Type,
+            opponentName: match.p1.username,
+            opponentAvatar: match.p1.avatar,
+            timeLimit: 30
+        });
+    }
+
+    // 32s auto pick fallback (30s limit + 2s network buffer)
+    match.draftTimer = setTimeout(() => {
+        if (!match || match.status !== 'drafting') return;
+        ['p1', 'p2'].forEach(role => {
+            const playerState = match.draftData[role];
+            while (playerState.results.picked.length < 3) {
+                const idx = playerState.results.picked.length;
+                const pair = playerState.choices[idx];
+                playerState.results.picked.push(pair[0]);
+                playerState.results.rejected.push(pair[1]);
+            }
+        });
+        checkTourDraftComplete(tour, match);
+    }, 32000);
+}
+
+function checkTourDraftComplete(tour, match) {
+    if (match.status !== 'drafting') return;
+    const { p1, p2, p1GetsPet } = match.draftData;
+
+    if (p1.results.picked.length === 3 && p2.results.picked.length === 3) {
+        if (match.draftTimer) clearTimeout(match.draftTimer);
+        match.draftStatus = 'completed';
+        match.status = 'awaiting_combat';
+
+        let p1Final, p2Final;
+        if (p1GetsPet) {
+            p1Final = {
+                heroes: [...p1.results.picked.slice(0, 2), ...p2.results.rejected.slice(0, 3)],
+                pet: p1.results.picked[2]
+            };
+            p2Final = {
+                heroes: [...p2.results.picked.slice(0, 3), ...p1.results.rejected.slice(0, 2)],
+                pet: p1.results.rejected[2]
+            };
+        } else {
+            p1Final = {
+                heroes: [...p1.results.picked.slice(0, 3), ...p2.results.rejected.slice(0, 2)],
+                pet: p2.results.rejected[2]
+            };
+            p2Final = {
+                heroes: [...p2.results.picked.slice(0, 2), ...p1.results.rejected.slice(0, 3)],
+                pet: p2.results.picked[2]
+            };
+        }
+
+        match.p1Deck = p1Final;
+        match.p2Deck = p2Final;
+
+        if (match.p1?.socketId) {
+            io.to(match.p1.socketId).emit('tourMatchDraftComplete', {
+                matchId: match.id,
+                yourTeam: p1Final,
+                opponentTeam: p2Final,
+                opponentName: match.p2.username,
+                opponentAvatar: match.p2.avatar
+            });
+        }
+        if (match.p2?.socketId) {
+            io.to(match.p2.socketId).emit('tourMatchDraftComplete', {
+                matchId: match.id,
+                yourTeam: p2Final,
+                opponentTeam: p1Final,
+                opponentName: match.p1.username,
+                opponentAvatar: match.p1.avatar
+            });
+        }
+
+        io.to(`tour_${tour.id}`).emit('tourStateUpdate', getTournamentPublicState(tour));
+    }
+}
+
+function initMatchTripleDraft(tour, match) {
+    const shuffledHeroes = shuffle([...allHeroes]);
+    const shuffledPets = shuffle([...allPets]);
+    const draftHeroes = shuffledHeroes.slice(0, 30);
+    const draftPets = shuffledPets.slice(0, 6);
+
+    const p1Choices = [
+        [draftHeroes[0], draftHeroes[1], draftHeroes[2]],
+        [draftHeroes[3], draftHeroes[4], draftHeroes[5]],
+        [draftHeroes[6], draftHeroes[7], draftHeroes[8]],
+        [draftHeroes[9], draftHeroes[10], draftHeroes[11]],
+        [draftHeroes[12], draftHeroes[13], draftHeroes[14]],
+        [draftPets[0], draftPets[1], draftPets[2]]
+    ];
+    const p2Choices = [
+        [draftHeroes[15], draftHeroes[16], draftHeroes[17]],
+        [draftHeroes[18], draftHeroes[19], draftHeroes[20]],
+        [draftHeroes[21], draftHeroes[22], draftHeroes[23]],
+        [draftHeroes[24], draftHeroes[25], draftHeroes[26]],
+        [draftHeroes[27], draftHeroes[28], draftHeroes[29]],
+        [draftPets[3], draftPets[4], draftPets[5]]
+    ];
+
+    const types = ['hero', 'hero', 'hero', 'hero', 'hero', 'pet'];
+
+    match.draftData = {
+        type: 'triple',
+        p1: { choices: p1Choices, type: types, results: { picked: [] } },
+        p2: { choices: p2Choices, type: types, results: { picked: [] } }
+    };
+
+    if (match.p1?.socketId) {
+        io.to(match.p1.socketId).emit('tourMatchTripleDraftStart', {
+            tourId: tour.id,
+            matchId: match.id,
+            mode: 'triple',
+            role: 'p1',
+            choices: p1Choices,
+            opponentChoices: p2Choices,
+            type: types,
+            opponentName: match.p2.username,
+            opponentAvatar: match.p2.avatar,
+            timeLimit: 35
+        });
+    }
+
+    if (match.p2?.socketId) {
+        io.to(match.p2.socketId).emit('tourMatchTripleDraftStart', {
+            tourId: tour.id,
+            matchId: match.id,
+            mode: 'triple',
+            role: 'p2',
+            choices: p2Choices,
+            opponentChoices: p1Choices,
+            type: types,
+            opponentName: match.p1.username,
+            opponentAvatar: match.p1.avatar,
+            timeLimit: 35
+        });
+    }
+
+    // 37s auto pick fallback (35s limit + 2s network buffer)
+    match.draftTimer = setTimeout(() => {
+        if (!match || match.status !== 'drafting') return;
+        ['p1', 'p2'].forEach(role => {
+            const playerState = match.draftData[role];
+            while (playerState.results.picked.length < 6) {
+                const idx = playerState.results.picked.length;
+                playerState.results.picked.push(playerState.choices[idx][0]);
+            }
+        });
+        checkTourTripleDraftComplete(tour, match);
+    }, 37000);
+}
+
+function checkTourTripleDraftComplete(tour, match) {
+    if (match.status !== 'drafting') return;
+    const { p1, p2 } = match.draftData;
+
+    if (p1.results.picked.length === 6 && p2.results.picked.length === 6) {
+        if (match.draftTimer) clearTimeout(match.draftTimer);
+        match.draftStatus = 'completed';
+        match.status = 'awaiting_combat';
+
+        const p1Final = {
+            heroes: p1.results.picked.slice(0, 5),
+            pet: p1.results.picked[5]
+        };
+        const p2Final = {
+            heroes: p2.results.picked.slice(0, 5),
+            pet: p2.results.picked[5]
+        };
+
+        match.p1Deck = p1Final;
+        match.p2Deck = p2Final;
+
+        if (match.p1?.socketId) {
+            io.to(match.p1.socketId).emit('tourMatchTripleDraftComplete', {
+                matchId: match.id,
+                yourTeam: p1Final,
+                opponentTeam: p2Final,
+                opponentName: match.p2.username,
+                opponentAvatar: match.p2.avatar
+            });
+        }
+        if (match.p2?.socketId) {
+            io.to(match.p2.socketId).emit('tourMatchTripleDraftComplete', {
+                matchId: match.id,
+                yourTeam: p2Final,
+                opponentTeam: p1Final,
+                opponentName: match.p1.username,
+                opponentAvatar: match.p1.avatar
+            });
+        }
+
+        io.to(`tour_${tour.id}`).emit('tourStateUpdate', getTournamentPublicState(tour));
+    }
+}
+
+function initMatchMegaDraft(tour, match) {
+    const shuffledHeroes = shuffle([...allHeroes]);
+    const shuffledPets = shuffle([...allPets]);
+
+    match.draftData = {
+        type: 'mega',
+        pool: {
+            heroes: shuffledHeroes.slice(0, 15),
+            pets: shuffledPets.slice(0, 3)
+        },
+        turn: 'p1',
+        picksLeftThisTurn: 1,
+        totalPicks: 0,
+        p1: { results: { heroes: [], pets: [] } },
+        p2: { results: { heroes: [], pets: [] } }
+    };
+
+    if (match.p1?.socketId) {
+        io.to(match.p1.socketId).emit('tourMatchMegaDraftStart', {
+            tourId: tour.id,
+            matchId: match.id,
+            mode: 'mega',
+            role: 'p1',
+            pool: match.draftData.pool,
+            opponentName: match.p2.username,
+            opponentAvatar: match.p2.avatar,
+            turn: match.draftData.turn,
+            picksLeftThisTurn: match.draftData.picksLeftThisTurn,
+            timeLimit: 12
+        });
+    }
+
+    if (match.p2?.socketId) {
+        io.to(match.p2.socketId).emit('tourMatchMegaDraftStart', {
+            tourId: tour.id,
+            matchId: match.id,
+            mode: 'mega',
+            role: 'p2',
+            pool: match.draftData.pool,
+            opponentName: match.p1.username,
+            opponentAvatar: match.p1.avatar,
+            turn: match.draftData.turn,
+            picksLeftThisTurn: match.draftData.picksLeftThisTurn,
+            timeLimit: 12
+        });
+    }
+
+    startTourMegaTurnTimer(tour, match);
+}
+
+function startTourMegaTurnTimer(tour, match) {
+    if (!match || match.status !== 'drafting') return;
+    if (match.megaTurnTimer) clearTimeout(match.megaTurnTimer);
+
+    match.megaTurnTimer = setTimeout(() => {
+        if (!match || match.status !== 'drafting') return;
+        const currentRole = match.draftData.turn;
+        const playerState = match.draftData[currentRole];
+        const pool = match.draftData.pool;
+
+        let type = 'hero';
+        let item = null;
+        if (playerState.results.heroes.length < 5 && pool.heroes.length > 0) {
+            type = 'hero';
+            item = pool.heroes[Math.floor(Math.random() * pool.heroes.length)];
+        } else if (playerState.results.pets.length < 1 && pool.pets.length > 0) {
+            type = 'pet';
+            item = pool.pets[Math.floor(Math.random() * pool.pets.length)];
+        }
+
+        if (item) {
+            const playerSocketId = currentRole === 'p1' ? match.p1.socketId : match.p2.socketId;
+            processTourMegaPick(tour, match, playerSocketId, type, item);
+        }
+    }, 12000);
+}
+
+function processTourMegaPick(tour, match, socketId, type, item) {
+    if (!match || match.status !== 'drafting') return;
+    const currentRole = match.draftData.turn;
+    const currentSocketId = currentRole === 'p1' ? match.p1?.socketId : match.p2?.socketId;
+
+    if (socketId !== currentSocketId) return;
+
+    const playerState = match.draftData[currentRole];
+    const pool = match.draftData.pool;
+
+    if (type === 'hero' && playerState.results.heroes.length >= 5) return;
+    if (type === 'pet' && playerState.results.pets.length >= 1) return;
+    if (type === 'hero' && !pool.heroes.includes(item)) return;
+    if (type === 'pet' && !pool.pets.includes(item)) return;
+
+    if (type === 'hero') pool.heroes = pool.heroes.filter(h => h !== item);
+    else pool.pets = pool.pets.filter(p => p !== item);
+
+    if (type === 'hero') playerState.results.heroes.push(item);
+    else playerState.results.pets.push(item);
+
+    match.draftData.totalPicks++;
+    match.draftData.picksLeftThisTurn--;
+
+    if (match.draftData.picksLeftThisTurn === 0) {
+        match.draftData.turn = currentRole === 'p1' ? 'p2' : 'p1';
+        const total = match.draftData.totalPicks;
+        if (total === 1 || total === 3 || total === 5 || total === 7 || total === 9) {
+            match.draftData.picksLeftThisTurn = 2;
+        } else if (total === 11) {
+            match.draftData.picksLeftThisTurn = 1;
+        }
+    }
+
+    const payload = {
+        pool: match.draftData.pool,
+        p1: match.draftData.p1.results,
+        p2: match.draftData.p2.results,
+        turn: match.draftData.turn,
+        picksLeftThisTurn: match.draftData.picksLeftThisTurn,
+        timeLimit: 12,
+        p1Name: match.p1.username,
+        p2Name: match.p2.username,
+        p1Avatar: match.p1.avatar,
+        p2Avatar: match.p2.avatar
+    };
+
+    if (match.p1?.socketId) io.to(match.p1.socketId).emit('tourMegaDraftUpdate', payload);
+    if (match.p2?.socketId) io.to(match.p2.socketId).emit('tourMegaDraftUpdate', payload);
+
+    if (match.draftData.totalPicks >= 12) {
+        if (match.megaTurnTimer) clearTimeout(match.megaTurnTimer);
+        match.draftStatus = 'completed';
+        match.status = 'awaiting_combat';
+
+        const p1Final = {
+            heroes: match.draftData.p1.results.heroes,
+            pet: match.draftData.p1.results.pets[0] || null
+        };
+        const p2Final = {
+            heroes: match.draftData.p2.results.heroes,
+            pet: match.draftData.p2.results.pets[0] || null
+        };
+
+        match.p1Deck = p1Final;
+        match.p2Deck = p2Final;
+
+        if (match.p1?.socketId) {
+            io.to(match.p1.socketId).emit('tourMegaDraftComplete', {
+                yourTeam: p1Final,
+                opponentTeam: p2Final,
+                opponentAvatar: match.p2.avatar
+            });
+        }
+        if (match.p2?.socketId) {
+            io.to(match.p2.socketId).emit('tourMegaDraftComplete', {
+                yourTeam: p2Final,
+                opponentTeam: p1Final,
+                opponentAvatar: match.p1.avatar
+            });
+        }
+
+        io.to(`tour_${tour.id}`).emit('tourStateUpdate', getTournamentPublicState(tour));
+    } else {
+        startTourMegaTurnTimer(tour, match);
+    }
+}
+
 io.on('connection', (socket) => {
     socket.on('joinRandom', (username) => {
         socket.username = username;
@@ -593,6 +1193,426 @@ io.on('connection', (socket) => {
         randomQueue = randomQueue.filter(s => s.id !== socket.id);
         tripleRandomQueue = tripleRandomQueue.filter(s => s.id !== socket.id);
         megaRandomQueue = megaRandomQueue.filter(s => s.id !== socket.id);
+    });
+
+    // ==========================================
+    // TOURNAMENT SYSTEM SOCKET HANDLERS
+    // ==========================================
+
+    socket.on('verifyHostKey', ({ hostKey }, callback) => {
+        const isValid = isValidHostKey(hostKey);
+        if (typeof callback === 'function') {
+            callback({ valid: isValid });
+        } else {
+            socket.emit('hostKeyVerified', { valid: isValid });
+        }
+    });
+
+    socket.on('createTournament', ({ hostKey, name, details, rewards, playerLimit, gameMode, username, avatar }) => {
+        if (!isValidHostKey(hostKey)) {
+            return socket.emit('tourError', 'Invalid Host Key / Permission denied.');
+        }
+
+        const validLimits = [4, 8, 16, 32];
+        const limit = validLimits.includes(parseInt(playerLimit)) ? parseInt(playerLimit) : 8;
+        const validModes = ['draft', 'triple', 'mega'];
+        const mode = validModes.includes(gameMode) ? gameMode : 'draft';
+
+        const tourId = generateTourId();
+        const totalRounds = Math.log2(limit);
+
+        const tour = {
+            id: tourId,
+            name: name && name.trim() ? name.trim() : 'Hero Wars Tournament',
+            details: details ? details.trim() : '',
+            rewards: rewards ? rewards.trim() : '',
+            playerLimit: limit,
+            gameMode: mode,
+            hostKey: hostKey.trim(),
+            hostSocketId: socket.id,
+            hostUsername: username || 'Tournament Host',
+            status: 'lobby',
+            currentRoundIndex: 0,
+            totalRounds: totalRounds,
+            players: [], // Host is NOT forced into participants!
+            rounds: [],
+            champion: null,
+            runnerUp: null,
+            createdTime: Date.now()
+        };
+
+        tournaments[tourId] = tour;
+        socket.join(`tour_${tourId}`);
+        socket.tourId = tourId;
+        socket.isTourHost = true;
+
+        socket.emit('tournamentCreated', {
+            tourId,
+            state: getTournamentPublicState(tour),
+            hostKey: tour.hostKey
+        });
+    });
+
+    socket.on('joinTournament', ({ tourId, username, avatar, playerId, platform, isHostJoining, hostKey }) => {
+        const cleanId = (tourId || '').trim().toUpperCase();
+        const tour = tournaments[cleanId];
+
+        if (!tour) {
+            return socket.emit('tourError', 'Tournament not found. Please check the Tour ID.');
+        }
+
+        socket.join(`tour_${cleanId}`);
+        socket.tourId = cleanId;
+
+        // If the host is re-authenticating
+        if (hostKey && isValidHostKey(hostKey) && hostKey.trim() === tour.hostKey) {
+            tour.hostSocketId = socket.id;
+            socket.isTourHost = true;
+        }
+
+        const cleanPlayerId = (playerId || '').trim();
+        const cleanPlatform = (platform === 'FB') ? 'FB' : 'WEB';
+
+        // Check if player already in tournament
+        let player = tour.players.find(p => p.username === username);
+
+        if (player) {
+            // Reconnecting player
+            player.socketId = socket.id;
+            player.avatar = avatar || getUserAvatar(username) || player.avatar;
+            if (cleanPlayerId) player.playerId = cleanPlayerId;
+            if (platform) player.platform = cleanPlatform;
+            // Update active match socket if playing
+            const curRound = tour.rounds[tour.currentRoundIndex];
+            if (curRound) {
+                curRound.matches.forEach(m => {
+                    if (m.p1 && m.p1.username === username) {
+                        m.p1.socketId = socket.id;
+                        m.p1.playerId = player.playerId;
+                        m.p1.platform = player.platform;
+                    }
+                    if (m.p2 && m.p2.username === username) {
+                        m.p2.socketId = socket.id;
+                        m.p2.playerId = player.playerId;
+                        m.p2.platform = player.platform;
+                    }
+                });
+            }
+        } else {
+            // New join
+            if (tour.status !== 'lobby') {
+                // If tournament already started, allow joining as spectator!
+                socket.emit('tourJoinedAsSpectator', {
+                    message: 'Tournament already started. You are now spectating.',
+                    state: getTournamentPublicState(tour)
+                });
+                return;
+            }
+
+            if (tour.players.length >= tour.playerLimit) {
+                return socket.emit('tourError', 'Tournament is full! You can watch as spectator once it starts.');
+            }
+
+            player = {
+                username,
+                avatar: avatar || getUserAvatar(username) || 'avatar1.jpg',
+                playerId: cleanPlayerId,
+                platform: cleanPlatform,
+                socketId: socket.id,
+                isHost: isHostJoining || (socket.id === tour.hostSocketId),
+                eliminated: false,
+                joinedAt: Date.now()
+            };
+            tour.players.push(player);
+        }
+
+        const state = getTournamentPublicState(tour);
+        io.to(`tour_${cleanId}`).emit('tourStateUpdate', state);
+        socket.emit('tourJoinedSuccess', { tourId: cleanId, state });
+    });
+
+    socket.on('leaveTournament', ({ tourId, username }) => {
+        const cleanId = (tourId || '').trim().toUpperCase();
+        const tour = tournaments[cleanId];
+        if (!tour) return;
+
+        socket.leave(`tour_${cleanId}`);
+        if (tour.status === 'lobby') {
+            tour.players = tour.players.filter(p => p.username !== username);
+            io.to(`tour_${cleanId}`).emit('tourStateUpdate', getTournamentPublicState(tour));
+        }
+        socket.emit('tourLeft');
+    });
+
+    socket.on('tourSetGameMode', ({ tourId, gameMode, hostKey }) => {
+        const tour = tournaments[tourId];
+        if (!tour) return;
+        if (tour.hostKey !== (hostKey || '').trim()) {
+            return socket.emit('tourError', 'Host permission required.');
+        }
+        if (['draft', 'triple', 'mega'].includes(gameMode)) {
+            tour.gameMode = gameMode;
+            io.to(`tour_${tourId}`).emit('tourStateUpdate', getTournamentPublicState(tour));
+        }
+    });
+
+    socket.on('startTournament', ({ tourId, hostKey }) => {
+        const tour = tournaments[tourId];
+        if (!tour) return;
+        if (tour.hostKey !== (hostKey || '').trim()) {
+            return socket.emit('tourError', 'Host permission required.');
+        }
+
+        if (tour.players.length < 2) {
+            return socket.emit('tourError', 'Need at least 2 players to start the tournament.');
+        }
+
+        if (tour.status !== 'lobby') {
+            return socket.emit('tourError', 'Tournament already started.');
+        }
+
+        // Fill remaining slots if any or seed bracket
+        setupInitialRound(tour);
+
+        tour.status = 'countdown';
+        io.to(`tour_${tour.id}`).emit('tourCountdown', { seconds: 5 });
+
+        setTimeout(() => {
+            if (!tournaments[tour.id]) return;
+            tour.status = 'in_round';
+            startMatchesForRound(tour, 0);
+            io.to(`tour_${tour.id}`).emit('tourStateUpdate', getTournamentPublicState(tour));
+        }, 5500);
+    });
+
+    socket.on('tourMakeChoice', ({ tourId, matchId, index, picked, rejected }) => {
+        const tour = tournaments[tourId];
+        if (!tour || tour.status !== 'in_round') return;
+
+        const curRound = tour.rounds[tour.currentRoundIndex];
+        if (!curRound) return;
+        const match = curRound.matches.find(m => m.id === matchId);
+        if (!match || match.status !== 'drafting') return;
+
+        const isP1 = match.p1 && match.p1.socketId === socket.id;
+        const isP2 = match.p2 && match.p2.socketId === socket.id;
+        if (!isP1 && !isP2) return;
+
+        const playerState = isP1 ? match.draftData.p1 : match.draftData.p2;
+        if (playerState.results.picked.length >= 3) return;
+
+        playerState.results.picked.push(picked);
+        playerState.results.rejected.push(rejected);
+
+        const opponentSocketId = isP1 ? match.p2.socketId : match.p1.socketId;
+        if (opponentSocketId) {
+            io.to(opponentSocketId).emit('tourOpponentSelected');
+        }
+
+        checkTourDraftComplete(tour, match);
+    });
+
+    socket.on('tourMakeTripleChoice', ({ tourId, matchId, index, picked }) => {
+        const tour = tournaments[tourId];
+        if (!tour || tour.status !== 'in_round') return;
+
+        const curRound = tour.rounds[tour.currentRoundIndex];
+        if (!curRound) return;
+        const match = curRound.matches.find(m => m.id === matchId);
+        if (!match || match.status !== 'drafting') return;
+
+        const isP1 = match.p1 && match.p1.socketId === socket.id;
+        const isP2 = match.p2 && match.p2.socketId === socket.id;
+        if (!isP1 && !isP2) return;
+
+        const playerState = isP1 ? match.draftData.p1 : match.draftData.p2;
+        if (playerState.results.picked.length >= 6) return;
+
+        playerState.results.picked.push(picked);
+
+        const opponentSocketId = isP1 ? match.p2.socketId : match.p1.socketId;
+        if (opponentSocketId) {
+            io.to(opponentSocketId).emit('tourOpponentSelected');
+        }
+
+        checkTourTripleDraftComplete(tour, match);
+    });
+
+    socket.on('tourMakeMegaChoice', ({ tourId, matchId, type, item }) => {
+        const tour = tournaments[tourId];
+        if (!tour || tour.status !== 'in_round') return;
+
+        const curRound = tour.rounds[tour.currentRoundIndex];
+        if (!curRound) return;
+        const match = curRound.matches.find(m => m.id === matchId);
+        if (!match || match.status !== 'drafting') return;
+
+        processTourMegaPick(tour, match, socket.id, type, item);
+    });
+
+    socket.on('declareWinner', ({ tourId, matchId, winnerUsername, hostKey }) => {
+        const tour = tournaments[tourId];
+        if (!tour) return;
+        if (tour.hostKey !== (hostKey || '').trim()) {
+            return socket.emit('tourError', 'Host permission required.');
+        }
+
+        const curRound = tour.rounds[tour.currentRoundIndex];
+        if (!curRound) return;
+        const match = curRound.matches.find(m => m.id === matchId);
+        if (!match) return;
+
+        if (match.status === 'completed') {
+            return socket.emit('tourError', 'Match already completed.');
+        }
+
+        if (match.p1 && match.p2 && (!match.p1Deck || !match.p2Deck)) {
+            return socket.emit('tourError', 'Cannot declare a winner while players are still drafting teams.');
+        }
+
+        if (![match.p1?.username, match.p2?.username].includes(winnerUsername)) {
+            return socket.emit('tourError', 'Winner must be one of the match participants.');
+        }
+
+        match.winner = winnerUsername;
+        match.status = 'completed';
+
+        const loserUsername = match.p1.username === winnerUsername ? match.p2?.username : match.p1?.username;
+        if (loserUsername) {
+            const loser = tour.players.find(p => p.username === loserUsername);
+            if (loser) loser.eliminated = true;
+        }
+
+        // Check if all active matches in this round are completed
+        const activeMatches = curRound.matches.filter(m => m.p1 || m.p2);
+        const allRoundMatchesDone = activeMatches.length > 0 && activeMatches.every(m => m.status === 'completed' && m.winner);
+
+        if (allRoundMatchesDone) {
+            curRound.status = 'completed';
+            // Is this the Grand Finals? (Only 1 active match)
+            if (activeMatches.length === 1) {
+                tour.status = 'finished';
+                const finalMatch = activeMatches[0];
+                const champUser = finalMatch.winner;
+                const runnerUser = finalMatch.p1.username === champUser ? finalMatch.p2?.username : finalMatch.p1?.username;
+                const champPlayer = tour.players.find(p => p.username === champUser);
+                const runnerPlayer = runnerUser ? tour.players.find(p => p.username === runnerUser) : null;
+
+                const champPlayerId = champPlayer?.playerId || (finalMatch.p1?.username === champUser ? finalMatch.p1?.playerId : finalMatch.p2?.playerId) || '';
+                const champPlatform = champPlayer?.platform || (finalMatch.p1?.username === champUser ? finalMatch.p1?.platform : finalMatch.p2?.platform) || 'WEB';
+
+                const runnerPlayerId = runnerPlayer?.playerId || (finalMatch.p1?.username === runnerUser ? finalMatch.p1?.playerId : finalMatch.p2?.playerId) || '';
+                const runnerPlatform = runnerPlayer?.platform || (finalMatch.p1?.username === runnerUser ? finalMatch.p1?.platform : finalMatch.p2?.platform) || 'WEB';
+
+                tour.champion = {
+                    username: champUser,
+                    avatar: getUserAvatar(champUser) || champPlayer?.avatar || 'avatar1.jpg',
+                    playerId: champPlayerId,
+                    platform: champPlatform
+                };
+                tour.runnerUp = {
+                    username: runnerUser || 'None',
+                    avatar: getUserAvatar(runnerUser) || runnerPlayer?.avatar || 'avatar2.jpg',
+                    playerId: runnerPlayerId,
+                    platform: runnerPlatform
+                };
+                io.to(`tour_${tour.id}`).emit('tourFinished', {
+                    champion: tour.champion,
+                    runnerUp: tour.runnerUp,
+                    rewards: tour.rewards
+                });
+            } else {
+                tour.status = 'round_completed';
+                io.to(`tour_${tour.id}`).emit('tourRoundEnded', {
+                    roundIndex: tour.currentRoundIndex,
+                    roundName: curRound.roundName,
+                    message: `All matches for ${curRound.roundName} completed! Host can select next mode and start next round.`
+                });
+            }
+        }
+
+        io.to(`tour_${tour.id}`).emit('tourStateUpdate', getTournamentPublicState(tour));
+    });
+
+    socket.on('startNextRound', ({ tourId, hostKey, nextGameMode }) => {
+        const tour = tournaments[tourId];
+        if (!tour) return;
+        if (tour.hostKey !== (hostKey || '').trim()) {
+            return socket.emit('tourError', 'Host permission required.');
+        }
+
+        if (tour.status !== 'round_completed') {
+            return socket.emit('tourError', 'Current round is not complete yet.');
+        }
+
+        if (['draft', 'triple', 'mega'].includes(nextGameMode)) {
+            tour.gameMode = nextGameMode;
+        }
+
+        const prevRound = tour.rounds[tour.currentRoundIndex];
+        const winners = prevRound.matches.map(m => m.winner);
+
+        const nextRoundIndex = tour.currentRoundIndex + 1;
+        tour.currentRoundIndex = nextRoundIndex;
+
+        const nextMatches = [];
+        for (let i = 0; i < winners.length; i += 2) {
+            const p1User = winners[i];
+            const p2User = winners[i + 1];
+            const p1Player = tour.players.find(p => p.username === p1User);
+            const p2Player = tour.players.find(p => p.username === p2User);
+
+            nextMatches.push({
+                id: `m_${nextRoundIndex}_${Math.floor(i / 2)}`,
+                matchNumber: Math.floor(i / 2) + 1,
+                p1: p1Player ? {
+                    username: p1Player.username,
+                    avatar: p1Player.avatar,
+                    playerId: p1Player.playerId || '',
+                    platform: p1Player.platform || 'WEB',
+                    socketId: p1Player.socketId
+                } : null,
+                p2: p2Player ? {
+                    username: p2Player.username,
+                    avatar: p2Player.avatar,
+                    playerId: p2Player.playerId || '',
+                    platform: p2Player.platform || 'WEB',
+                    socketId: p2Player.socketId
+                } : null,
+                p1Deck: null,
+                p2Deck: null,
+                draftStatus: 'pending',
+                winner: null,
+                status: 'pending'
+            });
+        }
+
+        tour.rounds.push({
+            roundIndex: nextRoundIndex,
+            roundName: getRoundName(tour.playerLimit, nextRoundIndex),
+            gameMode: tour.gameMode,
+            status: 'pending',
+            matches: nextMatches
+        });
+
+        tour.status = 'countdown';
+        io.to(`tour_${tour.id}`).emit('tourCountdown', { seconds: 5 });
+
+        setTimeout(() => {
+            if (!tournaments[tour.id]) return;
+            tour.status = 'in_round';
+            startMatchesForRound(tour, nextRoundIndex);
+            io.to(`tour_${tour.id}`).emit('tourStateUpdate', getTournamentPublicState(tour));
+        }, 5500);
+    });
+
+    socket.on('getTournamentState', ({ tourId }) => {
+        const tour = tournaments[tourId];
+        if (tour) {
+            socket.emit('tourStateUpdate', getTournamentPublicState(tour));
+        } else {
+            socket.emit('tourError', 'Tournament not found.');
+        }
     });
 });
 
