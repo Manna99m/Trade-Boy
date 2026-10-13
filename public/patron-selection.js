@@ -24,6 +24,7 @@ const PATRON_RULES = {
         "Sebastian.png", "Phobos.png", "Rufus.png", "Quing Mao.png", "yasmine.png"
     ],
     "Axel.png": [
+        "Alvanor.png", "Avalon.png",
         "Augustus.png", "Astaroth.png", "Arachne.png", "Amira.png", "byrna.webp",
         "Aurora.png", "Cascade.png", "Celeste.png", "Cornelious.png", "Electra.png",
         "Dorian.png", "fluffy.webp", "Faceless.png", "Folio.png", "Heidi.png",
@@ -34,6 +35,7 @@ const PATRON_RULES = {
         "Orion.png", "Peppy.png", "somna.webp", "Thea.png"
     ],
     "Biscuit.png": [
+        "Alvanor.png", "Avalon.png",
         "adam.webp", "Augustus.png", "Astaroth.png", "Amira.png", "byrna.webp",
         "corvus.png", "Aurora.png", "Cascade.png", "Celeste.png", "Chabba.png",
         "Cornelious.png", "Cleaver.png", "Electra.png", "eva.webp", "fluffy.webp",
@@ -56,6 +58,7 @@ const PATRON_RULES = {
         "yasmine.png", "somna.webp", "Ziri.png", "Tristan.png"
     ],
     "Khorus.png": [
+        "Alvanor.png", "Avalon.png",
         "Augustus.png", "Aidan.png", "byrna.webp", "Cascade.png", "Celeste.png",
         "fluffy.webp", "Faceless.png", "Folio.png", "Helios.png", "Guus.png",
         "Judge.png", "Lars.png", "Kai.png", "Krista.png", "Mojo.png",
@@ -69,6 +72,7 @@ const PATRON_RULES = {
         "Lian.png", "Lilith.png", "Orion.png", "Peppy.png", "Polaris.png", "Thea.png"
     ],
     "Merlin.png": [
+        "Alvanor.png", "Avalon.png",
         "Augustus.png", "Aidan.png", "byrna.webp", "Aurora.png", "Cascade.png",
         "Celeste.png", "Electra.png", "Dorian.png", "fluffy.webp", "Faceless.png",
         "Folio.png", "Helios.png", "Lars.png", "Kai.png", "Krista.png",
@@ -76,6 +80,7 @@ const PATRON_RULES = {
         "Orion.png", "Peppy.png", "Thea.png"
     ],
     "Oliver.png": [
+        "Alvanor.png", "Avalon.png",
         "Astaroth.png", "Andvari.png", "Amira.png", "corvus.png", "Aurora.png",
         "Chabba.png", "Cornelious.png", "Cleaver.png", "Fafnir.png", "Electra.png",
         "Galahad.png", "Guus.png", "Iris.png", "isaac.png", "Ishmael.png",
@@ -85,6 +90,7 @@ const PATRON_RULES = {
         "somna.webp", "Ziri.png"
     ],
     "Robin.png": [
+        "Alvanor.png", "Avalon.png",
         "Astaroth.png", "Andvari.png", "Amira.png", "Dare Devil.png", "byrna.webp",
         "Cornelious.png", "Fox.png", "Fafnir.png", "Dorian.png", "Dark star.png",
         "Faceless.png", "Folio.png", "Guus.png", "Ginger.png", "Jet.png",

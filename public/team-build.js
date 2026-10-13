@@ -1,6 +1,6 @@
 const heroes = [
     "Aidan.png", "Amira.png", "Andvari.png", "Arachne.png", "Artemis.png", "Astaroth.png", 
-    "Astrid.png", "Augustus.png", "Aurora.png", "Avalon.png", "Cascade.png", "Celeste.png", 
+    "Astrid.png", "Augustus.png", "Aurora.png", "Alvanor.png", "Cascade.png", "Celeste.png", 
     "Chabba.png", "Cleaver.png", "Cornelious.png", "Dante.png", "Dare Devil.png", "Dark star.png", 
     "Dorian.png", "Electra.png", "Elmir.png", "Faceless.png", "Fafnir.png", "Folio.png", 
     "Fox.png", "Galahad.png", "Ginger.png", "Guus.png", "Heidi.png", "Helios.png", "Iris.png", 
@@ -34,6 +34,7 @@ const HERO_POSITIONS = {
   "Astrid.png": 57,
   "Augustus.png": 56,
   "Aurora.png": 2,
+  "Alvanor.png": 25,
   "Avalon.png": 25,
   "byrna.webp": 42,
   "Cascade.png": 45,
@@ -147,6 +148,8 @@ const patronRules = {
         "yasmine.png"
     ],
     "Axel.png": [
+        "Alvanor.png",
+        "Avalon.png",
         "Augustus.png",
         "Astaroth.png",
         "Arachne.png",
@@ -188,6 +191,8 @@ const patronRules = {
         "Thea.png"
     ],
     "Biscuit.png": [
+        "Alvanor.png",
+        "Avalon.png",
         "adam.webp",
         "Augustus.png",
         "Astaroth.png",
@@ -272,6 +277,8 @@ const patronRules = {
         "Tristan.png"
     ],
     "Khorus.png": [
+        "Alvanor.png",
+        "Avalon.png",
         "Augustus.png",
         "Aidan.png",
         "byrna.webp",
@@ -319,6 +326,8 @@ const patronRules = {
         "Thea.png"
     ],
     "Merlin.png": [
+        "Alvanor.png",
+        "Avalon.png",
         "Augustus.png",
         "Aidan.png",
         "byrna.webp",
@@ -344,6 +353,8 @@ const patronRules = {
         "Thea.png"
     ],
     "Oliver.png": [
+        "Alvanor.png",
+        "Avalon.png",
         "Astaroth.png",
         "Andvari.png",
         "Amira.png",
@@ -376,6 +387,8 @@ const patronRules = {
         "Ziri.png"
     ],
     "Robin.png": [
+        "Alvanor.png",
+        "Avalon.png",
         "Astaroth.png",
         "Andvari.png",
         "Amira.png",
