@@ -31,9 +31,9 @@ app.get('/post', (req, res, next) => {
             if (err) return next();
             const post = POST_DATA[id];
             const title = post.title + ' - Trade Boy';
-            const img = 'https://trade-boy.onrender.com/' + post.img;
+            const img = 'https://trade-boy.com/' + post.img;
             let html = data.replace(/content="Trade Boy - Hero Wars Guide"/g, 'content="' + title + '"');
-            html = html.replace(/content="https:\/\/trade-boy\.onrender\.com\/logo\.jpg"/g, 'content="' + img + '"');
+            html = html.replace(/content="https:\/\/(trade-boy\.com|trade-boy\.onrender\.com)\/logo\.jpg"/g, 'content="' + img + '"');
             if (post.desc) {
                 html = html.replace(/content="Your ultimate Hero Wars companion for real-time Draft Battles, Team Builds, and Tier Lists\."/g, 'content="' + post.desc + '"');
             }
