@@ -12,6 +12,15 @@ const USERS_FILE = path.join(__dirname, 'users.json');
 
 app.use(express.json());
 
+// Redirect old onrender.com traffic to official custom domain
+app.use((req, res, next) => {
+    const host = req.get('host');
+    if (host && host.includes('trade-boy.onrender.com')) {
+        return res.redirect(301, 'https://trade-boy.com' + req.originalUrl);
+    }
+    next();
+});
+
 // Dynamic OG tags for /post
 const POST_DATA = {
     'archdemon-teams': { title: 'Best Team for Archdemon', desc: 'Best formations to tackle the Archdemon.', img: 'archdemon-teams.jpg' },
