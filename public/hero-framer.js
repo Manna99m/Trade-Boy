@@ -1,4 +1,37 @@
 /* hero-framer.js */
+window.copyPromoCode = window.copyPromoCode || function(btn) {
+    const code = 'TradeBoyMartha';
+    const textSpan = btn.querySelector('.btn-text');
+    const orig = textSpan ? textSpan.textContent : 'Copy Code';
+    function flash() {
+        if (textSpan) textSpan.textContent = 'Copied! ✅';
+        btn.style.background = '#ffd700';
+        setTimeout(() => {
+            if (textSpan) textSpan.textContent = orig;
+            btn.style.background = '#aef649';
+        }, 2000);
+    }
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(code).then(flash).catch(() => {
+            fallback(code);
+            flash();
+        });
+    } else {
+        fallback(code);
+        flash();
+    }
+    function fallback(text) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+    }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     // Inject CSS
     const style = document.createElement('link');

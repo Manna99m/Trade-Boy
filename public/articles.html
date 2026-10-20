@@ -78,6 +78,47 @@
 
 
     <div class="blog-container">
+        <!-- Hero Wars Starter Pack & Affiliate Banner -->
+        <div class="affiliate-banner-container" style="margin-bottom: 25px;">
+            <div class="affiliate-badge">🎁 Exclusive Hero Wars Starter Pack</div>
+            <div class="affiliate-cards-wrapper">
+                <!-- Card 1: Affiliate Link -->
+                <div class="affiliate-card">
+                    <div class="affiliate-card-header">
+                        <span class="affiliate-step">STEP 1</span>
+                        <h3 class="affiliate-title">Use my Affiliate link to get A head start:</h3>
+                    </div>
+                    <div class="affiliate-rewards-box">
+                        <span class="rewards-label">Instant Starter Rewards:</span>
+                        <img src="affiliate-rewards-1.png" alt="Starter Pack Rewards: 10 Energy Potions, 100k Gold, 100 Emeralds, Maya" class="affiliate-reward-img">
+                    </div>
+                    <a href="https://odiencetrck.com/clk.php?lid=2279" target="_blank" rel="noopener noreferrer" class="affiliate-cta-btn">
+                        <span>Claim Rewards & Play Now</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                    </a>
+                </div>
+
+                <!-- Card 2: Promo Code -->
+                <div class="affiliate-card">
+                    <div class="affiliate-card-header">
+                        <span class="affiliate-step">STEP 2</span>
+                        <h3 class="affiliate-title">Within your 1st 10 days, use promo code:</h3>
+                    </div>
+                    <div class="promo-code-box">
+                        <span class="promo-code-text" id="promo-code-val">TradeBoyMartha</span>
+                        <button class="promo-copy-btn" onclick="copyPromoCode(this)" title="Copy Promo Code">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            <span class="btn-text">Copy Code</span>
+                        </button>
+                    </div>
+                    <div class="affiliate-rewards-box">
+                        <span class="rewards-label">Bonus Martha Rewards:</span>
+                        <img src="affiliate-rewards-2.png" alt="Promo Code Rewards: 10 Chests, 150k Gold, 800 Emeralds, Martha" class="affiliate-reward-img">
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <h1>Trade Boy Blog & Guides</h1>
         
 <p>Welcome to the Trade Boy Guides section! Here you will find in-depth articles, tier list explanations, and strategy guides to help you dominate in Hero Wars.</p>
@@ -219,6 +260,7 @@
         profileBtn.addEventListener('mouseover', () => profileBtn.style.background = 'rgba(255,255,255,0.1)');
         profileBtn.addEventListener('mouseout', () => profileBtn.style.background = 'transparent');
     </script>
+<script src="hero-framer.js"></script>
 </body>
 
 </html>
