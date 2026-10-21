@@ -1,17 +1,17 @@
 [
   {
     "username": "testuser",
-    "password": "password123",
+    "password": "scrypt$95ccb2a58251ac09ca749f6aae1bf56c$3b4a601546803aba65fc3cfa6b1c689a8a1342c9923f8f6f7ff79e314cfd8e154efb6289471971960c65a5bf583e1596089a96ece5705aaee1c5c3b382b563ab",
     "avatar": "avatar2.jpg"
   },
   {
     "username": "Tradeboy",
-    "password": "mannamanna",
+    "password": "scrypt$a0371a885046e7260bc65146789f0973$93415c3dd22724315bd45635cfba755f9f3970d1cf334e042059a53da7bbf2527da5d804bfeaae94b9e40bd8b373ebbe50c6db8cab2ef31137a31fc0e322865b",
     "avatar": "avatar9.jpg"
   },
   {
     "username": "Manna",
-    "password": "1234",
+    "password": "scrypt$2bec4d3330de9fcf19837c7c176b50a9$03775ee560a0070733c55ac949fb792fb34b8c84e488034cbbc90bbfd2f9c9ef273315f396a1e9cabdf4602876bdc6d365cdd9b322a8461c1b93f8c6bc11c51f",
     "avatar": "avatar1.jpg"
   }
 ]
