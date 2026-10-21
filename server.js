@@ -1,4 +1,5 @@
 const express = require('express');
+const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const http = require('http');
@@ -63,7 +64,8 @@ app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] })
 if (!fs.existsSync(USERS_FILE)) {
     fs.writeFileSync(USERS_FILE, JSON.stringify([]));
 } else {
-    // Assign random avatars to existing users without one
+    // Assign random avatars to existing users without one,
+    // and replace any plain-text passwords with hashes
     const users = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
     let modified = false;
     users.forEach(u => {
@@ -71,8 +73,29 @@ if (!fs.existsSync(USERS_FILE)) {
             u.avatar = `avatar${Math.floor(Math.random() * 10) + 1}.jpg`;
             modified = true;
         }
+        if (typeof u.password === 'string' && !u.password.startsWith('scrypt$')) {
+            u.password = hashPassword(u.password);
+            modified = true;
+        }
     });
     if (modified) fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+}
+
+// Passwords are stored as "scrypt$<salt>$<hash>". Older accounts saved in
+// plain text are upgraded to a hash the next time they log in.
+function hashPassword(password) {
+    const salt = crypto.randomBytes(16).toString('hex');
+    const hash = crypto.scryptSync(String(password), salt, 64).toString('hex');
+    return `scrypt$${salt}$${hash}`;
+}
+
+function verifyPassword(password, stored) {
+    if (typeof stored !== 'string') return false;
+    if (!stored.startsWith('scrypt$')) return stored === password;
+    const [, salt, hash] = stored.split('$');
+    const expected = Buffer.from(hash, 'hex');
+    const actual = crypto.scryptSync(String(password), salt, expected.length);
+    return crypto.timingSafeEqual(expected, actual);
 }
 
 app.post('/api/register', (req, res) => {
@@ -87,7 +110,7 @@ app.post('/api/register', (req, res) => {
     }
 
     const assignedAvatar = avatar || `avatar${Math.floor(Math.random() * 10) + 1}.jpg`;
-    users.push({ username, password, avatar: assignedAvatar });
+    users.push({ username, password: hashPassword(password), avatar: assignedAvatar });
     fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
     res.status(201).json({ message: 'User registered successfully', avatar: assignedAvatar });
 });
@@ -95,9 +118,13 @@ app.post('/api/register', (req, res) => {
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
     const users = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
-    const user = users.find(u => u.username === username && u.password === password);
-    
+    const user = users.find(u => u.username === username && verifyPassword(password, u.password));
+
     if (user) {
+        if (!user.password.startsWith('scrypt$')) {
+            user.password = hashPassword(password);
+            fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+        }
         res.json({ message: 'Login successful', avatar: user.avatar });
     } else {
         res.status(401).json({ error: 'Invalid username or password' });
@@ -545,7 +572,7 @@ const MASTER_HOST_KEYS = [
 let tournaments = {};
 
 function isValidHostKey(key) {
-    if (!key) return false;
+    if (typeof key !== 'string' || !key) return false;
     const cleanKey = key.trim().toLowerCase();
     return MASTER_HOST_KEYS.some(k => k.toLowerCase() === cleanKey);
 }
@@ -1180,8 +1207,24 @@ function processTourMegaPick(tour, match, socketId, type, item) {
 }
 
 io.on('connection', (socket) => {
+    // An error inside one handler (e.g. a malformed message) must not crash
+    // the whole server, so every handler below runs inside try/catch.
+    const on = socket.on.bind(socket);
+    socket.on = (event, handler) => on(event, (...args) => {
+        try {
+            return handler(...args);
+        } catch (err) {
+            console.error(`Socket event "${event}" failed:`, err);
+        }
+    });
+
+    // Only someone actually playing in a room, while it's drafting, may pick
+    const isDraftingPlayer = room => room && room.status === 'drafting' && room.p1 && room.p2 &&
+        (room.p1.id === socket.id || room.p2.id === socket.id);
+
     socket.on('joinRandom', (username) => {
         socket.username = username;
+        if (randomQueue.includes(socket)) return; // double click: don't match with yourself
         randomQueue.push(socket);
         if (randomQueue.length >= 2) {
             const p1 = randomQueue.shift();
@@ -1218,7 +1261,7 @@ io.on('connection', (socket) => {
     
     socket.on('makeChoice', ({ roomId, index, picked, rejected }) => {
         const room = rooms[roomId];
-        if (!room) return;
+        if (!isDraftingPlayer(room)) return;
         
         const player = room.p1.id === socket.id ? room.p1 : room.p2;
         if (player.results.picked.length >= 3) return;
@@ -1235,6 +1278,7 @@ io.on('connection', (socket) => {
 
     socket.on('joinTripleRandom', (username) => {
         socket.username = username;
+        if (tripleRandomQueue.includes(socket)) return;
         tripleRandomQueue.push(socket);
         if (tripleRandomQueue.length >= 2) {
             const p1 = tripleRandomQueue.shift();
@@ -1271,7 +1315,7 @@ io.on('connection', (socket) => {
     
     socket.on('makeTripleChoice', ({ roomId, index, picked }) => {
         const room = tripleRooms[roomId];
-        if (!room) return;
+        if (!isDraftingPlayer(room)) return;
         
         const player = room.p1.id === socket.id ? room.p1 : room.p2;
         if (player.results.picked.length >= 6) return;
@@ -1287,6 +1331,7 @@ io.on('connection', (socket) => {
 
     socket.on('joinMegaRandom', (username) => {
         socket.username = username;
+        if (megaRandomQueue.includes(socket)) return;
         megaRandomQueue.push(socket);
         if (megaRandomQueue.length >= 2) {
             const p1 = megaRandomQueue.shift();
@@ -1322,6 +1367,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('makeMegaChoice', ({ roomId, type, item }) => {
+        if (!isDraftingPlayer(megaRooms[roomId])) return;
         processMegaPick(roomId, socket.id, type, item);
     });
 
@@ -1394,6 +1440,17 @@ io.on('connection', (socket) => {
         for (const [id, room] of Object.entries(megaRooms)) {
             if (room.status === 'patron_selection' && (room.p1?.id === socket.id || room.p2?.id === socket.id)) {
                 finalizeMegaPatrons(room);
+            }
+        }
+
+        // Free finished rooms and unjoined custom rooms this player was in,
+        // otherwise they stay in memory until the server restarts
+        for (const roomList of [rooms, tripleRooms, megaRooms]) {
+            for (const [id, room] of Object.entries(roomList)) {
+                const inRoom = room.p1?.id === socket.id || room.p2?.id === socket.id;
+                if (inRoom && (room.status === 'completed' || (room.status === 'waiting' && !room.p2))) {
+                    delete roomList[id];
+                }
             }
         }
 
