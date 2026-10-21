@@ -58,7 +58,8 @@ const draftScreen = document.getElementById('draft-screen');
 const resultsScreen = document.getElementById('results-screen');
 const lobbyStatus = document.getElementById('lobby-status');
 const draftWaiting = document.getElementById('draft-waiting');
-const draftCards = document.querySelector('.draft-cards-container');
+// The player's own cards (the opponent preview uses the same class and comes first)
+const draftCards = document.querySelector('.draft-cards-container:not(#opponent-cards-container)');
 const matchmakingControls = document.getElementById('matchmaking-controls');
 const matchmakingTimer = document.getElementById('matchmaking-timer');
 const btnCancelMatchmaking = document.getElementById('btn-cancel-matchmaking');

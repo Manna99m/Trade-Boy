@@ -219,7 +219,6 @@ body {
     flex-wrap: wrap;
     gap: 15px;
     justify-content: center;
-    max-width: 410px;
     margin: 0 auto;
 }
 

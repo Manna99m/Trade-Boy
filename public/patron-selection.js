@@ -399,6 +399,17 @@ function renderTeamResultsWithPatrons(team, containerElement, borderColor = '#3b
     const heroes = team.heroes || [];
     const patrons = team.patrons || {};
 
+    // Team pet goes first (left side), like the in-game line-up
+    const mainPet = team.pet || (team.pets && team.pets[0]);
+    if (mainPet) {
+        const petWrapper = document.createElement('div');
+        petWrapper.className = 'hero-with-patron';
+        petWrapper.innerHTML = `
+            <img src="pets/${mainPet}" class="main-hero-img" title="Main Pet: ${cleanPetDisplayName(mainPet)}" style="border-color: #a855f7;">
+        `;
+        containerElement.appendChild(petWrapper);
+    }
+
     heroes.forEach(h => {
         const wrapper = document.createElement('div');
         wrapper.className = 'hero-with-patron';
@@ -411,14 +422,4 @@ function renderTeamResultsWithPatrons(team, containerElement, borderColor = '#3b
 
         containerElement.appendChild(wrapper);
     });
-
-    const mainPet = team.pet || (team.pets && team.pets[0]);
-    if (mainPet) {
-        const petWrapper = document.createElement('div');
-        petWrapper.className = 'hero-with-patron';
-        petWrapper.innerHTML = `
-            <img src="pets/${mainPet}" class="main-hero-img" title="Main Pet: ${cleanPetDisplayName(mainPet)}" style="border-color: #a855f7;">
-        `;
-        containerElement.appendChild(petWrapper);
-    }
 }

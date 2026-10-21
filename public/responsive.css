@@ -35,6 +35,33 @@ font[style*="background-color"] {
     box-shadow: none !important;
 }
 
+/* ---------- Draft results: each team on a single row ----------
+   Icons shrink to fit instead of wrapping onto a second line */
+.team-grid {
+    flex-wrap: nowrap !important;
+    max-width: none;
+}
+
+.team-grid .hero-with-patron {
+    flex: 0 1 90px;
+    min-width: 0;
+    margin: 4px;
+}
+
+.team-grid .hero-with-patron img.main-hero-img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+}
+
+.team-grid .hero-with-patron .patron-mini-badge {
+    width: 48%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    bottom: -8%;
+    right: -8%;
+}
+
 /* ---------- Desktop: content fills the screen ---------- */
 @media (min-width: 769px) {
     .main-content,
@@ -363,9 +390,17 @@ font[style*="background-color"] {
         padding: 14px;
     }
 
-    .team-grid img {
+    .team-grid {
+        gap: 4px;
+    }
+
+    .team-grid > img {
         width: 56px;
         height: 56px;
+    }
+
+    .team-grid .hero-with-patron {
+        margin: 2px;
     }
 
     .timer-container {

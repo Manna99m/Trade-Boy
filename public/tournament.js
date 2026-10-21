@@ -965,6 +965,8 @@ function showTripleDraftChoice(index) {
                     tripleDraftTimer = null;
                 }
                 document.getElementById('triple-draft-pick-area').style.display = 'none';
+                const waitingEl = document.getElementById('arena-triple-waiting');
+                if (waitingEl) waitingEl.style.display = 'block';
             }
         };
     }
@@ -1593,7 +1595,7 @@ function renderDeckImages(deck) {
     const petCard = deck.pet ? `
         <img src="pets/${deck.pet}" class="hero-mini-card pet-mini-card" title="${cleanItemName(deck.pet)} (Team Pet)">
     ` : '';
-    return heroCards + petCard;
+    return petCard + heroCards; // team pet first (left side)
 }
 
 function escapeJson(obj) {
