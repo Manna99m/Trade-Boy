@@ -10,6 +10,16 @@ const server = http.createServer(app);
 const io = new Server(server);
 const PORT = process.env.PORT || 3000;
 const USERS_FILE = path.join(__dirname, 'users.json');
+const HERO_POSITIONS = require('./public/hero-positions.js');
+
+// Put a finished team's heroes in in-game line-up order (back to front,
+// tank last), the same order the Team Build page uses
+function orderTeam(team) {
+    if (team && Array.isArray(team.heroes)) {
+        team.heroes.sort((a, b) => (HERO_POSITIONS[b] || 0) - (HERO_POSITIONS[a] || 0));
+    }
+    return team;
+}
 
 app.use(express.json());
 
@@ -221,8 +231,8 @@ function checkDraftComplete(room) {
             };
         }
         
-        room.p1Final = p1Final;
-        room.p2Final = p2Final;
+        room.p1Final = orderTeam(p1Final);
+        room.p2Final = orderTeam(p2Final);
         room.p1Patrons = null;
         room.p2Patrons = null;
         
@@ -265,8 +275,8 @@ function checkTripleDraftComplete(room) {
             pet: room.p2.results.picked[5]
         };
         
-        room.p1Final = p1Final;
-        room.p2Final = p2Final;
+        room.p1Final = orderTeam(p1Final);
+        room.p2Final = orderTeam(p2Final);
         room.p1Patrons = null;
         room.p2Patrons = null;
 
@@ -510,8 +520,8 @@ function processMegaPick(roomId, socketId, type, item) {
             pet: room.p2.results.pets[0]
         };
 
-        room.p1Final = p1Final;
-        room.p2Final = p2Final;
+        room.p1Final = orderTeam(p1Final);
+        room.p2Final = orderTeam(p2Final);
         room.p1Patrons = null;
         room.p2Patrons = null;
 
@@ -882,8 +892,8 @@ function checkTourDraftComplete(tour, match) {
             };
         }
 
-        match.p1Final = p1Final;
-        match.p2Final = p2Final;
+        match.p1Final = orderTeam(p1Final);
+        match.p2Final = orderTeam(p2Final);
         match.p1Patrons = null;
         match.p2Patrons = null;
 
@@ -1004,8 +1014,8 @@ function checkTourTripleDraftComplete(tour, match) {
             pet: p2.results.picked[5]
         };
 
-        match.p1Final = p1Final;
-        match.p2Final = p2Final;
+        match.p1Final = orderTeam(p1Final);
+        match.p2Final = orderTeam(p2Final);
         match.p1Patrons = null;
         match.p2Patrons = null;
 
@@ -1174,8 +1184,8 @@ function processTourMegaPick(tour, match, socketId, type, item) {
             pet: match.draftData.p2.results.pets[0] || null
         };
 
-        match.p1Final = p1Final;
-        match.p2Final = p2Final;
+        match.p1Final = orderTeam(p1Final);
+        match.p2Final = orderTeam(p2Final);
         match.p1Patrons = null;
         match.p2Patrons = null;
 
