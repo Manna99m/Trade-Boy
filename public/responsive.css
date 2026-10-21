@@ -1,0 +1,564 @@
+/* ===================================================
+   Responsive layout (full-width desktop + mobile)
+   Loaded last on every page so it can override page styles.
+   =================================================== */
+
+/* Only on body: it then applies to the whole viewport, so normal page
+   scrolling and the sticky header keep working */
+body {
+    overflow-x: hidden;
+}
+
+img, video, iframe {
+    max-width: 100%;
+}
+
+/* Hide Google Translate's own bar, tooltips and highlights
+   (language is picked from our menu instead, see site-translate.js) */
+body > .skiptranslate,
+iframe.skiptranslate,
+.goog-te-banner-frame,
+#goog-gt-tt,
+.goog-te-balloon-frame,
+.VIpgJd-ZVi9od-ORHb-OEVmcd,
+.VIpgJd-ZVi9od-aZ2wEe-wOHMyf {
+    display: none !important;
+}
+
+body {
+    top: 0 !important;
+}
+
+.goog-text-highlight,
+font[style*="background-color"] {
+    background: none !important;
+    box-shadow: none !important;
+}
+
+/* ---------- Desktop: content fills the screen ---------- */
+@media (min-width: 769px) {
+    .main-content,
+    .tour-main-content,
+    .legal-container,
+    .policy-container {
+        max-width: none !important;
+        margin-left: 40px !important;
+        margin-right: 40px !important;
+    }
+
+    /* Inner boxes that had their own width caps */
+    .tier-list-container,
+    .hero-pool-container,
+    .hero-pool,
+    .main-content > div[style*="max-width: 1000px"] {
+        max-width: none !important;
+    }
+
+    /* Team build's text box sits outside .main-content */
+    body > .seo-content {
+        max-width: none !important;
+        margin-left: 40px !important;
+        margin-right: 40px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Phones don't handle fixed backgrounds well (jumpy / zoomed in) */
+    body {
+        background-attachment: scroll;
+    }
+
+    /* ---------- Top navigation ---------- */
+    .top-nav {
+        flex-wrap: wrap;
+        gap: 8px 10px;
+        padding: 10px 12px;
+    }
+
+    .logo-container {
+        gap: 8px;
+        min-width: 0;
+    }
+
+    .logo {
+        font-size: 1.15rem;
+        white-space: nowrap;
+        gap: 6px !important;
+    }
+
+    .logo svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .logo-img {
+        width: 30px;
+        height: 30px;
+    }
+
+    /* Search moves to its own full-width row under the logo */
+    .search-container {
+        order: 3;
+        flex: 1 1 100%;
+    }
+
+    .search-bar {
+        padding: 8px 14px;
+        font-size: 16px; /* 16px stops iOS zooming in on focus */
+    }
+
+    /* Right-hand button group (language / profile / logout) */
+    .top-nav > div:last-child {
+        gap: 8px !important;
+        margin-left: auto;
+    }
+
+    .profile-container {
+        gap: 6px;
+        margin-left: 0 !important;
+    }
+
+    #profile-btn {
+        padding: 2px !important;
+        gap: 6px !important;
+    }
+
+    #user-avatar {
+        width: 30px !important;
+        height: 30px !important;
+    }
+
+    .nav-icon-btn,
+    .logout-btn {
+        padding: 5px 9px;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+        border-width: 2px;
+    }
+
+    .lang-dropdown {
+        right: 0;
+        width: 180px;
+        max-height: 60vh;
+        overflow-y: auto;
+    }
+
+    /* ---------- Login ---------- */
+    .login-container {
+        width: calc(100% - 32px);
+        max-width: 380px;
+    }
+
+    /* ---------- Page containers ---------- */
+    .main-content,
+    .blog-container,
+    .legal-container,
+    .policy-container {
+        margin: 14px 10px !important;
+        padding: 18px 14px !important;
+        border-radius: 14px;
+        max-width: none;
+        width: auto !important;
+    }
+
+    .post-detail {
+        padding: 14px;
+        border-radius: 14px;
+    }
+
+    .post-detail .seo-content,
+    .post-detail [style*="padding: 20px"] {
+        padding: 12px !important;
+    }
+
+    .post-header-img {
+        margin-bottom: 18px;
+    }
+
+    /* ---------- Typography ---------- */
+    h1 {
+        font-size: 1.6rem !important;
+        line-height: 1.25;
+    }
+
+    h2 {
+        font-size: 1.3rem !important;
+        line-height: 1.3;
+    }
+
+    h3 {
+        line-height: 1.35;
+    }
+
+    .page-title {
+        font-size: 1.5rem;
+        margin-bottom: 18px;
+    }
+
+    .blog-container h3,
+    .legal-container h3,
+    .policy-container h3 {
+        font-size: 1.1rem;
+    }
+
+    .blog-container p,
+    .blog-container ul,
+    .legal-container p,
+    .policy-container p,
+    .post-detail p,
+    .post-detail li {
+        font-size: 0.98rem !important;
+        line-height: 1.65;
+    }
+
+    .blog-container ul,
+    .legal-container ul,
+    .policy-container ul {
+        margin-left: 20px;
+    }
+
+    .post-detail > div[style*="font-size"] {
+        font-size: 1rem !important;
+        line-height: 1.65 !important;
+    }
+
+    .hero-btn {
+        font-size: 0.9rem;
+        padding: 8px 14px;
+    }
+
+    /* ---------- Home grid ---------- */
+    .grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .card-content {
+        padding: 14px;
+    }
+
+    .card-title {
+        font-size: 1.1rem;
+    }
+
+    /* ---------- Modals (avatar picker etc.) ---------- */
+    #avatar-modal > div {
+        width: 92% !important;
+        max-width: 400px;
+        padding: 20px !important;
+    }
+
+    /* ---------- Footer ---------- */
+    .site-footer {
+        padding: 30px 16px;
+        margin-top: 30px;
+    }
+
+    .footer-content {
+        gap: 24px;
+    }
+
+    .footer-logo-text {
+        font-size: 1.4rem;
+    }
+
+    .footer-links a {
+        display: inline-block;
+        margin: 4px 6px;
+    }
+
+    /* ---------- Tier lists ---------- */
+    .page-header {
+        margin-top: 10px;
+    }
+
+    .page-description {
+        margin-bottom: 20px;
+        font-size: 0.95rem;
+    }
+
+    .tier-row {
+        min-height: 70px;
+    }
+
+    .tier-label {
+        width: 54px;
+        flex-shrink: 0;
+        font-size: 1.4rem;
+    }
+
+    .tier-dropzone {
+        min-height: 70px;
+        padding: 8px;
+        gap: 6px;
+    }
+
+    .hero-icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .hero-pool {
+        padding: 12px;
+        gap: 8px;
+    }
+
+    .hero-pool-title {
+        font-size: 1.15rem;
+    }
+
+    /* ---------- Draft modes ---------- */
+    .action-btn,
+    .select-btn {
+        font-size: 0.95rem;
+        padding: 10px 14px;
+    }
+
+    .draft-progress {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .draft-slot {
+        width: 46px;
+        height: 46px;
+    }
+
+    .draft-cards-container {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .draft-card {
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .draft-card img {
+        width: 80px;
+        height: 80px;
+    }
+
+    .results-container {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .team-result {
+        padding: 14px;
+    }
+
+    .team-grid img {
+        width: 56px;
+        height: 56px;
+    }
+
+    .timer-container {
+        max-width: 100%;
+    }
+
+    /* Mega draft */
+    .draft-header {
+        flex-direction: column;
+        gap: 14px;
+        padding: 14px;
+    }
+
+    .player-team,
+    .draft-status {
+        width: 100%;
+        text-align: center;
+    }
+
+    .player-team#opponent-team-progress {
+        text-align: center;
+    }
+
+    .team-slots,
+    #opponent-slots {
+        justify-content: center;
+    }
+
+    .pool-container {
+        padding: 14px;
+    }
+
+    .pool-grid {
+        gap: 8px;
+        justify-content: center;
+    }
+
+    .pool-item {
+        width: 60px;
+        height: 60px;
+        border-radius: 10px;
+    }
+
+    /* ---------- Team build ---------- */
+    .hero-builder-container {
+        flex-direction: column;
+        padding: 12px;
+        gap: 12px;
+        margin-bottom: 190px;
+    }
+
+    .sidebar {
+        flex-direction: row;
+        width: 100%;
+    }
+
+    .sidebar .tab-btn {
+        flex: 1;
+        padding: 10px;
+        font-size: 0.95rem;
+    }
+
+    .tab-btn.active::after {
+        display: none;
+    }
+
+    .hero-grid {
+        grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+        gap: 8px;
+        padding-right: 4px;
+    }
+
+    .bottom-bar {
+        flex-wrap: wrap;
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .bottom-bar .selected-slots {
+        gap: 6px;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding-top: 8px;
+    }
+
+    .bottom-bar .slot {
+        width: 54px;
+        height: 54px;
+    }
+
+    .bottom-bar .patron-badge {
+        width: 26px;
+        height: 26px;
+        top: -8px;
+        right: -8px;
+    }
+
+    .bottom-bar .patron-badge.has-patron {
+        width: 28px;
+        height: 28px;
+        top: -9px;
+        right: -9px;
+    }
+
+    .bottom-actions {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .ok-btn {
+        padding: 10px 28px;
+        font-size: 1rem;
+    }
+
+    .modal-body {
+        grid-template-columns: 1fr;
+        padding: 12px;
+    }
+
+    /* ---------- Tournament ---------- */
+    .tour-card-panel {
+        padding: 16px 12px;
+        border-radius: 14px;
+        margin-bottom: 18px;
+    }
+
+    .tour-title {
+        font-size: 1.6rem;
+    }
+
+    .tour-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .entrance-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .entrance-card {
+        padding: 18px 14px;
+    }
+
+    .entrance-card-icon {
+        font-size: 2.2rem;
+    }
+
+    .player-limit-selector {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .mode-select-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .lobby-tour-name {
+        font-size: 1.4rem;
+    }
+
+    .tour-id-container {
+        max-width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .slots-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 10px;
+    }
+
+    .countdown-timer {
+        font-size: 5rem;
+    }
+
+    .bracket-wrapper {
+        gap: 20px;
+        padding: 10px 4px 24px;
+    }
+
+    .bracket-column {
+        min-width: 180px;
+    }
+
+    .champion-heading {
+        font-size: 1.8rem;
+        letter-spacing: 1px;
+    }
+
+    .champion-name {
+        font-size: 1.5rem;
+    }
+
+    .champion-crown {
+        font-size: 3.5rem;
+    }
+}
+
+/* Very narrow phones: show only the avatar, not the username
+   (the username stays when there is no avatar to tap) */
+@media (max-width: 420px) {
+    #user-avatar:not([style*="display: none"]) + #user-display {
+        display: none;
+    }
+
+    #user-display {
+        max-width: 90px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}

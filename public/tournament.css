@@ -1057,7 +1057,7 @@ body {
 }
 
 @media (max-width: 850px) {
-    combat-duel-container {
+    .combat-duel-container {
         grid-template-columns: 1fr;
     }
 }

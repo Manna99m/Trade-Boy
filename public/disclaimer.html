@@ -48,6 +48,8 @@
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#aef649" />
+    <link rel="stylesheet" href="responsive.css">
+    <script src="site-translate.js" defer></script>
 </head>
 <body>
     <nav class="top-nav">
@@ -65,7 +67,7 @@
                 <button class="nav-icon-btn" onclick="const m = document.getElementById('lang-dropdown'); m.style.display = m.style.display === 'none' ? 'block' : 'none';" data-i18n="lang_en">
                     EN <span style="font-size: 1.2em; margin-top: -2px;">🌐</span>
                 </button>
-                <div id="lang-dropdown" class="lang-dropdown">
+                <div id="lang-dropdown" class="lang-dropdown" style="display: none;">
                     <div class="lang-option active" onclick="selectLanguage(this, 'EN')">🇺🇸 English</div>
                     <div class="lang-option" onclick="selectLanguage(this, 'ID')">🇮🇩 Indonesia</div>
                     <div class="lang-option" onclick="selectLanguage(this, 'RU')">🇷🇺 Русский</div>
@@ -73,7 +75,7 @@
             </div>
             <div id="user-info" style="display: flex; align-items: center; gap: 15px;">
                 <span id="user-display" style="font-weight: bold; color: #aef649;"></span>
-                <img id="user-avatar" src="" alt="Avatar" style="width: 40px; height: 40px; border-radius: 50%; display: none; border: 2px solid #aef649; cursor: pointer;">
+                <img id="user-avatar" alt="Avatar" style="width: 40px; height: 40px; border-radius: 50%; display: none; border: 2px solid #aef649; cursor: pointer;">
                 <button id="logout-btn" class="nav-icon-btn" style="padding: 6px 15px; font-size: 0.8rem;" data-i18n="logout">Logout</button>
             </div>
         </div>

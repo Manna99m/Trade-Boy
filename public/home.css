@@ -180,13 +180,14 @@ body {
     padding: 40px;
 }
 
+/* Show the whole thumbnail (no cropping), centered, at a sensible size */
 .post-header-img {
+    display: block;
     width: 100%;
-    aspect-ratio: 16 / 9;
-    max-height: 400px;
-    object-fit: cover;
+    max-width: 960px;
+    height: auto;
+    margin: 0 auto 30px auto;
     border-radius: 12px;
-    margin-bottom: 30px;
 }
 
 .hero-btn {
@@ -402,213 +403,246 @@ body {
 
 /* ===================================================
    Affiliate & Promo Banner (Hero Wars Starter Pack)
+   Minimal strip: one dark surface, thin dividers,
+   a single green accent for the two actions
    =================================================== */
 .affiliate-banner-container {
-    max-width: 1200px;
-    margin: 0 auto 35px auto;
-    padding: 24px 28px;
-    background: linear-gradient(135deg, rgba(26, 18, 48, 0.94) 0%, rgba(15, 23, 42, 0.95) 50%, rgba(20, 36, 24, 0.94) 100%);
-    border: 1.5px solid rgba(174, 246, 73, 0.4);
-    border-radius: 16px;
-    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(174, 246, 73, 0.12);
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-}
-
-.affiliate-banner-container::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(174, 246, 73, 0.05) 0%, transparent 60%);
-    pointer-events: none;
+    margin: 0 0 24px 0;
+    padding: 10px 16px;
+    background: rgba(12, 16, 26, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
 
 .affiliate-badge {
-    display: inline-block;
-    background: linear-gradient(90deg, #ffd700, #aef649);
-    color: #0b0f19;
-    font-size: 0.8rem;
-    font-weight: 800;
+    flex-shrink: 0;
+    max-width: 110px;
+    color: #94a3b8;
+    font-size: 0.68rem;
+    font-weight: 700;
     letter-spacing: 1.2px;
-    padding: 5px 16px;
-    border-radius: 20px;
-    margin-bottom: 18px;
-    box-shadow: 0 2px 10px rgba(174, 246, 73, 0.35);
+    line-height: 1.4;
     text-transform: uppercase;
 }
 
 .affiliate-cards-wrapper {
+    flex: 1;
+    min-width: 0;
     display: flex;
-    align-items: stretch;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    position: relative;
-    z-index: 1;
 }
 
 .affiliate-card {
-    flex: 1 1 380px;
-    min-width: 290px;
-    background: rgba(10, 15, 29, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 14px;
-    padding: 20px 22px;
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 4px 16px;
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     gap: 14px;
-    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.affiliate-card:hover {
-    transform: translateY(-3px);
-    border-color: rgba(174, 246, 73, 0.55);
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5), 0 0 15px rgba(174, 246, 73, 0.15);
 }
 
 .affiliate-card-header {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 6px;
+    align-items: flex-start;
+    gap: 2px;
+    flex: 1 1 140px;
+    min-width: 120px;
 }
 
 .affiliate-step {
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-    color: #aef649;
-    background: rgba(174, 246, 73, 0.12);
-    padding: 3px 10px;
-    border-radius: 12px;
-    border: 1px solid rgba(174, 246, 73, 0.3);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #64748b;
+    text-transform: uppercase;
+    white-space: nowrap;
 }
 
-.affiliate-title {
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: #fff;
+/* Two classes so page heading styles (e.g. ".blog-container h3") don't win */
+.affiliate-banner-container .affiliate-title {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #e2e8f0;
     margin: 0;
-    line-height: 1.4;
+    line-height: 1.35;
 }
 
 .affiliate-rewards-box {
-    width: 100%;
+    flex-shrink: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
-    background: rgba(0, 0, 0, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 10px;
-    padding: 12px 14px;
+    gap: 3px;
 }
 
 .rewards-label {
-    font-size: 0.78rem;
-    color: #aaa;
+    font-size: 0.6rem;
+    color: #64748b;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.8px;
+    letter-spacing: 0.6px;
+    white-space: nowrap;
 }
 
 .affiliate-reward-img {
+    height: 34px;
+    width: auto;
     max-width: 100%;
-    height: auto;
-    max-height: 52px;
     object-fit: contain;
-    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.7));
 }
 
 .affiliate-cta-btn {
-    width: 100%;
-    max-width: 320px;
-    background: linear-gradient(135deg, #aef649, #8bd032);
+    flex-shrink: 0;
+    max-width: 230px;
+    background: #aef649;
     color: #0b0f19;
-    font-weight: 800;
-    font-size: 0.95rem;
-    padding: 12px 20px;
-    border-radius: 25px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    line-height: 1.25;
+    text-align: center;
+    padding: 8px 14px;
+    border-radius: 8px;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    box-shadow: 0 4px 15px rgba(174, 246, 73, 0.4);
-    transition: all 0.2s ease;
-    cursor: pointer;
+    gap: 6px;
+    transition: background 0.15s ease;
+}
+
+.affiliate-cta-btn svg {
+    width: 14px;
+    height: 14px;
 }
 
 .affiliate-cta-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 22px rgba(174, 246, 73, 0.65);
-    color: #000;
+    background: #c3f972;
+    color: #0b0f19;
 }
 
 .promo-code-box {
-    width: 100%;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
-    background: rgba(174, 246, 73, 0.08);
-    border: 1.5px dashed rgba(174, 246, 73, 0.6);
-    border-radius: 10px;
-    padding: 8px 14px;
+    gap: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 8px;
+    padding: 3px 3px 3px 10px;
 }
 
 .promo-code-text {
     font-family: 'Consolas', 'Courier New', monospace;
-    font-size: 1.15rem;
-    font-weight: 800;
-    color: #ffd700;
-    letter-spacing: 1px;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    letter-spacing: 0.5px;
 }
 
 .promo-copy-btn {
-    background: #aef649;
-    color: #0b0f19;
+    background: rgba(255, 255, 255, 0.08);
+    color: #e2e8f0;
     border: none;
     border-radius: 6px;
-    padding: 6px 12px;
-    font-weight: 700;
-    font-size: 0.8rem;
+    padding: 5px 9px;
+    font-weight: 600;
+    font-size: 0.72rem;
     cursor: pointer;
+    white-space: nowrap;
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    transition: all 0.15s ease;
+    gap: 4px;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.promo-copy-btn svg {
+    width: 13px;
+    height: 13px;
 }
 
 .promo-copy-btn:hover {
-    background: #c3f972;
-    transform: scale(1.04);
+    background: #aef649;
+    color: #0b0f19;
 }
 
 .promo-copy-btn:active {
     transform: scale(0.96);
 }
 
-@media (max-width: 768px) {
+/* Medium screens: label on its own row so the two steps keep their width */
+@media (max-width: 1400px) {
     .affiliate-banner-container {
-        padding: 18px 14px;
-        margin-bottom: 25px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
     }
-    .affiliate-card {
-        min-width: 100%;
-        padding: 16px 14px;
+
+    .affiliate-badge {
+        max-width: none;
     }
-    .affiliate-title {
-        font-size: 0.95rem;
-    }
-    .promo-code-text {
-        font-size: 1rem;
+
+    .affiliate-card:first-child {
+        border-left: none;
+        padding-left: 0;
     }
 }
 
+/* Tablets: the two steps stack, divided by a line */
+@media (max-width: 1100px) {
+    .affiliate-cards-wrapper {
+        flex-direction: column;
+    }
+
+    .affiliate-card {
+        border-left: none;
+        padding: 8px 0;
+    }
+
+    .affiliate-card + .affiliate-card {
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+}
+
+/* Phones: each step wraps into title row + rewards/action row */
+@media (max-width: 768px) {
+    .affiliate-banner-container {
+        padding: 10px 12px;
+        margin-bottom: 16px;
+    }
+
+    .affiliate-card {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .affiliate-card-header {
+        width: 100%;
+        flex-direction: row;
+        align-items: baseline;
+        gap: 8px;
+    }
+
+    .affiliate-step {
+        flex-shrink: 0;
+    }
+
+    .affiliate-banner-container .affiliate-title {
+        font-size: 0.82rem;
+    }
+
+    .rewards-label {
+        display: none;
+    }
+
+    .affiliate-reward-img {
+        height: 30px;
+    }
+
+    .promo-code-text {
+        font-size: 0.85rem;
+    }
+}

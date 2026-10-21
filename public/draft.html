@@ -19,6 +19,8 @@
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#aef649" />
+    <link rel="stylesheet" href="responsive.css">
+    <script src="site-translate.js" defer></script>
 </head>
 <body>
     <nav class="top-nav">
@@ -57,7 +59,7 @@
             </div>
             <div class="profile-container" style="margin-left: 10px;">
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <img src="" id="user-avatar" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #aef649; display: none;">
+                    <img id="user-avatar" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #aef649; display: none;">
                     <span id="user-display" style="font-weight: bold;"></span>
                 </div>
                 <button class="logout-btn" id="logout-btn" data-i18n="logout">Logout</button>
@@ -94,7 +96,7 @@
             <!-- Opponent Team (Top Center, Small) -->
             <div style="text-align: center; margin-bottom: 20px;">
                 <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px;">
-                    <img id="opponent-team-avatar" src="" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 2px solid #ef4444; display: none;">
+                    <img id="opponent-team-avatar" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 2px solid #ef4444; display: none;">
                     <h3 style="color: #ef4444; margin: 0; font-size: 1rem; text-shadow: 1px 1px 2px #000;" id="opponent-team-title" data-i18n="opponents_team">Opponent's Team</h3>
                 </div>
                 <div class="draft-progress" id="opponent-progress" style="transform: scale(0.7); transform-origin: top center; margin-bottom: 0;">
@@ -107,17 +109,17 @@
                 </div>
                 <div id="opponent-cards-container" class="draft-cards-container" style="transform: scale(0.6); margin-top: -10px; margin-bottom: 20px; display: none;">
                     <div class="draft-card" style="padding: 10px;">
-                        <img id="opp-img-0" src="" alt="Option 1" style="width: 80px; height: 80px;">
+                        <img id="opp-img-0" alt="Option 1" style="width: 80px; height: 80px;">
                     </div>
                     <div class="draft-card" style="padding: 10px;">
-                        <img id="opp-img-1" src="" alt="Option 2" style="width: 80px; height: 80px;">
+                        <img id="opp-img-1" alt="Option 2" style="width: 80px; height: 80px;">
                     </div>
                 </div>
             </div>
             <!-- Your Team (Center, Normal Size) -->
             <div style="text-align: center; margin-bottom: 30px;">
                 <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px;">
-                    <img id="my-team-avatar" src="" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover; border: 2px solid #3b82f6; display: none;">
+                    <img id="my-team-avatar" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover; border: 2px solid #3b82f6; display: none;">
                     <h3 style="color: #3b82f6; margin: 0; font-size: 1.2rem; text-shadow: 1px 1px 2px #000;" id="my-team-title" data-i18n="your_team">Your Team</h3>
                 </div>
                 <div class="draft-progress" id="my-progress">
@@ -137,11 +139,11 @@
             <p style="color: #ffffff; font-size: 1.1rem; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); margin-bottom: 30px;">The option you don't pick will be given to <span id="opponent-name" style="color: #fef08a;">your opponent</span>.</p>
             <div class="draft-cards-container">
                 <div class="draft-card" id="card-0">
-                    <img id="img-0" src="" alt="Option 1">
+                    <img id="img-0" alt="Option 1">
                     <button class="select-btn" onclick="selectCard(0)" data-i18n="select">Select</button>
                 </div>
                 <div class="draft-card" id="card-1">
-                    <img id="img-1" src="" alt="Option 2">
+                    <img id="img-1" alt="Option 2">
                     <button class="select-btn" onclick="selectCard(1)" data-i18n="select">Select</button>
                 </div>
             </div>
@@ -155,14 +157,14 @@
             <div class="results-container">
                 <div class="team-result" id="my-final-team">
                     <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 20px;">
-                        <img id="my-final-avatar" src="" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 3px solid #3b82f6; display: none;">
+                        <img id="my-final-avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 3px solid #3b82f6; display: none;">
                         <h3 id="my-final-title" style="color: #3b82f6; margin: 0; font-size: 1.5rem;" data-i18n="your_team">Your Team</h3>
                     </div>
                     <div class="team-grid" id="my-team-grid"></div>
                 </div>
                 <div class="team-result" id="opponent-final-team">
                     <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 20px;">
-                        <img id="opponent-final-avatar" src="" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 3px solid #ef4444; display: none;">
+                        <img id="opponent-final-avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 3px solid #ef4444; display: none;">
                         <h3 id="opponent-final-title" style="color: #ef4444; margin: 0; font-size: 1.5rem;" data-i18n="opponents_team">Opponent's Team</h3>
                     </div>
                     <div class="team-grid" id="opponent-team-grid"></div>
@@ -191,12 +193,27 @@
     <script src="patron-selection.js"></script>
     <script src="draft.js"></script>
 
-    <footer style="text-align: center; margin-top: 60px; padding: 20px; font-size: 0.85rem; color: #888; border-top: 1px solid #333; width: 100%;">
-        <a href="privacy.html" style="color: #888; text-decoration: none; margin: 0 10px;">Privacy Policy</a> |
-        <a href="terms.html" style="color: #888; text-decoration: none; margin: 0 10px;">Terms & Conditions</a> |
-        <a href="contact.html" style="color: #888; text-decoration: none; margin: 0 10px;">Contact</a>
-        <br><br>
-        <span style="font-size: 0.75rem;">This website is not associated with Nexters, not sponsored by Nexters, and Nexters is not liable for it.</span>
+    <footer class="site-footer" style="margin-top: 50px;">
+        <div class="footer-content">
+            <div class="footer-left">
+                <a href="index.html" class="footer-logo-container">
+                    <img src="logo.jpg" alt="Trade Boy Logo" class="footer-logo-img" style="width: 40px; border-radius: 50%;">
+                    <span class="footer-logo-text" style="color: #fff; font-weight: bold; font-size: 1.2rem; margin-left: 10px;">Trade Boy</span>
+                </a>
+                <p class="footer-slogan" style="color: #888; font-size: 0.8rem; margin-top: 5px;">ELEVATE YOUR HERO WARS STRATEGY.</p>
+            </div>
+            
+            <div class="footer-center" style="text-align: center;">
+                <div class="footer-links" style="margin-bottom: 10px;">
+                    <a href="privacy.html" style="color: #888; text-decoration: none; margin: 0 10px;">Privacy Policy</a> | 
+                    <a href="terms.html" style="color: #888; text-decoration: none; margin: 0 10px;">Terms & Conditions</a> | 
+                    <a href="contact.html" style="color: #888; text-decoration: none; margin: 0 10px;">Contact</a> | 
+                    <a href="about.html" style="color: #888; text-decoration: none; margin: 0 10px;">About Us</a>
+                </div>
+                <p class="footer-copyright" style="color: #555; font-size: 0.8rem;">TRADE BOY &copy; 2026 ALL RIGHTS RESERVED</p>
+                <p class="footer-disclaimer" style="margin-top: 8px;">This website is not associated with Nexters, not sponsored by Nexters, and Nexters is not liable for it.</p>
+            </div>
+        </div>
     </footer>
 
 </body>

@@ -151,6 +151,11 @@
     z-index: 1000;
 }
 
+/* Keep the footer clear of the fixed bottom bar */
+body:has(.bottom-bar) .site-footer {
+    margin-bottom: 145px;
+}
+
 .selected-slots {
     display: flex;
     gap: 15px;

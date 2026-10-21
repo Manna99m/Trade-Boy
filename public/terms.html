@@ -27,6 +27,8 @@
         .nav-header a { color: #aef649; text-decoration: none; font-weight: bold; margin: 0 10px; }
         .nav-header a:hover { text-decoration: underline; }
     </style>
+    <link rel="stylesheet" href="responsive.css">
+    <script src="site-translate.js" defer></script>
 </head>
 <body>
     
@@ -55,7 +57,7 @@
             
             <div class="profile-container" style="margin-left: 10px;">
                 <div id="profile-btn" style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 5px 10px; border-radius: 20px; transition: background 0.2s;">
-                    <img src="" id="user-avatar" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #aef649; display: none;">
+                    <img id="user-avatar" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #aef649; display: none;">
                     <span id="user-display" style="font-weight: bold;"></span>
                 </div>
                 <button class="logout-btn" id="logout-btn">Logout</button>

@@ -118,7 +118,7 @@
         }
         
         .hero-pool-container {
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto 60px auto;
             text-align: center;
         }
@@ -138,6 +138,8 @@
             min-height: 150px;
             justify-content: center;
             align-items: center;
+            max-width: 900px;
+            margin: 0 auto;
         }
     </style>
     <!-- Google AdSense -->
@@ -150,6 +152,8 @@
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#aef649" />
+    <link rel="stylesheet" href="responsive.css">
+    <script src="site-translate.js" defer></script>
 </head>
 <body>
     <nav class="top-nav">
@@ -167,7 +171,7 @@
                 <button class="nav-icon-btn" onclick="const m = document.getElementById('lang-dropdown'); m.style.display = m.style.display === 'none' ? 'block' : 'none';" data-i18n="lang_en">
                     EN <span style="font-size: 1.2em; margin-top: -2px;">🌐</span>
                 </button>
-                <div id="lang-dropdown" class="lang-dropdown">
+                <div id="lang-dropdown" class="lang-dropdown" style="display: none;">
                     <div class="lang-option active" onclick="selectLanguage(this, 'EN')">🇺🇸 English</div>
                     <div class="lang-option" onclick="selectLanguage(this, 'ID')">🇮🇩 Indonesia</div>
                     <div class="lang-option" onclick="selectLanguage(this, 'RU')">🇷🇺 Русский</div>
@@ -175,7 +179,7 @@
             </div>
             <div id="user-info" style="display: flex; align-items: center; gap: 15px;">
                 <span id="user-display" style="font-weight: bold; color: #aef649;"></span>
-                <img id="user-avatar" src="" alt="Avatar" style="width: 40px; height: 40px; border-radius: 50%; display: none; border: 2px solid #aef649; cursor: pointer;">
+                <img id="user-avatar" alt="Avatar" style="width: 40px; height: 40px; border-radius: 50%; display: none; border: 2px solid #aef649; cursor: pointer;">
                 <button id="logout-btn" class="nav-icon-btn" style="padding: 6px 15px; font-size: 0.8rem;" data-i18n="logout">Logout</button>
             </div>
         </div>
@@ -218,33 +222,40 @@
         <div class="hero-pool-container">
             <h2 class="hero-pool-title">Titan Pool</h2>
             <div class="hero-pool" id="hero-pool">
-                <img src="titans/alecto.png" class="hero-icon" alt="alecto" title="alecto">
-                <img src="titans/Amon.png" class="hero-icon" alt="Amon" title="Amon">
-                <img src="titans/Angus.png" class="hero-icon" alt="Angus" title="Angus">
-                <img src="titans/Araji.png" class="hero-icon" alt="Araji" title="Araji">
-                <img src="titans/Asherona.png" class="hero-icon" alt="Asherona" title="Asherona">
-                <img src="titans/Avalon.png" class="hero-icon" alt="Avalon" title="Avalon">
-                <img src="titans/Bruster.png" class="hero-icon" alt="Bruster" title="Bruster">
-                <img src="titans/Eden.png" class="hero-icon" alt="Eden" title="Eden">
-                <img src="titans/Hyperion.png" class="hero-icon" alt="Hyperion" title="Hyperion">
-                <img src="titans/Ignis.png" class="hero-icon" alt="Ignis" title="Ignis">
-                <img src="titans/Iyari.png" class="hero-icon" alt="Iyari" title="Iyari">
-                <img src="titans/Keros.png" class="hero-icon" alt="Keros" title="Keros">
-                <img src="titans/Lumira.png" class="hero-icon" alt="Lumira" title="Lumira">
-                <img src="titans/Mairi.png" class="hero-icon" alt="Mairi" title="Mairi">
+                <!-- Fire Titans -->
                 <img src="titans/Moloch.png" class="hero-icon" alt="Moloch" title="Moloch">
-                <img src="titans/Mort.png" class="hero-icon" alt="Mort" title="Mort">
-                <img src="titans/Nova.png" class="hero-icon" alt="Nova" title="Nova">
-                <img src="titans/Rigel.png" class="hero-icon" alt="Rigel" title="Rigel">
-                <img src="titans/Sigurd.png" class="hero-icon" alt="Sigurd" title="Sigurd">
-                <img src="titans/Solaris.png" class="hero-icon" alt="Solaris" title="Solaris">
-                <img src="titans/Syvla.png" class="hero-icon" alt="Syvla" title="Syvla">
-                <img src="titans/Tenebris.png" class="hero-icon" alt="Tenebris" title="Tenebris">
-                <img src="titans/Tidus.png" class="hero-icon" alt="Tidus" title="Tidus">
-                <img src="titans/Umbra.png" class="hero-icon" alt="Umbra" title="Umbra">
-                <img src="titans/valdur-and-echo.png" class="hero-icon" alt="valdur-and-echo" title="valdur-and-echo">
-                <img src="titans/Verdoc.png" class="hero-icon" alt="Verdoc" title="Verdoc">
                 <img src="titans/Vulcan.png" class="hero-icon" alt="Vulcan" title="Vulcan">
+                <img src="titans/Asherona.png" class="hero-icon" alt="Asherona" title="Asherona">
+                <img src="titans/Araji.png" class="hero-icon" alt="Araji" title="Araji">
+                <img src="titans/Ignis.png" class="hero-icon" alt="Ignis" title="Ignis">
+                <!-- Water Titans -->
+                <img src="titans/Sigurd.png" class="hero-icon" alt="Sigurd" title="Sigurd">
+                <img src="titans/Nova.png" class="hero-icon" alt="Nova" title="Nova">
+                <img src="titans/Tidus.png" class="hero-icon" alt="Tidus" title="Tidus">
+                <img src="titans/Mairi.png" class="hero-icon" alt="Mairi" title="Mairi">
+                <img src="titans/Hyperion.png" class="hero-icon" alt="Hyperion" title="Hyperion">
+                <!-- Earth Titans -->
+                <img src="titans/Angus.png" class="hero-icon" alt="Angus" title="Angus">
+                <img src="titans/Avalon.png" class="hero-icon" alt="Avalon" title="Avalon">
+                <img src="titans/Verdoc.png" class="hero-icon" alt="Verdoc" title="Verdoc">
+                <img src="titans/Eden.png" class="hero-icon" alt="Eden" title="Eden">
+                <img src="titans/Syvla.png" class="hero-icon" alt="Syvla" title="Syvla">
+                <!-- Light Titans -->
+                <img src="titans/Rigel.png" class="hero-icon" alt="Rigel" title="Rigel">
+                <img src="titans/Amon.png" class="hero-icon" alt="Amon" title="Amon">
+                <img src="titans/Solaris.png" class="hero-icon" alt="Solaris" title="Solaris">
+                <img src="titans/Iyari.png" class="hero-icon" alt="Iyari" title="Iyari">
+                <img src="titans/Lumira.png" class="hero-icon" alt="Lumira" title="Lumira">
+                <!-- Dark Titans -->
+                <img src="titans/Bruster.png" class="hero-icon" alt="Bruster" title="Bruster">
+                <img src="titans/Mort.png" class="hero-icon" alt="Mort" title="Mort">
+                <img src="titans/Keros.png" class="hero-icon" alt="Keros" title="Keros">
+                <img src="titans/Umbra.png" class="hero-icon" alt="Umbra" title="Umbra">
+                <img src="titans/Tenebris.png" class="hero-icon" alt="Tenebris" title="Tenebris">
+                <!-- Distortion Titans -->
+                <img src="titans/alecto.png" class="hero-icon" alt="Alecto" title="Alecto">
+                <img src="titans/Orm.png" class="hero-icon" alt="Orm" title="Orm">
+                <img src="titans/valdur-and-echo.png" class="hero-icon" alt="Valdur and Echo" title="Valdur and Echo">
             </div>
         </div>
     
@@ -356,12 +367,27 @@
     </script>
 <script src="hero-framer.js"></script>
 
-    <footer style="text-align: center; margin-top: 60px; padding: 20px; font-size: 0.85rem; color: #888; border-top: 1px solid #333; width: 100%;">
-        <a href="/privacy" style="color: #888; text-decoration: none; margin: 0 10px;">Privacy Policy</a> |
-        <a href="/terms" style="color: #888; text-decoration: none; margin: 0 10px;">Terms & Conditions</a> |
-        <a href="/contact" style="color: #888; text-decoration: none; margin: 0 10px;">Contact</a>
-        <br><br>
-        <span style="font-size: 0.75rem;">This website is not associated with Nexters, not sponsored by Nexters, and Nexters is not liable for it.</span>
+    <footer class="site-footer" style="margin-top: 50px;">
+        <div class="footer-content">
+            <div class="footer-left">
+                <a href="index.html" class="footer-logo-container">
+                    <img src="logo.jpg" alt="Trade Boy Logo" class="footer-logo-img" style="width: 40px; border-radius: 50%;">
+                    <span class="footer-logo-text" style="color: #fff; font-weight: bold; font-size: 1.2rem; margin-left: 10px;">Trade Boy</span>
+                </a>
+                <p class="footer-slogan" style="color: #888; font-size: 0.8rem; margin-top: 5px;">ELEVATE YOUR HERO WARS STRATEGY.</p>
+            </div>
+            
+            <div class="footer-center" style="text-align: center;">
+                <div class="footer-links" style="margin-bottom: 10px;">
+                    <a href="privacy.html" style="color: #888; text-decoration: none; margin: 0 10px;">Privacy Policy</a> | 
+                    <a href="terms.html" style="color: #888; text-decoration: none; margin: 0 10px;">Terms & Conditions</a> | 
+                    <a href="contact.html" style="color: #888; text-decoration: none; margin: 0 10px;">Contact</a> | 
+                    <a href="about.html" style="color: #888; text-decoration: none; margin: 0 10px;">About Us</a>
+                </div>
+                <p class="footer-copyright" style="color: #555; font-size: 0.8rem;">TRADE BOY &copy; 2026 ALL RIGHTS RESERVED</p>
+                <p class="footer-disclaimer" style="margin-top: 8px;">This website is not associated with Nexters, not sponsored by Nexters, and Nexters is not liable for it.</p>
+            </div>
+        </div>
     </footer>
 
 </body>
