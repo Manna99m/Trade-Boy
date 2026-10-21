@@ -48,10 +48,20 @@ font[style*="background-color"] {
     margin: 4px;
 }
 
-.team-grid .hero-with-patron img.main-hero-img {
+/* .main-hero-img can be the <img> itself or, on framed pages (tournament),
+   the frame wrapper that takes over its class */
+.team-grid .hero-with-patron .main-hero-img {
     width: 100%;
     height: auto;
     aspect-ratio: 1 / 1;
+}
+
+.team-grid .hero-with-patron {
+    display: block;
+}
+
+.team-grid .hero-with-patron .patron-mini-badge {
+    z-index: 5;
 }
 
 .team-grid .hero-with-patron .patron-mini-badge {
@@ -391,7 +401,18 @@ font[style*="background-color"] {
     }
 
     .team-grid {
-        gap: 4px;
+        gap: 4px !important;
+    }
+
+    /* Tournament "Teams Locked" boxes: less padding so icons stay large */
+    #arena-completed-decks .results-container {
+        gap: 12px !important;
+    }
+
+    #arena-completed-decks .team-result {
+        padding: 12px 8px;
+        min-width: 0 !important;
+        flex: 0 0 auto !important; /* stacked vertically here, so no fixed basis */
     }
 
     .team-grid > img {
@@ -400,7 +421,7 @@ font[style*="background-color"] {
     }
 
     .team-grid .hero-with-patron {
-        margin: 2px;
+        margin: 0;
     }
 
     .timer-container {

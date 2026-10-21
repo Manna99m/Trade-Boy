@@ -700,6 +700,7 @@ function autoPickRemainingNormalDraft() {
         const rejected = pair[1];
 
         updateMyDraftSlot('arena-my-progress', idx, `${dir}/${picked}`);
+        updateMyDraftSlot('arena-opp-progress', 3 + idx, `${dir}/${rejected}`);
         socket.emit('tourMakeChoice', {
             tourId: currentTourId,
             matchId: activeMatchId,
@@ -832,6 +833,10 @@ function showNormalDraftChoice(index) {
 function selectNormalDraftChoice(index, picked, rejected, imgSrc) {
     playBeep(587.33, 0.15, 'sine');
     updateMyDraftSlot('arena-my-progress', index, imgSrc);
+    // The card I didn't pick goes to my opponent: show it in their row (slots 4-6),
+    // same as the regular Draft page
+    const dir = activeTypes[index] === 'pet' ? 'pets' : 'heroes';
+    updateMyDraftSlot('arena-opp-progress', 3 + index, `${dir}/${rejected}`);
 
     socket.emit('tourMakeChoice', {
         tourId: currentTourId,
@@ -866,15 +871,22 @@ function updateMyDraftSlot(containerId, index, imgSrc) {
     }
 }
 
+function markNextSlot(containerId, from, to) {
+    const slots = Array.from(document.querySelectorAll(`#${containerId} .draft-slot`)).slice(from, to);
+    const slot = slots.find(s => !s.classList.contains('filled'));
+    if (slot) {
+        slot.textContent = '✓';
+        slot.classList.add('filled');
+    }
+}
+
 socket.on('tourOpponentSelected', () => {
-    // Fill next opponent slot with checkmark
-    const oppSlots = document.querySelectorAll('#arena-opp-progress .draft-slot, #arena-triple-opp-progress .draft-slot');
-    for (let slot of oppSlots) {
-        if (!slot.classList.contains('filled')) {
-            slot.textContent = '✓';
-            slot.classList.add('filled');
-            break;
-        }
+    if (activeMatchMode === 'triple') {
+        markNextSlot('arena-triple-opp-progress', 0, 6);
+    } else {
+        // Opponent's hidden pick (slots 1-3), and the card they passed to me (my slots 4-6)
+        markNextSlot('arena-opp-progress', 0, 3);
+        markNextSlot('arena-my-progress', 3, 6);
     }
 });
 
@@ -1328,13 +1340,13 @@ function showMatchDraftCompleted(yourTeam, opponentTeam) {
     const showcase = document.getElementById('arena-completed-decks');
     showcase.innerHTML = `
         <div class="results-container" style="display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; margin-top: 15px;">
-            <div class="team-result" style="text-align: center; min-width: 320px; max-width: 440px;">
+            <div class="team-result" style="text-align: center; flex: 1 1 320px; max-width: 600px;">
                 <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 15px;">
                     <h3 style="color: #aef649; margin: 0; font-size: 1.3rem;">Your Team</h3>
                 </div>
                 <div id="tour-my-result-grid" class="team-grid" style="justify-content: center; display: flex; flex-wrap: wrap; gap: 10px;"></div>
             </div>
-            <div class="team-result" style="text-align: center; min-width: 320px; max-width: 440px;">
+            <div class="team-result" style="text-align: center; flex: 1 1 320px; max-width: 600px;">
                 <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 15px;">
                     <h3 style="color: #ef4444; margin: 0; font-size: 1.3rem;">Opponent's Team</h3>
                 </div>
@@ -1588,7 +1600,7 @@ function renderDeckImages(deck) {
         return `
             <div class="hero-patron-badge-wrap" style="position: relative; display: inline-block;">
                 <img src="heroes/${h}" class="hero-mini-card" title="${cleanItemName(h)}">
-                ${patron ? `<img src="patrons/${patron}" class="patron-mini-badge" title="Patron: ${cleanItemName(patron)}" style="width: 22px; height: 22px; bottom: -3px; right: -3px;">` : ''}
+                ${patron ? `<img src="patrons/${patron}" class="patron-mini-badge" title="Patron: ${cleanItemName(patron)}" style="width: 40%; height: auto; aspect-ratio: 1 / 1; bottom: -6%; right: -6%; z-index: 5;">` : ''}
             </div>
         `;
     }).join('');

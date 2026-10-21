@@ -1100,17 +1100,29 @@ body {
     color: #fff;
 }
 
+/* Host view: one row of 6 that shrinks to fit instead of wrapping */
 .duel-deck-row {
     display: flex;
     justify-content: center;
     gap: 8px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     margin-bottom: 12px;
 }
 
+.duel-deck-row > * {
+    flex: 0 1 76px;
+    min-width: 0;
+}
+
+.duel-deck-row .hero-mini-card {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+}
+
 .hero-mini-card {
-    width: 52px;
-    height: 52px;
+    width: 76px;
+    height: 76px;
     border-radius: 8px;
     border: 2px solid rgba(255, 255, 255, 0.2);
     object-fit: cover;
