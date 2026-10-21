@@ -128,12 +128,27 @@ font[style*="background-color"] {
         height: 30px !important;
     }
 
+    /* Language and Login/Logout buttons: identical height and text size
+       (the globe emoji renders larger on real phones, so size is fixed) */
     .nav-icon-btn,
-    .logout-btn {
-        padding: 5px 9px;
-        font-size: 0.72rem;
+    .logout-btn,
+    #logout-btn {
+        height: 34px;
+        padding: 0 12px !important;
+        font-size: 0.8rem !important;
         letter-spacing: 0.5px;
         border-width: 2px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        line-height: 1;
+    }
+
+    .nav-icon-btn span {
+        font-size: 1.1em !important;
+        line-height: 1;
+        margin-top: 0 !important;
     }
 
     .lang-dropdown {
