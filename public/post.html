@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Post Details</title>
+    <meta name="robots" content="noindex, follow">
     <link rel="stylesheet" href="home.css">
     <link rel="stylesheet" href="team-build.css">
     <!-- Google AdSense -->
@@ -2667,11 +2668,15 @@
         };
 
         const urlParams = new URLSearchParams(window.location.search);
-        const postId = urlParams.get('id');
-        
+        // Guide pages (/best-team-for-osh etc.) get their id from the server
+        const postId = window.__POST_ID__ || urlParams.get('id');
+
         const container = document.getElementById('post-content');
-        
-        if (postId && postData[postId]) {
+
+        if (container.dataset.ssr) {
+            // Already filled in by the server (so search engines see the content)
+            document.title = document.title || `${postData[postId].title} - Trade Boy`;
+        } else if (postId && postData[postId]) {
             const post = postData[postId];
             document.title = `${post.title} - Trade Boy`;
             
