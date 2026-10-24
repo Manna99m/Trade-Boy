@@ -33,7 +33,6 @@
     background-position: 0 0%;
     -webkit-background-clip: text; background-clip: text;
     animation: tbWave 1.6s linear infinite;
-    transition: background-position-y 0.35s ease-out;
 }
 #tb-loader .tb-count {
     position: absolute; right: 0; top: calc(100% + 10px);
@@ -71,8 +70,11 @@
     const tracked = new Set();
     let loadedCount = 0;
     let pageLoaded = false;
-    let shown = 0;     // progress currently displayed
+    let goal = 0;      // real progress (0-100)
+    let shown = 0;     // progress currently displayed; rises smoothly towards goal
     let finished = false;
+    let exiting = false;
+    const RISE_PER_MS = 0.11; // max fill speed: 0 -> 100% in about 0.9s, even when cached
 
     function track(img) {
         if (tracked.has(img)) return;
@@ -95,29 +97,51 @@
     }
 
     function render(p) {
-        const next = Math.max(shown, p); // never goes backwards
-        if (next === shown && count.textContent) return;
-        shown = next;
-        fill.style.backgroundPositionY = shown + '%';
-        count.textContent = 'loading... ' + shown + '%';
+        const text = 'loading... ' + p + '%';
+        if (count.textContent === text) return;
+        fill.style.backgroundPositionY = p + '%';
+        count.textContent = text;
     }
 
     function update() {
         if (finished) return;
-        render(target());
+        goal = Math.max(goal, target()); // never goes backwards
         if (pageLoaded && loadedCount >= tracked.size) finish();
     }
 
     function finish() {
-        if (finished) return;
         finished = true;
-        render(100);
+        goal = 100;
+        if (document.hidden) { shown = 100; render(100); exit(); }
+    }
+
+    function exit() {
+        if (exiting) return;
+        exiting = true;
         const wait = Math.max(0, MIN_SHOW - (Date.now() - startedAt)) + 300;
         setTimeout(() => {
             loader.classList.add('done');
             setTimeout(() => loader.remove(), 800);
         }, wait);
     }
+
+    // The water rises smoothly towards the real progress, so the fill is always
+    // visible (when pictures are already cached, loading is near-instant)
+    let last = performance.now();
+    function tick(now) {
+        const dt = Math.min(now - last, 100);
+        last = now;
+        shown = Math.min(goal, shown + dt * RISE_PER_MS);
+        render(Math.round(shown));
+        if (finished && shown >= 100) { exit(); return; }
+        requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+
+    // A tab opened in the background doesn't animate; don't keep it waiting
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden && finished) { shown = 100; render(100); exit(); }
+    });
 
     // Images added later (hero grids built by scripts, hero frames) are tracked too
     // (changes inside the loader itself, like the counter text, are ignored,
@@ -138,5 +162,10 @@
         setTimeout(() => { pageLoaded = true; scan(document); update(); }, 50);
     });
 
-    setTimeout(() => { observer.disconnect(); finish(); }, MAX_WAIT);
+    setTimeout(() => {
+        observer.disconnect();
+        finish();
+        // Safety net if animation frames aren't running (e.g. tab never shown)
+        setTimeout(() => { shown = 100; render(100); exit(); }, 1500);
+    }, MAX_WAIT);
 })();
