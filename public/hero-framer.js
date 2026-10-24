@@ -33,11 +33,14 @@ window.copyPromoCode = window.copyPromoCode || function(btn) {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Inject CSS
-    const style = document.createElement('link');
-    style.rel = 'stylesheet';
-    style.href = 'hero-framer.css';
-    document.head.appendChild(style);
+    // Inject CSS (pages normally link hero-framer.css in <head> so frames are
+    // styled from the first paint; this is only a fallback)
+    if (!document.querySelector('link[href="hero-framer.css"]')) {
+        const style = document.createElement('link');
+        style.rel = 'stylesheet';
+        style.href = 'hero-framer.css';
+        document.head.appendChild(style);
+    }
 
     // Function to wrap a hero or pet image
     function wrapHeroImage(img) {
