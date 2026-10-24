@@ -42,10 +42,10 @@ font[style*="background-color"] {
     gap: 6px;
 }
 
-/* Same width for "Glass", "Light" and "Dark" so the header never shifts */
+/* Same width for "Glass", "Light", "Dark" and "System" so the header never shifts */
 .theme-label {
     display: inline-block;
-    min-width: 4em;
+    min-width: 5em;
     text-align: left;
 }
 
