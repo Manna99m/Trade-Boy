@@ -35,10 +35,18 @@
             border-radius: 8px;
             margin-bottom: 20px;
             border-left: 4px solid #aef649;
+            position: relative;
+            transition: background 0.2s;
         }
+        .article-card:hover { background: rgba(255,255,255,0.08); }
         .article-card h2 { margin-top: 0; color: #aef649; }
-        .article-card a { color: #fff; text-decoration: none; display: inline-block; margin-top: 10px; font-weight: bold; padding: 8px 16px; background: #333; border-radius: 4px; }
-        .article-card a:hover { background: #444; }
+        /* The title link stretches over the whole card, so clicking the
+           title, description or anywhere on the card opens the article */
+        .article-card h2 a { color: inherit; text-decoration: none; }
+        .article-card h2 a::after { content: ''; position: absolute; inset: 0; border-radius: 8px; }
+        .article-card:hover h2 a { text-decoration: underline; }
+        .article-card > a { position: relative; z-index: 1; color: #fff; text-decoration: none; display: inline-block; margin-top: 10px; font-weight: bold; padding: 8px 16px; background: #333; border-radius: 4px; }
+        .article-card > a:hover { background: #444; }
     </style>
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
@@ -46,6 +54,8 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="manifest" href="/site.webmanifest">
     <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="theme.css" id="theme-css">
+    <script src="theme-switcher.js"></script>
     <script src="site-translate.js" defer></script>
 </head>
 <body>
@@ -131,19 +141,19 @@
 <p>Welcome to the Trade Boy Guides section! Here you will find in-depth articles, tier list explanations, and strategy guides to help you dominate in Hero Wars.</p>
 
 <div class="article-card">
-    <h2>The Ultimate Beginner's Guide to Hero Wars (2026)</h2>
+    <h2><a href="blog-beginner-guide.html">The Ultimate Beginner's Guide to Hero Wars (2026)</a></h2>
     <p>Starting out in Hero Wars can be overwhelming. With dozens of heroes, titans, resources, and game modes, where should you spend your time and emeralds? This guide covers the top mistakes new players make and how to build a team that will carry you to the endgame.</p>
     <a href="blog-beginner-guide.html">Read Full Article →</a>
 </div>
 
 <div class="article-card">
-    <h2>Titan Upgrades: Earth, Water, or Fire?</h2>
+    <h2><a href="blog-titan-guide.html">Titan Upgrades: Earth, Water, or Fire?</a></h2>
     <p>Guild Wars are won and lost in the Titan Valley. Understanding the rock-paper-scissors mechanic of the elements is only the first step. Learn which Titan artifacts you should prioritize, why Super Titans are mandatory, and how to build an impenetrable defense.</p>
     <a href="blog-titan-guide.html">Read Full Article →</a>
 </div>
 
 <div class="article-card">
-    <h2>Understanding Draft Battles in Trade Boy</h2>
+    <h2><a href="draft.html">Understanding Draft Battles in Trade Boy</a></h2>
     <p>Drafting is an art. Before you take your team into the arena, use our Draft Simulator to practice against counter-picks. This article breaks down the meta heroes you should always ban and the flex picks that fit into any composition.</p>
     <a href="draft.html">Try the Draft Tool →</a>
 </div>
