@@ -32,36 +32,134 @@ app.use((req, res, next) => {
     next();
 });
 
-// Dynamic OG tags for /post
-const POST_DATA = {
-    'archdemon-teams': { title: 'Best Team for Archdemon', desc: 'Best formations to tackle the Archdemon.', img: 'archdemon-teams.jpg' },
-    'event-teams': { title: 'Event Teams - EVA Chapters', desc: 'Top tier combinations for the current events.', img: 'event-teams.jpg' },
-    'team-build': { title: 'Team Build', desc: 'Comprehensive guide to building a balanced team.', img: 'team-build.jpg' },
-    'heroes': { title: 'Heroes Tier List', desc: 'Tier list and analysis of the best heroes.', img: 'heroes-tier-list-thumb.jpg' },
-    'titans': { title: 'Titans Guide', desc: 'Maximize your titans damage and utility.', img: 'titans-tier-list-thumb.jpg' },
-    'maestro-teams': { title: 'Best Team for Maestro', desc: 'Top strategies and team comps to counter Maestro.', img: 'maestro-teams.jpg' },
-    'osh-teams': { title: 'Best Team for OSH', desc: 'Discover the most effective lineups for defeating OSH.', img: 'osh-teams.jpg' }
+// ---------- Guide pages (SEO) ----------
+// Each guide has its own keyword-rich address, and the server sends the full
+// guide already in the HTML (title, description, canonical, structured data
+// and the team content), so Google can read and index it without running
+// JavaScript. The guide content itself still lives in public/post.html.
+const SITE = 'https://trade-boy.com';
+const GUIDES = {
+    'best-team-for-osh': {
+        id: 'osh-teams',
+        title: 'Best Team for OSH in Hero Wars (2026) | Trade Boy',
+        desc: 'Best Hero Wars teams for OSH: proven Cornelius, Lara Croft and Jhu lineups for Level 150 and 160, with damage, playstyle, difficulty, recommended buffs and video guides.',
+        img: 'osh-teams.jpg'
+    },
+    'best-team-for-maestro': {
+        id: 'maestro-teams',
+        title: 'Best Team for Maestro in Hero Wars (2026) | Trade Boy',
+        desc: 'Best Hero Wars teams for Maestro: Hard Mode lineups for 1 Billion+ damage and Easy Mode Cornelius teams for Level 150, with buffs, patrons and video guides.',
+        img: 'maestro-teams.jpg'
+    },
+    'best-team-for-archdemon': {
+        id: 'archdemon-teams',
+        title: 'Best Team for Archdemon in Hero Wars (2026) | Trade Boy',
+        desc: 'Best Hero Wars teams for the Archdemon: top lineups with damage, playstyle, difficulty, recommended buffs and video guides.',
+        img: 'archdemon-teams.jpg'
+    },
+    'hero-wars-event-teams': {
+        id: 'event-teams',
+        title: 'Hero Wars Event Teams - EVA Chapters (2026) | Trade Boy',
+        desc: 'Best Hero Wars teams for the current events and EVA chapters, with lineups, difficulty and video guides.',
+        img: 'event-teams.jpg'
+    }
 };
+const GUIDE_SLUG_BY_ID = Object.fromEntries(Object.entries(GUIDES).map(([slug, g]) => [g.id, slug]));
+
+// Old /post?id=... addresses: guides move to their new address; placeholder
+// posts go to the real page for that topic
+const OLD_POST_REDIRECTS = { heroes: '/tier-list', titans: '/titans-tier-list', 'team-build': '/team-build', 'draft-battle': '/draft' };
+
+const escapeHtml = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+// Read the guide content (the postData object) out of post.html
+function loadPostData(html) {
+    const start = html.indexOf('const postData = ');
+    const end = html.indexOf('const urlParams', start);
+    if (start < 0 || end < 0) return {};
+    const objText = html.slice(start + 'const postData = '.length, html.lastIndexOf('};', end) + 1);
+    try {
+        return require('vm').runInNewContext('(' + objText + ')', {});
+    } catch (e) {
+        console.error('Could not read guide content from post.html:', e.message);
+        return {};
+    }
+}
+
+function renderGuide(html, slug) {
+    const guide = GUIDES[slug];
+    const post = loadPostData(html)[guide.id];
+    if (!post) return null;
+
+    const url = `${SITE}/${slug}`;
+    const img = `${SITE}/${guide.img}`;
+    const structuredData = [
+        {
+            '@context': 'https://schema.org',
+            '@type': 'Article',
+            headline: post.title,
+            description: guide.desc,
+            image: img,
+            mainEntityOfPage: url,
+            author: { '@type': 'Organization', name: 'Trade Boy', url: SITE },
+            publisher: { '@type': 'Organization', name: 'Trade Boy', logo: { '@type': 'ImageObject', url: `${SITE}/icon-512.png` } },
+            dateModified: new Date(fs.statSync(path.join(__dirname, 'public', 'post.html')).mtime).toISOString()
+        },
+        {
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+                { '@type': 'ListItem', position: 2, name: post.title, item: url }
+            ]
+        }
+    ];
+
+    const head = `<title>${escapeHtml(guide.title)}</title>
+    <meta name="description" content="${escapeHtml(guide.desc)}">
+    <link rel="canonical" href="${url}">
+    <meta property="og:title" content="${escapeHtml(guide.title)}" />
+    <meta property="og:description" content="${escapeHtml(guide.desc)}" />
+    <meta property="og:image" content="${img}" />
+    <meta property="og:url" content="${url}" />
+    <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json">${JSON.stringify(structuredData)}</script>
+    <script>window.__POST_ID__ = ${JSON.stringify(guide.id)};</script>`;
+
+    // Same markup the page's own script would build in the browser
+    const body = `
+                <img src="${post.img || 'thumbnail.jpg'}" alt="${escapeHtml(post.title)}" class="post-header-img">
+                <h1 style="margin-bottom: 20px; font-size: 2.5rem;">${post.title}</h1>
+                <div style="font-size: 1.1rem; line-height: 1.8; color: #cbd5e1;">${post.content}</div>
+                <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <p style="color: #94a3b8;">Written by: Trade Boy</p>
+                </div>`;
+
+    return html
+        .replace(/<title>[^<]*<\/title>/, head)
+        .replace(/\s*<meta name="robots" content="noindex, follow">/, '') // the bare template stays noindex; guides are indexable
+        .replace(/\s*<meta (property="og:[a-z]+"|name="twitter:card")[^>]*>/g, '')
+        .replace(/(<div class="post-detail" id="post-content")>\s*<!-- Content generated by JS -->\s*<\/div>/,
+                 `$1 data-ssr="1">${body}\n        </div>`);
+}
+
+Object.keys(GUIDES).forEach(slug => {
+    app.get('/' + slug, (req, res, next) => {
+        fs.readFile(path.join(__dirname, 'public', 'post.html'), 'utf8', (err, html) => {
+            if (err) return next();
+            const page = renderGuide(html, slug);
+            if (!page) return next();
+            res.send(page);
+        });
+    });
+});
 
 app.get('/post', (req, res, next) => {
     const id = req.query.id;
-    if (id && POST_DATA[id]) {
-        const filePath = path.join(__dirname, 'public', 'post.html');
-        fs.readFile(filePath, 'utf8', (err, data) => {
-            if (err) return next();
-            const post = POST_DATA[id];
-            const title = post.title + ' - Trade Boy';
-            const img = 'https://trade-boy.com/' + post.img;
-            let html = data.replace(/content="Trade Boy - Hero Wars Guide"/g, 'content="' + title + '"');
-            html = html.replace(/content="https:\/\/(trade-boy\.com|trade-boy\.onrender\.com)\/logo\.jpg"/g, 'content="' + img + '"');
-            if (post.desc) {
-                html = html.replace(/content="Your ultimate Hero Wars companion for real-time Draft Battles, Team Builds, and Tier Lists\."/g, 'content="' + post.desc + '"');
-            }
-            res.send(html);
-        });
-    } else {
-        next();
-    }
+    if (GUIDE_SLUG_BY_ID[id]) return res.redirect(301, '/' + GUIDE_SLUG_BY_ID[id]);
+    if (OLD_POST_REDIRECTS[id]) return res.redirect(301, OLD_POST_REDIRECTS[id]);
+    next();
 });
 
 app.get('/heroes/Avalon.png', (req, res) => {
