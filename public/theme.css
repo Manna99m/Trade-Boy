@@ -239,7 +239,11 @@ a { color: var(--ink); }
 .blog-container h3, .legal-container h3, .policy-container h3 { color: var(--ink-soft) !important; }
 .blog-container, .legal-container, .policy-container { color: var(--ink-soft) !important; }
 
-.blog-container a, .legal-container a, .policy-container a { color: var(--ink) !important; text-decoration: underline; }
+/* Underline only text links in the article body, not buttons (banner CTA, Read Full Article) */
+.blog-container p a, .blog-container li a,
+.legal-container p a, .legal-container li a,
+.policy-container p a, .policy-container li a { color: var(--ink) !important; text-decoration: underline; }
+.article-card > a { text-decoration: none !important; }
 
 /* Inner panels: post detail, SEO text boxes, results, pools, builders */
 .post-detail, .seo-content, .team-result, .pool-container, .draft-header,
@@ -351,7 +355,10 @@ a { color: var(--ink); }
 [style*="background: rgba(0,0,0,0.6)"], [style*="background: rgba(0, 0, 0, 0.6)"],
 [style*="background: rgba(0,0,0,0.7)"], [style*="background: rgba(0, 0, 0, 0.7)"],
 [style*="background: rgba(255,255,255,0.05)"], [style*="background: rgba(255, 255, 255, 0.05)"],
-[style*="background: rgba(255, 255, 255, 0.03)"], [style*="background: rgba(0, 0, 0, 0.2)"] {
+[style*="background: rgba(255, 255, 255, 0.03)"], [style*="background: rgba(0, 0, 0, 0.2)"],
+[style*="background: rgba(255,255,255,0.1)"], [style*="background: rgba(255, 255, 255, 0.1)"],
+[style*="background: rgba(255,255,255,0.08)"], [style*="background: rgba(255, 255, 255, 0.08)"],
+[style*="background: rgba(255,255,255,0.15)"], [style*="background: rgba(255, 255, 255, 0.15)"] {
     background: var(--paper) !important;
     color: var(--ink) !important;
     border-color: var(--line) !important;
