@@ -42,6 +42,13 @@ font[style*="background-color"] {
     gap: 6px;
 }
 
+/* Same width for "Glass", "Light" and "Dark" so the header never shifts */
+.theme-label {
+    display: inline-block;
+    min-width: 4em;
+    text-align: left;
+}
+
 .theme-dropdown {
     width: 150px !important;
     right: 0 !important;
