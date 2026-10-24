@@ -1,0 +1,157 @@
+/* ===================================================================
+   BUTTONS - two styles for the whole site
+   1. Glass pill   - header controls and secondary actions
+                     (theme, language, Login/Logout, Back to Home, tabs)
+   2. Solid lime   - the main action on a page
+                     (Claim Rewards, Join/Create Match, Select, Submit, OK...)
+   Shapes/sizes below apply in every theme, so Light and Dark keep the same
+   layout as Glass. The colours only apply in Glass; Light and Dark colour
+   the same buttons black/white from theme.css (loaded after this file).
+   =================================================================== */
+
+/* ---------- Groups ---------- */
+/* Glass:  .nav-icon-btn, .logout-btn, .hero-btn, Back-to-Home links,
+           .tab-btn, #cancel-avatar-btn, .patron-btn-close
+   Lime:   .action-btn (except Back to Home), .select-btn, .ok-btn, .save-btn,
+           .patron-submit-btn, #save-avatar-btn, .login-container button */
+
+/* ---------- Shared shape (all themes) ---------- */
+.nav-icon-btn, .logout-btn, .hero-btn, .tab-btn, #cancel-avatar-btn,
+.action-btn, .select-btn, .ok-btn, .save-btn, .patron-submit-btn,
+#save-avatar-btn, .login-container button {
+    border-radius: 12px !important;
+    border-width: 1px !important;
+    border-style: solid !important;
+    text-shadow: none !important;
+    text-transform: none !important;
+    letter-spacing: 0.2px !important;
+    font-weight: 700 !important;
+    filter: none !important;
+    transition: background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, transform 0.12s ease !important;
+}
+
+/* Glass group: compact */
+.nav-icon-btn, .logout-btn, .hero-btn, .tab-btn, #cancel-avatar-btn {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+}
+
+/* Lime group: a little larger, it's the button to press */
+.action-btn, .select-btn, .ok-btn, .save-btn, .patron-submit-btn,
+#save-avatar-btn, .login-container button {
+    padding: 11px 22px;
+    font-size: 1rem;
+}
+
+.nav-icon-btn:hover, .logout-btn:hover, .hero-btn:hover, .tab-btn:hover,
+.action-btn:hover, .select-btn:hover:not(:disabled), .ok-btn:hover, .save-btn:hover,
+.patron-submit-btn:hover:not(:disabled), #save-avatar-btn:hover, #cancel-avatar-btn:hover,
+.login-container button:hover {
+    transform: translateY(-1px) !important;
+}
+
+.nav-icon-btn:active, .logout-btn:active, .hero-btn:active, .tab-btn:active,
+.action-btn:active, .select-btn:active, .ok-btn:active, .save-btn:active,
+.patron-submit-btn:active, #save-avatar-btn:active, .login-container button:active {
+    transform: translateY(0) scale(0.98) !important;
+}
+
+/* ---------- Glass theme colours ---------- */
+
+/* 1. Glass pill */
+html[data-theme="glass"] .nav-icon-btn,
+html[data-theme="glass"] .logout-btn,
+html[data-theme="glass"] .hero-btn,
+html[data-theme="glass"] a.action-btn[href="/"],
+html[data-theme="glass"] a.action-btn[href="index.html"],
+html[data-theme="glass"] .tab-btn,
+html[data-theme="glass"] #cancel-avatar-btn,
+html[data-theme="glass"] .patron-btn-close {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #f1f5f9 !important;
+    border-color: rgba(255, 255, 255, 0.18) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 4px 14px rgba(0, 0, 0, 0.18) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+html[data-theme="glass"] .nav-icon-btn:hover,
+html[data-theme="glass"] .logout-btn:hover,
+html[data-theme="glass"] .hero-btn:hover,
+html[data-theme="glass"] a.action-btn[href="/"]:hover,
+html[data-theme="glass"] a.action-btn[href="index.html"]:hover,
+html[data-theme="glass"] .tab-btn:hover,
+html[data-theme="glass"] #cancel-avatar-btn:hover,
+html[data-theme="glass"] .patron-btn-close:hover {
+    background: rgba(255, 255, 255, 0.16) !important;
+    border-color: rgba(255, 255, 255, 0.34) !important;
+    color: #ffffff !important;
+}
+
+/* Back to Home uses the glass size, not the big action size */
+a.action-btn[href="/"], a.action-btn[href="index.html"] {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+}
+
+/* Active tab (Team Build: Heroes / Pets) lights up lime */
+html[data-theme="glass"] .tab-btn.active {
+    background: #aef649 !important;
+    color: #0b0f19 !important;
+    border-color: #aef649 !important;
+}
+html[data-theme="glass"] .tab-btn.active::after { border-left-color: #aef649 !important; }
+
+/* 2. Solid lime */
+html[data-theme="glass"] .action-btn:not([href="/"]):not([href="index.html"]),
+html[data-theme="glass"] .select-btn,
+html[data-theme="glass"] .ok-btn,
+html[data-theme="glass"] .save-btn,
+html[data-theme="glass"] .patron-submit-btn,
+html[data-theme="glass"] #save-avatar-btn,
+html[data-theme="glass"] .login-container button {
+    background: linear-gradient(180deg, #bdf76a 0%, #a3ec45 100%) !important;
+    color: #0b0f19 !important;
+    border-color: rgba(174, 246, 73, 0.9) !important;
+    box-shadow: 0 4px 16px rgba(174, 246, 73, 0.25) !important;
+}
+
+html[data-theme="glass"] .action-btn:not([href="/"]):not([href="index.html"]):hover,
+html[data-theme="glass"] .select-btn:hover:not(:disabled),
+html[data-theme="glass"] .ok-btn:hover,
+html[data-theme="glass"] .save-btn:hover,
+html[data-theme="glass"] .patron-submit-btn:hover:not(:disabled),
+html[data-theme="glass"] #save-avatar-btn:hover,
+html[data-theme="glass"] .login-container button:hover {
+    background: linear-gradient(180deg, #c9fa82 0%, #b0f25a 100%) !important;
+    box-shadow: 0 6px 22px rgba(174, 246, 73, 0.4) !important;
+}
+
+/* Text boxes next to these buttons (Room ID etc.) get the same glass look */
+#room-input, .tour-input {
+    border-radius: 12px !important;
+    border-width: 1px !important;
+    border-style: solid !important;
+}
+
+html[data-theme="glass"] #room-input,
+html[data-theme="glass"] .tour-input {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #f1f5f9 !important;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+
+html[data-theme="glass"] #room-input:focus,
+html[data-theme="glass"] .tour-input:focus {
+    border-color: rgba(174, 246, 73, 0.7) !important;
+    outline: none;
+}
+
+html[data-theme="glass"] .select-btn:disabled,
+html[data-theme="glass"] .patron-submit-btn:disabled {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: rgba(255, 255, 255, 0.45) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    box-shadow: none !important;
+}
