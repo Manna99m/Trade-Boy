@@ -37,8 +37,8 @@ const POST_DATA = {
     'archdemon-teams': { title: 'Best Team for Archdemon', desc: 'Best formations to tackle the Archdemon.', img: 'archdemon-teams.jpg' },
     'event-teams': { title: 'Event Teams - EVA Chapters', desc: 'Top tier combinations for the current events.', img: 'event-teams.jpg' },
     'team-build': { title: 'Team Build', desc: 'Comprehensive guide to building a balanced team.', img: 'team-build.jpg' },
-    'heroes': { title: 'Heroes Tier List', desc: 'Tier list and analysis of the best heroes.', img: 'heroes.jpg' },
-    'titans': { title: 'Titans Guide', desc: 'Maximize your titans damage and utility.', img: 'titans.jpg' },
+    'heroes': { title: 'Heroes Tier List', desc: 'Tier list and analysis of the best heroes.', img: 'heroes-tier-list-thumb.jpg' },
+    'titans': { title: 'Titans Guide', desc: 'Maximize your titans damage and utility.', img: 'titans-tier-list-thumb.jpg' },
     'maestro-teams': { title: 'Best Team for Maestro', desc: 'Top strategies and team comps to counter Maestro.', img: 'maestro-teams.jpg' },
     'osh-teams': { title: 'Best Team for OSH', desc: 'Discover the most effective lineups for defeating OSH.', img: 'osh-teams.jpg' }
 };
