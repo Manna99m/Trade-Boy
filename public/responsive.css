@@ -691,3 +691,19 @@ font[style*="background-color"] {
         white-space: nowrap;
     }
 }
+
+/* Glass theme: text links inside articles and guides.
+   Without this they fall back to the browser's dark blue/purple,
+   which is hard to read on the dark glass background.
+   (Light and Dark colour these links in theme.css.) */
+html[data-theme="glass"] :is(.blog-container, .legal-container, .policy-container, #post-content) :is(p, li, td, figcaption) a:not(.hero-btn):not(.video-guide-card),
+html[data-theme="glass"] :is(.blog-container, .legal-container, .policy-container, #post-content) :is(p, li, td, figcaption) a:not(.hero-btn):not(.video-guide-card):visited {
+    color: #aef649;
+    text-decoration: underline;
+    text-decoration-color: rgba(174, 246, 73, 0.45);
+    text-underline-offset: 3px;
+}
+html[data-theme="glass"] :is(.blog-container, .legal-container, .policy-container, #post-content) :is(p, li, td, figcaption) a:not(.hero-btn):not(.video-guide-card):hover {
+    color: #d4ff8f;
+    text-decoration-color: currentColor;
+}
