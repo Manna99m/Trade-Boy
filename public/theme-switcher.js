@@ -1,10 +1,10 @@
-// Site theme: Glass (original look), Light (black & white), Dark, or System
+// Site theme: Arena (game artwork behind frosted gold panels; stored as 'glass'), Light, Dark, or System
 // (the default: follows the device's light/dark setting and switches live).
 // Loaded right after theme.css in <head> so the theme is applied before the
 // page is drawn. The choice is remembered in localStorage ('siteTheme').
 (function () {
     const THEMES = [
-        ['glass', 'Glass'],
+        ['glass', 'Arena'],   // value stays 'glass' so saved choices keep working
         ['light', 'Light'],
         ['dark', 'Dark'],
         ['system', 'System']
