@@ -416,6 +416,12 @@ body.home-v2 a:focus-visible, body.home-v2 button:focus-visible, body.home-v2 in
 @media (max-width: 420px) {
     html body.home-v2 .lang-menu-container .nav-icon-btn span { display: none; }
     html body.home-v2 .logo-img { width: 30px !important; height: 30px !important; }
+    /* Tighter buttons so "Trade Boy" fits next to avatar + Logout */
+    html body.home-v2 .top-nav > div:last-child { gap: 4px !important; }
+    html body.home-v2 .top-nav .nav-icon-btn { min-width: 32px; padding: 0 8px !important; }
+    html body.home-v2 .top-nav .logout-btn { padding: 0 10px !important; }
+    html body.home-v2 .logo-container { gap: 8px; flex: 1 0 auto; }
+    html body.home-v2 #profile-btn { padding: 0 !important; }
 }
 @media (prefers-reduced-motion: reduce) {
     .hv-featured, .hv-card, .hv-thumb img, .hv-btn { transition: none; transform: none !important; }

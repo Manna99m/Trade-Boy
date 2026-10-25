@@ -1,0 +1,268 @@
+/* ===================================================================
+   SITE-WIDE "Obsidian Gold" layer (every page except the home page,
+   which has its own home-v2.css). Loaded last in <head>, scoped to
+   body.site-v2, and stronger than theme.css so the Light / Dark
+   themes recolour this design instead of replacing it.
+   It styles the shared parts only: page background, header, footer,
+   content panels, headings and the "Back to Home" button.
+   Tools (draft boards, tier lists, team builder, tournament) keep
+   their own controls inside their panels.
+   Colour tokens use the --hv- prefix (same values as the home page).
+   =================================================================== */
+
+html body.site-v2 {
+    --hv-bg: #050505;
+    --hv-bg-2: #0e0c08;
+    --hv-surface: rgba(255, 236, 200, 0.035);
+    --hv-surface-2: rgba(255, 236, 200, 0.07);
+    --hv-panel: rgba(16, 14, 10, 0.82);
+    --hv-line: rgba(255, 226, 170, 0.09);
+    --hv-line-2: rgba(255, 226, 170, 0.18);
+    --hv-text: #f6f1e7;
+    --hv-text-2: #ddd5c6;
+    --hv-muted: #b3a994;
+    --hv-dim: #8a816e;
+    --hv-gold: #fbbf24;
+    --hv-gold-soft: rgba(251, 191, 36, 0.10);
+    --hv-gold-line: rgba(251, 191, 36, 0.35);
+    --hv-lime: #aef649;
+    --hv-header: rgba(5, 5, 5, 0.82);
+    --hv-shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
+    --hv-glow-1: rgba(245, 158, 11, 0.12);
+    --hv-glow-2: rgba(174, 246, 73, 0.04);
+    --hv-display: 'Oxanium', 'Inter', 'Segoe UI', sans-serif;
+    --hv-body: 'Inter', 'Segoe UI', system-ui, sans-serif;
+
+    background: var(--hv-bg) none !important;
+    min-height: 100vh;
+}
+
+html[data-theme="light"] body.site-v2 {
+    --hv-bg: #f7f3ea;
+    --hv-bg-2: #fffdf8;
+    --hv-surface: #ffffff;
+    --hv-surface-2: #fbf6ea;
+    --hv-panel: #ffffff;
+    --hv-line: rgba(70, 52, 12, 0.10);
+    --hv-line-2: rgba(70, 52, 12, 0.18);
+    --hv-text: #1d1810;
+    --hv-text-2: #3a3326;
+    --hv-muted: #5c5446;
+    --hv-dim: #7d7564;
+    --hv-gold: #a16207;
+    --hv-gold-soft: rgba(161, 98, 7, 0.08);
+    --hv-gold-line: rgba(161, 98, 7, 0.35);
+    --hv-header: rgba(247, 243, 234, 0.88);
+    --hv-shadow: 0 14px 30px rgba(70, 52, 12, 0.12);
+    --hv-glow-1: rgba(245, 158, 11, 0.14);
+    --hv-glow-2: rgba(132, 204, 22, 0.07);
+}
+
+/* Glass: the site artwork faintly behind, frosted panels */
+html[data-theme="glass"] body.site-v2 {
+    --hv-panel: rgba(16, 14, 10, 0.70);
+    background: linear-gradient(rgba(5, 5, 5, 0.74), rgba(5, 5, 5, 0.74)), url('bg.jpg') center top / cover fixed !important;
+}
+
+/* Warm glow behind everything (no extra markup needed) */
+body.site-v2::before {
+    content: ''; position: fixed; z-index: -1; pointer-events: none;
+    width: 900px; height: 900px; top: -480px; left: 8%; border-radius: 50%;
+    background: var(--hv-glow-1); filter: blur(120px);
+}
+html[data-theme="glass"] body.site-v2::before { opacity: 0.7; }
+
+/* ---------- Header ---------- */
+html body.site-v2 .top-nav {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; gap: 22px; flex-wrap: nowrap; justify-content: flex-start;
+    height: 68px; padding: 0 max(40px, calc((100% - 1920px) / 2)) !important;
+    background: var(--hv-header) !important;
+    backdrop-filter: blur(14px) !important; -webkit-backdrop-filter: blur(14px) !important;
+    border-bottom: 1px solid var(--hv-line) !important; box-shadow: none !important;
+    font-family: var(--hv-body);
+}
+html body.site-v2 .logo-container { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; overflow: visible; text-decoration: none; }
+html body.site-v2 .logo-img { width: 34px !important; height: 34px !important; border-radius: 10px; border: 1px solid var(--hv-line-2); object-fit: cover; }
+html body.site-v2 .logo {
+    display: inline !important; font-family: var(--hv-display) !important; font-weight: 800; font-size: 1.2rem !important;
+    letter-spacing: 0.4px; color: var(--hv-text) !important; white-space: nowrap;
+}
+html body.site-v2 .logo b { color: var(--hv-gold); font-weight: 800; font-family: inherit; }
+html body.site-v2 .logo svg { display: none; }
+
+.hv-links { display: flex; gap: 2px; }
+html body.site-v2 .hv-links a {
+    padding: 8px 12px; border-radius: 10px; color: var(--hv-muted) !important; font: 500 0.93rem var(--hv-body);
+    text-decoration: none; white-space: nowrap; transition: background 0.15s, color 0.15s;
+}
+html body.site-v2 .hv-links a:hover, html body.site-v2 .hv-links a.on { color: var(--hv-text) !important; background: var(--hv-surface-2); }
+
+html body.site-v2 .search-container { position: relative; flex: 0 1 280px; margin-left: auto; min-width: 0; order: 0; }
+html body.site-v2 .search-container::before {
+    content: ''; position: absolute; left: 12px; top: 50%; width: 15px; height: 15px; transform: translateY(-50%); pointer-events: none;
+    background: var(--hv-dim);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+html body.site-v2 .search-bar,
+html body.site-v2 input.search-bar[type="text"] {
+    width: 100%; height: 38px; padding: 0 12px 0 36px !important; border-radius: 10px !important;
+    border: 1px solid var(--hv-line) !important; background: var(--hv-surface) !important; color: var(--hv-text) !important;
+    font: 400 0.9rem var(--hv-body) !important; outline: none; box-shadow: none !important;
+}
+html body.site-v2 .search-bar::placeholder { color: var(--hv-dim); }
+html body.site-v2 .search-bar:focus { border-color: var(--hv-gold-line) !important; background: var(--hv-surface-2) !important; }
+
+html body.site-v2 .top-nav > div:last-child { display: flex !important; align-items: center; gap: 8px !important; flex: 0 0 auto; margin-left: 0; }
+html body.site-v2 .top-nav .nav-icon-btn,
+html body.site-v2 .top-nav .logout-btn {
+    height: 38px; min-width: 38px; padding: 0 12px !important; border-radius: 10px !important;
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer;
+    background: var(--hv-surface) !important; color: var(--hv-muted) !important;
+    border: 1px solid var(--hv-line) !important; box-shadow: none !important;
+    font: 600 0.85rem var(--hv-body) !important; letter-spacing: 0 !important; line-height: 1; text-transform: none !important;
+    transform: none !important; backdrop-filter: none !important; text-shadow: none !important;
+}
+html body.site-v2 .top-nav .nav-icon-btn:hover { color: var(--hv-text) !important; background: var(--hv-surface-2) !important; }
+html body.site-v2 .top-nav .logout-btn,
+html body.site-v2 .top-nav #logout-btn { color: var(--hv-text) !important; border-color: var(--hv-line-2) !important; padding: 0 16px !important; }
+html body.site-v2 .top-nav .logout-btn:hover,
+html body.site-v2 .top-nav #logout-btn:hover { border-color: var(--hv-gold-line) !important; background: var(--hv-surface-2) !important; }
+/* Older login block used on the tier lists and disclaimer */
+html body.site-v2 #user-info { display: flex; align-items: center; gap: 8px !important; }
+html body.site-v2 .lang-menu-container .nav-icon-btn span { font-size: 1em !important; margin: 0 !important; }
+html body.site-v2 .theme-label { min-width: 0; }
+
+html body.site-v2 .lang-dropdown {
+    position: absolute; top: calc(100% + 10px); right: 0; z-index: 1000;
+    width: 200px; max-height: 60vh; overflow-y: auto; padding: 6px;
+    background: var(--hv-bg-2) !important; border: 1px solid var(--hv-line-2) !important; border-radius: 12px;
+    box-shadow: var(--hv-shadow) !important;
+}
+html body.site-v2 .lang-option {
+    padding: 9px 12px; border-radius: 8px; cursor: pointer; font: 500 0.9rem var(--hv-body);
+    color: var(--hv-muted) !important; background: transparent !important; margin: 0;
+}
+html body.site-v2 .lang-option:hover { color: var(--hv-text) !important; background: var(--hv-surface-2) !important; }
+html body.site-v2 .lang-option.active { color: var(--hv-gold) !important; background: var(--hv-gold-soft) !important; }
+
+html body.site-v2 .profile-container { display: flex; align-items: center; gap: 8px; margin: 0 !important; }
+html body.site-v2 #profile-btn { padding: 3px 8px 3px 3px !important; border-radius: 999px !important; }
+html body.site-v2 #profile-btn:hover { background: var(--hv-surface-2) !important; }
+html body.site-v2 #user-avatar { width: 32px !important; height: 32px !important; border: 2px solid var(--hv-gold) !important; }
+html body.site-v2 #user-display { color: var(--hv-text) !important; font: 600 0.9rem var(--hv-body); }
+
+/* ---------- Content panels ---------- */
+html body.site-v2 .blog-container,
+html body.site-v2 .legal-container,
+html body.site-v2 .policy-container,
+html body.site-v2 .main-content {
+    background: var(--hv-panel) !important;
+    border: 1px solid var(--hv-line) !important;
+    border-radius: 20px !important;
+    box-shadow: var(--hv-shadow) !important;
+}
+html[data-theme="glass"] body.site-v2 :is(.blog-container, .legal-container, .policy-container, .main-content) {
+    backdrop-filter: blur(12px) !important; -webkit-backdrop-filter: blur(12px) !important;
+}
+/* Readable text in articles and legal pages */
+html body.site-v2 :is(.blog-container, .legal-container, .policy-container) {
+    color: var(--hv-text-2) !important; font-family: var(--hv-body) !important;
+}
+html body.site-v2 :is(.blog-container, .legal-container, .policy-container) h1 {
+    font-family: var(--hv-display) !important; color: var(--hv-text) !important;
+    border-bottom-color: var(--hv-line-2) !important; letter-spacing: 0.2px;
+}
+html body.site-v2 :is(.blog-container, .legal-container, .policy-container) h2 {
+    font-family: var(--hv-display) !important; color: var(--hv-text) !important; letter-spacing: 0.2px;
+}
+html body.site-v2 :is(.blog-container, .legal-container, .policy-container) h3 { color: var(--hv-gold) !important; }
+
+/* Team pages (Osh, Maestro, events): headings in the brand font */
+html body.site-v2 #post-content h1, html body.site-v2 #post-content h2 { font-family: var(--hv-display) !important; letter-spacing: 0.3px; }
+
+/* ---------- Starter pack box (team pages) ---------- */
+html body.site-v2 .affiliate-banner-container {
+    background: var(--hv-surface) !important; border: 1px solid var(--hv-line) !important;
+    border-radius: 16px !important; box-shadow: none !important;
+}
+html body.site-v2 .affiliate-card { background: transparent !important; border-color: var(--hv-line) !important; }
+html body.site-v2 .affiliate-badge { color: var(--hv-gold) !important; }
+html body.site-v2 .affiliate-banner-container .affiliate-title { color: var(--hv-text) !important; }
+html body.site-v2 .affiliate-step, html body.site-v2 .rewards-label { color: var(--hv-dim) !important; }
+html body.site-v2 .promo-code-box { background: var(--hv-surface-2) !important; border: 1px dashed var(--hv-line-2) !important; }
+html body.site-v2 .promo-code-text { color: var(--hv-text) !important; }
+
+/* ---------- "Back to Home" and other secondary buttons ---------- */
+html body.site-v2 .hero-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--hv-surface-2) !important; color: var(--hv-text) !important;
+    border: 1px solid var(--hv-line-2) !important; border-radius: 11px !important; box-shadow: none !important;
+    font-family: var(--hv-body) !important; text-decoration: none !important;
+}
+html body.site-v2 .hero-btn:hover { border-color: var(--hv-gold-line) !important; background: var(--hv-gold-soft) !important; }
+
+/* ---------- Footer (same as the home page) ---------- */
+.hv-footer { margin-top: 48px; border-top: 1px solid var(--hv-line); background: rgba(0, 0, 0, 0.3); font-family: var(--hv-body); color: var(--hv-muted); }
+html[data-theme="light"] body.site-v2 .hv-footer { background: rgba(255, 255, 255, 0.55); }
+.hv-footer .hv-wrap { width: 100%; max-width: 2000px; margin: 0 auto; padding: 0 40px; }
+.hv-footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 32px; padding-top: 44px !important; padding-bottom: 28px !important; }
+html body.site-v2 .hv-footer h4 {
+    font: 700 0.78rem var(--hv-body); letter-spacing: 1px; text-transform: uppercase; color: var(--hv-dim) !important; margin: 0 0 12px;
+}
+.hv-footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+html body.site-v2 .hv-footer li a { color: var(--hv-muted) !important; font-size: 0.92rem; text-decoration: none; }
+html body.site-v2 .hv-footer li a:hover { color: var(--hv-text) !important; }
+html body.site-v2 .hv-brand {
+    display: inline-flex; align-items: center; gap: 10px; text-decoration: none;
+    font-family: var(--hv-display); font-weight: 800; font-size: 1.15rem; color: var(--hv-text) !important;
+}
+.hv-brand img { width: 32px; height: 32px; border-radius: 9px; }
+.hv-brand b { color: var(--hv-gold); }
+.hv-footer-about p { color: var(--hv-dim); font-size: 0.9rem; max-width: 330px; margin: 12px 0 14px; line-height: 1.55; }
+.hv-social { display: flex; gap: 8px; }
+html body.site-v2 .hv-social a {
+    width: 38px; height: 38px; display: grid; place-items: center; border-radius: 10px;
+    border: 1px solid var(--hv-line); background: var(--hv-surface); color: var(--hv-muted) !important; transition: 0.15s;
+}
+html body.site-v2 .hv-social a:hover { color: var(--hv-text) !important; border-color: var(--hv-gold-line); }
+.hv-social svg { width: 18px; height: 18px; }
+.hv-legal { border-top: 1px solid var(--hv-line); }
+.hv-legal .hv-wrap { display: flex; justify-content: space-between; gap: 6px 20px; flex-wrap: wrap; padding-top: 16px; padding-bottom: 22px; color: var(--hv-dim); font-size: 0.8rem; }
+
+body.site-v2 a:focus-visible, body.site-v2 button:focus-visible, body.site-v2 input:focus-visible { outline: 2px solid var(--hv-gold); outline-offset: 2px; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1180px) {
+    .hv-links { display: none; }
+}
+@media (max-width: 1080px) {
+    .hv-footer-grid { grid-template-columns: 1fr 1fr; }
+    .hv-footer .hv-wrap { padding: 0 24px; }
+}
+@media (max-width: 768px) {
+    html body.site-v2 .top-nav { flex-wrap: wrap; height: auto; gap: 8px; padding: 10px 14px !important; }
+    html body.site-v2 .logo-container { flex: 1 1 0; min-width: 0; overflow: hidden; }
+    html body.site-v2 .logo { font-size: 1.1rem !important; overflow: hidden; text-overflow: ellipsis; }
+    html body.site-v2 .search-container { order: 3; flex: 1 1 100%; margin-left: 0; }
+    html body.site-v2 .search-bar { font-size: 16px !important; } /* stops iOS zooming in */
+    html body.site-v2 .top-nav > div:last-child { gap: 6px !important; }
+    html body.site-v2 .top-nav .nav-icon-btn, html body.site-v2 .top-nav .logout-btn { height: 34px; min-width: 34px; padding: 0 10px !important; font-size: 0.8rem !important; }
+    html body.site-v2 :is(.blog-container, .legal-container, .policy-container, .main-content) { border-radius: 16px !important; }
+}
+@media (max-width: 640px) {
+    .hv-footer .hv-wrap { padding: 0 16px; }
+    .hv-footer-grid { gap: 26px; }
+    .hv-footer-about { grid-column: 1 / -1; }
+}
+@media (max-width: 420px) {
+    html body.site-v2 .lang-menu-container .nav-icon-btn span { display: none; }
+    html body.site-v2 .logo-img { width: 30px !important; height: 30px !important; }
+    /* Tighter buttons so "Trade Boy" fits next to avatar + Logout */
+    html body.site-v2 .top-nav > div:last-child { gap: 4px !important; }
+    html body.site-v2 .top-nav .nav-icon-btn { min-width: 32px; padding: 0 8px !important; }
+    html body.site-v2 .top-nav .logout-btn, html body.site-v2 .top-nav #logout-btn { padding: 0 10px !important; }
+    html body.site-v2 .logo-container { gap: 8px; flex: 1 0 auto; }
+    html body.site-v2 #profile-btn { padding: 0 !important; }
+}

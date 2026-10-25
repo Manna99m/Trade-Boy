@@ -430,9 +430,13 @@
             }
         });
 
+        // Search sent from another page's header (/?q=osh#guides)
+        const sentQuery = new URLSearchParams(location.search).get('q');
+        if (sentQuery) searchBar.value = sentQuery;
+
         setFilter(activeFilter);
-        // Shared filter link (e.g. /#asgard): open with the guides in view
-        if (activeFilter !== 'all') {
+        // Shared filter link (e.g. /#asgard) or a search: open with the guides in view
+        if (activeFilter !== 'all' || sentQuery) {
             requestAnimationFrame(() => document.getElementById('guides').scrollIntoView());
         }
 
