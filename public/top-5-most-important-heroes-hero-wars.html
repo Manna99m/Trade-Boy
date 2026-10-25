@@ -76,6 +76,33 @@
         }
         .hero-banner + h2 { margin-top: 0; }
 
+        /* Jump-to hero buttons (same look as the OSH page) */
+        html { scroll-behavior: smooth; }
+        .hero-banner[id] { scroll-margin-top: 110px; }
+        .jump-nav { margin: 30px 0 10px; text-align: center; }
+        .jump-title {
+            display: inline-flex; align-items: center; gap: 8px; margin-bottom: 16px;
+            color: #aef649; font-size: 1.15rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;
+        }
+        .jump-grid { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
+        .jump-grid a {
+            display: block; border-radius: 16px; overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .jump-grid a:hover, .jump-grid a:focus-visible {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 8px 25px rgba(174,246,73,0.4);
+        }
+        .jump-grid img {
+            display: block; width: 130px; height: 130px; object-fit: cover;
+            border-radius: 16px; border: 2px solid rgba(174,246,73,0.5);
+        }
+        @media (max-width: 480px) {
+            .jump-grid { gap: 10px; }
+            .jump-grid img { width: 96px; height: 96px; }
+        }
+
         .callout {
             margin: 0 0 22px; padding: 14px 18px; border-radius: 10px;
             border-left: 4px solid #ffd23f; background: rgba(255, 210, 63, 0.08);
@@ -173,8 +200,19 @@
             <p><strong>Important:</strong> These five heroes do not necessarily make an effective team when used together. Each has a different role, and their effectiveness depends on your team composition and your opponent's lineup. Understanding when to use each hero is far more important than simply placing all five in the same team.</p>
         </div>
 
+        <nav class="jump-nav" aria-label="Jump to a hero">
+            <div class="jump-title"><span>⚡</span> Jump to:</div>
+            <div class="jump-grid">
+                <a href="#sebastian"><img src="/blog/top5/btn-sebastian.jpg" alt="Sebastian" width="130" height="130"></a>
+                <a href="#isaac"><img src="/blog/top5/btn-isaac.jpg" alt="Isaac" width="130" height="130"></a>
+                <a href="#nebula"><img src="/blog/top5/btn-nebula.jpg" alt="Nebula" width="130" height="130"></a>
+                <a href="#lyria"><img src="/blog/top5/btn-lyria.jpg" alt="Lyria" width="130" height="130"></a>
+                <a href="#fluffy"><img src="/blog/top5/btn-fluffy.jpg" alt="Fluffy" width="130" height="130"></a>
+            </div>
+        </nav>
+
         <!-- 1. Sebastian -->
-        <figure class="hero-banner">
+        <figure class="hero-banner" id="sebastian">
             <img src="/blog/top5/banner-sebastian.webp" alt="Sebastian, support hero in Hero Wars" width="900" height="270" loading="lazy">
         </figure>
         <h2>1. Sebastian — A Powerful Support Hero Against Debuffs</h2>
@@ -204,7 +242,7 @@
         <p>If you're looking for a versatile support hero who can improve physical damage teams while protecting allies from debuffs, Sebastian deserves serious consideration. His value comes from the combination of his offensive support and defensive utility, making him a useful option across multiple team compositions.</p>
 
         <!-- 2. Isaac -->
-        <figure class="hero-banner">
+        <figure class="hero-banner" id="isaac">
             <img src="/blog/top5/banner-isaac.webp" alt="Isaac, anti-mage support hero in Hero Wars" width="900" height="270" loading="lazy">
         </figure>
         <h2>2. Isaac — A Strong Counter to Magic Damage Teams</h2>
@@ -244,7 +282,7 @@
         <p>Building Isaac for Osh? See my <a href="/isaac-build-for-osh">Isaac build for Osh</a> guide.</p>
 
         <!-- 3. Nebula -->
-        <figure class="hero-banner">
+        <figure class="hero-banner" id="nebula">
             <img src="/blog/top5/banner-nebula.webp" alt="Nebula, support hero in Hero Wars" width="900" height="270" loading="lazy">
         </figure>
         <h2>3. Nebula — Versatile Support for Different Damage Types</h2>
@@ -279,7 +317,7 @@
         <p>Nebula is worth considering if you want a support hero who can fit into multiple team compositions. Her flexibility is especially useful for players who prefer adapting their lineups to different opponents rather than relying on a single fixed team.</p>
 
         <!-- 4. Lyria -->
-        <figure class="hero-banner">
+        <figure class="hero-banner" id="lyria">
             <img src="/blog/top5/banner-lyria.webp" alt="Lyria, support hero in Hero Wars" width="900" height="270" loading="lazy">
         </figure>
         <h2>4. Lyria — Countering Dodge-Focused Opponents</h2>
@@ -317,7 +355,7 @@
         <p><strong>When Dodge is the problem, Lyria can be the answer.</strong></p>
 
         <!-- 5. Fluffy -->
-        <figure class="hero-banner">
+        <figure class="hero-banner" id="fluffy">
             <img src="/blog/top5/banner-fluffy.webp" alt="Fluffy, support hero in Hero Wars" width="900" height="270" loading="lazy">
         </figure>
         <h2>5. Fluffy — Resurrection and Ultimate Disruption</h2>
