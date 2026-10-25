@@ -110,7 +110,8 @@
             border: 1px dashed rgba(174, 246, 73, 0.6);
         }
 
-        .kill-timeline { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 0 0 22px; }
+        .kill-timeline { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 10px; margin: 0 0 22px; }
+        .kill-timeline .backup { border-style: dashed; }
         .kill-timeline .meteor b { color: #ff9f43; }
         .kill-timeline .kill { border-color: rgba(174,246,73,0.6); background: rgba(174,246,73,0.08); }
         .blog-table td.num { text-align: right; }
@@ -152,7 +153,6 @@
         .meta-line { opacity: 0.8; }
         @media (max-width: 768px) {
             .team-grid { grid-template-columns: repeat(3, 1fr); }
-            .kill-timeline { grid-template-columns: repeat(3, 1fr); }
             .kill-timeline b { font-size: 1.2rem; }
             .skill-head img { width: 48px; height: 48px; }
         }
@@ -257,7 +257,7 @@
                 <tr><td>Armor</td><td class="num">168,833</td></tr>
                 <tr><td>Magic Defense</td><td class="num">156,574</td></tr>
                 <tr><td>Defense Sphere health</td><td class="num">129,012 each</td></tr>
-                <tr><td>Meteor Shower</td><td>20s into the battle, then every 40s</td></tr>
+                <tr><td>Meteor Shower</td><td>4 per battle: at about 1:40, 1:00, 0:40–0:30 and 0:11–0:03 on the timer</td></tr>
                 <tr><td>Planet Parade</td><td>30s into the battle, then every 40s</td></tr>
                 <tr><td>Wormhole</td><td>3s into the battle, then every 40s</td></tr>
             </tbody>
@@ -270,11 +270,13 @@
         <div class="kill-timeline">
             <div><b>2:00</b><span>Battle starts</span></div>
             <div class="meteor"><b>1:40</b><span>1st Meteor Shower</span></div>
-            <div class="kill"><b>1:29</b><span>First Osh kill</span></div>
+            <div class="kill"><b>1:29</b><span>First Osh kill (my replay)</span></div>
             <div class="meteor"><b>1:00</b><span>2nd Meteor Shower</span></div>
-            <div class="kill"><b>0:56</b><span>Second kill: battle ends</span></div>
+            <div class="kill"><b>0:56</b><span>Second kill (my replay): battle ends</span></div>
+            <div class="meteor backup"><b>0:40–0:30</b><span>3rd Meteor Shower (if you missed a crit)</span></div>
+            <div class="meteor backup"><b>0:11–0:03</b><span>4th Meteor Shower (last chance)</span></div>
         </div>
-        <p style="font-size:0.9rem; opacity:0.8; margin-top:-10px;">Times are what the battle timer shows. Each kill lands shortly after a Meteor Shower, which is when the combo is set up.</p>
+        <p style="font-size:0.9rem; opacity:0.8; margin-top:-10px;">Times are what the battle timer shows. Each kill lands shortly after a Meteor Shower, which is when the combo is set up. In my replay both kills landed early, so the battle ended at 0:56. If Cornelius misses the critical hit on an earlier meteor, you still get the 3rd and 4th Meteor Showers to finish the job.</p>
         <p>In my battle replay, the first Osh kill happened with <strong>1 minute and 29 seconds remaining</strong> on the timer.</p>
         <p>The second kill happened with <strong>56 seconds remaining</strong>, immediately ending the encounter.</p>
         <p>This demonstrates that you don't need to use the entire two-minute timer to reach the maximum damage. The real challenge is executing the damage setup correctly twice before the battle ends.</p>
@@ -371,7 +373,10 @@
             <li>Aim for another successful critical hit and complete the second kill.</li>
         </ol>
         <p>Remember that the battle ends immediately after the second Osh kill.</p>
-        <p>You have approximately four opportunities during the battle to establish the required artifact bonuses, but you only need to execute the full combination successfully twice.</p>
+        <p>You have approximately four opportunities during the battle to establish the required artifact bonuses, one for each Meteor Shower, but you only need to execute the full combination successfully twice.</p>
+        <div class="callout">
+            <p><strong>Missed a crit? Don't restart yet.</strong> The 3rd Meteor Shower starts between 0:40 and 0:30 on the timer, and the 4th between 0:11 and 0:03. Set up the same combination again on either one and you can still get your second kill.</p>
+        </div>
         <p>Because the strategy depends on precise timing and critical hits, the result isn't guaranteed on every attempt. You may need to repeat the battle until the necessary conditions align.</p>
         <div class="callout">
             <p><strong>The key to reaching 1.72 billion damage is executing the full combination twice, not simply activating every ultimate as soon as possible.</strong></p>
