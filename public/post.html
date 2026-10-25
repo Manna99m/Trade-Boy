@@ -36,6 +36,48 @@
     <script src="theme-switcher.js"></script>
     <script src="site-translate.js" defer></script>
     <link rel="stylesheet" href="hero-framer.css">
+    <style>
+        /* "Watch video guide" card: YouTube thumbnail + play badge + who made it */
+        .video-guide-card {
+            display: flex; align-items: center; gap: 14px;
+            width: 100%; max-width: 460px; box-sizing: border-box;
+            margin-top: 14px; padding: 8px 14px 8px 8px;
+            border-radius: 14px; text-decoration: none !important; color: inherit !important;
+            background: rgba(128,128,128,0.10); border: 1px solid rgba(128,128,128,0.35);
+            transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+        }
+        .video-guide-card:hover, .video-guide-card:focus-visible {
+            transform: translateY(-2px);
+            border-color: rgba(255,0,51,0.65);
+            background: rgba(255,0,51,0.08);
+            box-shadow: 0 8px 22px rgba(255,0,51,0.18);
+        }
+        .vg-thumb {
+            position: relative; flex-shrink: 0; width: 128px; aspect-ratio: 16 / 9;
+            border-radius: 9px; overflow: hidden; background: #000;
+        }
+        .vg-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+        .video-guide-card:hover .vg-thumb img { transform: scale(1.06); }
+        .vg-play {
+            position: absolute; left: 50%; top: 50%; width: 38px; height: 26px; transform: translate(-50%, -50%);
+            border-radius: 8px; background: #ff0033; box-shadow: 0 2px 8px rgba(0,0,0,0.45);
+        }
+        .vg-play::after {
+            content: ''; position: absolute; left: 15px; top: 7px;
+            border-style: solid; border-width: 6px 0 6px 10px; border-color: transparent transparent transparent #fff;
+        }
+        .vg-text { display: flex; flex-direction: column; min-width: 0; flex: 1; line-height: 1.3; }
+        .vg-label { font-size: 0.72rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: #ff4d6a; }
+        .vg-title { font-size: 1rem; font-weight: 700; margin: 2px 0; }
+        .vg-by { font-size: 0.82rem; opacity: 0.7; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .vg-arrow { font-size: 1.2rem; opacity: 0.55; flex-shrink: 0; }
+        .video-guide-card:hover .vg-arrow { opacity: 1; }
+        html[data-theme="light"] .vg-label { color: #d6002a; }
+        @media (max-width: 420px) {
+            .vg-thumb { width: 104px; }
+            .vg-title { font-size: 0.92rem; }
+        }
+    </style>
 </head>
 <body>
     <nav class="top-nav">
@@ -1749,7 +1791,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="https://youtu.be/0P0q0AUkpd8" target="_blank" style="display: inline-block; margin-top: 10px; padding: 8px 16px; background: #e52d27; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 0.9rem;">▶ Watch Video Guide (Trade Boy)</a>
+                    <a class="video-guide-card" href="https://youtu.be/0P0q0AUkpd8" target="_blank" rel="noopener" aria-label="Watch the video guide by Trade Boy on YouTube"><span class="vg-thumb"><img src="https://i.ytimg.com/vi/0P0q0AUkpd8/mqdefault.jpg" alt="" width="320" height="180" loading="lazy"><span class="vg-play" aria-hidden="true"></span></span><span class="vg-text"><span class="vg-label">Video guide</span><span class="vg-title">Watch this team in action</span><span class="vg-by">by Trade Boy · YouTube</span></span><span class="vg-arrow" aria-hidden="true">↗</span></a>
                 </div>
                 
                 <div class="team-showcase" style="margin-bottom: 30px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 10px; border: 1px solid #aef649;">
@@ -1788,7 +1830,7 @@
                         </div>
                     </div>
                     <p style="margin-top: 15px; color: #ffeb3b; font-size: 0.9rem; border-left: 3px solid #ffeb3b; padding-left: 10px;"><em>*Note: This team must be played manually and requires high skill and an extreme level of luck!</em></p>
-                    <a href="https://youtu.be/RA1wtRqHGVc" target="_blank" style="display: inline-block; margin-top: 10px; padding: 8px 16px; background: #e52d27; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 0.9rem;">▶ Watch Video Guide (Trade Boy)</a>
+                    <a class="video-guide-card" href="https://youtu.be/RA1wtRqHGVc" target="_blank" rel="noopener" aria-label="Watch the video guide by Trade Boy on YouTube"><span class="vg-thumb"><img src="https://i.ytimg.com/vi/RA1wtRqHGVc/mqdefault.jpg" alt="" width="320" height="180" loading="lazy"><span class="vg-play" aria-hidden="true"></span></span><span class="vg-text"><span class="vg-label">Video guide</span><span class="vg-title">Watch this team in action</span><span class="vg-by">by Trade Boy · YouTube</span></span><span class="vg-arrow" aria-hidden="true">↗</span></a>
                 </div>
                 
                 <h2 id="maestro-easy-teams" class="osh-section-target" style="color: #aef649; margin-top: 50px; margin-bottom: 10px; text-transform: uppercase; text-align: center;">Easy Mode Teams</h2>
@@ -1831,7 +1873,7 @@
                         </div>
                     </div>
                     <p style="margin-top: 15px; color: #ffeb3b; font-size: 0.9rem; border-left: 3px solid #ffeb3b; padding-left: 10px;"><em>*Note: This team must be played manually and requires high skill and luck!</em></p>
-                    <a href="https://www.youtube.com/watch?v=Msnc5i0uRng" target="_blank" style="display: inline-block; margin-top: 10px; padding: 8px 16px; background: #e52d27; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 0.9rem;">▶ Watch Video Guide (Project hero wars)</a>
+                    <a class="video-guide-card" href="https://www.youtube.com/watch?v=Msnc5i0uRng" target="_blank" rel="noopener" aria-label="Watch the video guide by Project hero wars on YouTube"><span class="vg-thumb"><img src="https://i.ytimg.com/vi/Msnc5i0uRng/mqdefault.jpg" alt="" width="320" height="180" loading="lazy"><span class="vg-play" aria-hidden="true"></span></span><span class="vg-text"><span class="vg-label">Video guide</span><span class="vg-title">Watch this team in action</span><span class="vg-by">by Project hero wars · YouTube</span></span><span class="vg-arrow" aria-hidden="true">↗</span></a>
                 </div>
                 
                 <div class="team-showcase" style="margin-bottom: 30px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 10px; border: 1px solid #aef649;">
@@ -1905,7 +1947,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="https://youtu.be/0P0q0AUkpd8" target="_blank" style="display: inline-block; margin-top: 10px; padding: 8px 16px; background: #e52d27; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 0.9rem;">▶ Watch Video Guide (Trade Boy)</a>
+                    <a class="video-guide-card" href="https://youtu.be/0P0q0AUkpd8" target="_blank" rel="noopener" aria-label="Watch the video guide by Trade Boy on YouTube"><span class="vg-thumb"><img src="https://i.ytimg.com/vi/0P0q0AUkpd8/mqdefault.jpg" alt="" width="320" height="180" loading="lazy"><span class="vg-play" aria-hidden="true"></span></span><span class="vg-text"><span class="vg-label">Video guide</span><span class="vg-title">Watch this team in action</span><span class="vg-by">by Trade Boy · YouTube</span></span><span class="vg-arrow" aria-hidden="true">↗</span></a>
                 </div>
                 
                 <h2 style="color: #aef649; border-bottom: 2px solid #aef649; padding-bottom: 10px; margin-top: 60px; margin-bottom: 20px;">Maestro Buffs</h2>
@@ -2040,7 +2082,7 @@
                                 <li style="margin-bottom: 5px;"><strong style="color: #fff;">Damage:</strong> <strong style="color: #ffeb3b;">50-85 Million</strong></li>
                                 <li style="margin-bottom: 5px;"><strong style="color: #fff;">Difficulty:</strong> Easy</li>
                             </ul>
-                            <a href="https://youtu.be/LIoZCfk4jX8?si=RsEz1YqzWEsjmxoD&t=133" target="_blank" style="display: inline-block; margin-top: 10px; padding: 8px 16px; background: #e52d27; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 0.9rem;">▶ Watch Video Guide (Trade Boy)</a>
+                            <a class="video-guide-card" href="https://youtu.be/LIoZCfk4jX8?si=RsEz1YqzWEsjmxoD&amp;t=133" target="_blank" rel="noopener" aria-label="Watch the video guide by Trade Boy on YouTube"><span class="vg-thumb"><img src="https://i.ytimg.com/vi/LIoZCfk4jX8/mqdefault.jpg" alt="" width="320" height="180" loading="lazy"><span class="vg-play" aria-hidden="true"></span></span><span class="vg-text"><span class="vg-label">Video guide</span><span class="vg-title">Watch this team in action</span><span class="vg-by">by Trade Boy · YouTube</span></span><span class="vg-arrow" aria-hidden="true">↗</span></a>
                         </div>
                         <div style="margin-left: auto; width: fit-content; background: rgba(255,255,255,0.05); padding: 10px 15px; border-radius: 8px; border: 1px solid rgba(174, 246, 73, 0.3);">
                             <div style="color: #aef649; font-size: 0.9rem; font-weight: bold; margin-bottom: 8px;">Recommended Buffs:</div>
@@ -2072,7 +2114,7 @@
                                 <li style="margin-bottom: 5px;"><strong style="color: #fff;">Difficulty:</strong> Extreme Hard</li>
                             </ul>
                             <p style="margin-top: 15px; color: #ffeb3b; font-size: 0.9rem; border-left: 3px solid #ffeb3b; padding-left: 10px;"><em>*Note: This team must be played manually and requires high skill and a huge amount of luck!</em></p>
-                            <a href="https://youtu.be/G7oZ3skAcAw" target="_blank" style="display: inline-block; margin-top: 10px; padding: 8px 16px; background: #e52d27; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 0.9rem;">▶ Watch Video Guide (Trade Boy)</a>
+                            <a class="video-guide-card" href="https://youtu.be/G7oZ3skAcAw" target="_blank" rel="noopener" aria-label="Watch the video guide by Trade Boy on YouTube"><span class="vg-thumb"><img src="https://i.ytimg.com/vi/G7oZ3skAcAw/mqdefault.jpg" alt="" width="320" height="180" loading="lazy"><span class="vg-play" aria-hidden="true"></span></span><span class="vg-text"><span class="vg-label">Video guide</span><span class="vg-title">Watch this team in action</span><span class="vg-by">by Trade Boy · YouTube</span></span><span class="vg-arrow" aria-hidden="true">↗</span></a>
                         </div>
                         <div style="margin-left: auto; width: fit-content; background: rgba(255,255,255,0.05); padding: 10px 15px; border-radius: 8px; border: 1px solid rgba(174, 246, 73, 0.3);">
                             <div style="color: #aef649; font-size: 0.9rem; font-weight: bold; margin-bottom: 8px;">Recommended Buffs:</div>
@@ -2107,7 +2149,7 @@
                                 <li style="margin-bottom: 5px;"><strong style="color: #fff;">Damage:</strong> <strong style="color: #ffeb3b;">20-40 Million</strong></li>
                                 <li style="margin-bottom: 5px;"><strong style="color: #fff;">Difficulty:</strong> Easy</li>
                             </ul>
-                            <a href="https://youtu.be/YdhtgBfT3gM?si=z61qx-GIDANQlMYV&t=263" target="_blank" style="display: inline-block; margin-top: 10px; padding: 8px 16px; background: #e52d27; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 0.9rem;">▶ Watch Video Guide (Trade Boy)</a>
+                            <a class="video-guide-card" href="https://youtu.be/YdhtgBfT3gM?si=z61qx-GIDANQlMYV&amp;t=263" target="_blank" rel="noopener" aria-label="Watch the video guide by Trade Boy on YouTube"><span class="vg-thumb"><img src="https://i.ytimg.com/vi/YdhtgBfT3gM/mqdefault.jpg" alt="" width="320" height="180" loading="lazy"><span class="vg-play" aria-hidden="true"></span></span><span class="vg-text"><span class="vg-label">Video guide</span><span class="vg-title">Watch this team in action</span><span class="vg-by">by Trade Boy · YouTube</span></span><span class="vg-arrow" aria-hidden="true">↗</span></a>
                         </div>
                         <div style="margin-left: auto; width: fit-content; background: rgba(255,255,255,0.05); padding: 10px 15px; border-radius: 8px; border: 1px solid rgba(174, 246, 73, 0.3);">
                             <div style="color: #aef649; font-size: 0.9rem; font-weight: bold; margin-bottom: 8px;">Recommended Buffs:</div>
@@ -2143,7 +2185,7 @@
                                 <li style="margin-bottom: 5px;"><strong style="color: #fff;">Damage:</strong> <strong style="color: #ffeb3b;">60-115 Million</strong></li>
                                 <li style="margin-bottom: 5px;"><strong style="color: #fff;">Difficulty:</strong> Medium</li>
                             </ul>
-                            <a href="https://youtu.be/bZg8l3ypERU?si=S1CJfVNt0oQEqEUf" target="_blank" style="display: inline-block; margin-top: 10px; padding: 8px 16px; background: #e52d27; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 0.9rem;">▶ Watch Video Guide (Deda)</a>
+                            <a class="video-guide-card" href="https://youtu.be/bZg8l3ypERU?si=S1CJfVNt0oQEqEUf" target="_blank" rel="noopener" aria-label="Watch the video guide by Deda on YouTube"><span class="vg-thumb"><img src="https://i.ytimg.com/vi/bZg8l3ypERU/mqdefault.jpg" alt="" width="320" height="180" loading="lazy"><span class="vg-play" aria-hidden="true"></span></span><span class="vg-text"><span class="vg-label">Video guide</span><span class="vg-title">Watch this team in action</span><span class="vg-by">by Deda · YouTube</span></span><span class="vg-arrow" aria-hidden="true">↗</span></a>
                         </div>
                         <div style="margin-left: auto; width: fit-content; background: rgba(255,255,255,0.05); padding: 10px 15px; border-radius: 8px; border: 1px solid rgba(174, 246, 73, 0.3);">
                             <div style="color: #aef649; font-size: 0.9rem; font-weight: bold; margin-bottom: 8px;">Recommended Buffs:</div>
@@ -2183,7 +2225,7 @@
                                 <li style="margin-bottom: 5px;"><strong style="color: #fff;">Difficulty:</strong> Medium</li>
                             </ul>
                             <p style="margin-top: 15px; color: #ffeb3b; font-size: 0.9rem; border-left: 3px solid #ffeb3b; padding-left: 10px;"><em>*Note: Since Tristan is already used in Team 1, you will need to replace him with an alternative hero here.</em></p>
-                            <a href="https://youtu.be/bVwkyBgUWh4?si=TXWms3skNg2YmhGA" target="_blank" style="display: inline-block; margin-top: 10px; padding: 8px 16px; background: #e52d27; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 0.9rem;">▶ Watch Video Guide (Deda)</a>
+                            <a class="video-guide-card" href="https://youtu.be/bVwkyBgUWh4?si=TXWms3skNg2YmhGA" target="_blank" rel="noopener" aria-label="Watch the video guide by Deda on YouTube"><span class="vg-thumb"><img src="https://i.ytimg.com/vi/bVwkyBgUWh4/mqdefault.jpg" alt="" width="320" height="180" loading="lazy"><span class="vg-play" aria-hidden="true"></span></span><span class="vg-text"><span class="vg-label">Video guide</span><span class="vg-title">Watch this team in action</span><span class="vg-by">by Deda · YouTube</span></span><span class="vg-arrow" aria-hidden="true">↗</span></a>
                         </div>
                         <div style="margin-left: auto; width: fit-content; background: rgba(255,255,255,0.05); padding: 10px 15px; border-radius: 8px; border: 1px solid rgba(174, 246, 73, 0.3);">
                             <div style="color: #aef649; font-size: 0.9rem; font-weight: bold; margin-bottom: 8px;">Recommended Buffs:</div>
@@ -2255,7 +2297,7 @@
                                 <li style="margin-bottom: 5px;"><strong style="color: #fff;">Damage:</strong> <strong style="color: #ffeb3b;">200-700 Million</strong></li>
                                 <li style="margin-bottom: 5px;"><strong style="color: #fff;">Difficulty:</strong> Easy</li>
                             </ul>
-                            <a href="https://youtu.be/Ly5B5BMLudA" target="_blank" style="display: inline-block; margin-top: 10px; padding: 8px 16px; background: #e52d27; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 0.9rem;">▶ Watch Video Guide (Trade Boy)</a>
+                            <a class="video-guide-card" href="https://youtu.be/Ly5B5BMLudA" target="_blank" rel="noopener" aria-label="Watch the video guide by Trade Boy on YouTube"><span class="vg-thumb"><img src="https://i.ytimg.com/vi/Ly5B5BMLudA/mqdefault.jpg" alt="" width="320" height="180" loading="lazy"><span class="vg-play" aria-hidden="true"></span></span><span class="vg-text"><span class="vg-label">Video guide</span><span class="vg-title">Watch this team in action</span><span class="vg-by">by Trade Boy · YouTube</span></span><span class="vg-arrow" aria-hidden="true">↗</span></a>
                         </div>
                         <div style="margin-left: auto; width: fit-content; background: rgba(255,255,255,0.05); padding: 10px 15px; border-radius: 8px; border: 1px solid rgba(174, 246, 73, 0.3);">
                             <div style="color: #aef649; font-size: 0.9rem; font-weight: bold; margin-bottom: 8px;">Recommended Buffs:</div>
@@ -2291,7 +2333,7 @@
                                 <li style="margin-bottom: 5px;"><strong style="color: #fff;">Damage:</strong> <strong style="color: #ffeb3b;">20-40 Million</strong></li>
                                 <li style="margin-bottom: 5px;"><strong style="color: #fff;">Difficulty:</strong> Easy</li>
                             </ul>
-                            <a href="https://youtu.be/YdhtgBfT3gM?si=z61qx-GIDANQlMYV&t=263" target="_blank" style="display: inline-block; margin-top: 10px; padding: 8px 16px; background: #e52d27; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 0.9rem;">▶ Watch Video Guide (Trade Boy)</a>
+                            <a class="video-guide-card" href="https://youtu.be/YdhtgBfT3gM?si=z61qx-GIDANQlMYV&amp;t=263" target="_blank" rel="noopener" aria-label="Watch the video guide by Trade Boy on YouTube"><span class="vg-thumb"><img src="https://i.ytimg.com/vi/YdhtgBfT3gM/mqdefault.jpg" alt="" width="320" height="180" loading="lazy"><span class="vg-play" aria-hidden="true"></span></span><span class="vg-text"><span class="vg-label">Video guide</span><span class="vg-title">Watch this team in action</span><span class="vg-by">by Trade Boy · YouTube</span></span><span class="vg-arrow" aria-hidden="true">↗</span></a>
                         </div>
                         <div style="margin-left: auto; width: fit-content; background: rgba(255,255,255,0.05); padding: 10px 15px; border-radius: 8px; border: 1px solid rgba(174, 246, 73, 0.3);">
                             <div style="color: #aef649; font-size: 0.9rem; font-weight: bold; margin-bottom: 8px;">Recommended Buffs:</div>
@@ -2327,7 +2369,7 @@
                                 <li style="margin-bottom: 5px;"><strong style="color: #fff;">Damage:</strong> <strong style="color: #ffeb3b;">60-115 Million</strong></li>
                                 <li style="margin-bottom: 5px;"><strong style="color: #fff;">Difficulty:</strong> Medium</li>
                             </ul>
-                            <a href="https://youtu.be/bZg8l3ypERU?si=S1CJfVNt0oQEqEUf" target="_blank" style="display: inline-block; margin-top: 10px; padding: 8px 16px; background: #e52d27; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 0.9rem;">▶ Watch Video Guide (Deda)</a>
+                            <a class="video-guide-card" href="https://youtu.be/bZg8l3ypERU?si=S1CJfVNt0oQEqEUf" target="_blank" rel="noopener" aria-label="Watch the video guide by Deda on YouTube"><span class="vg-thumb"><img src="https://i.ytimg.com/vi/bZg8l3ypERU/mqdefault.jpg" alt="" width="320" height="180" loading="lazy"><span class="vg-play" aria-hidden="true"></span></span><span class="vg-text"><span class="vg-label">Video guide</span><span class="vg-title">Watch this team in action</span><span class="vg-by">by Deda · YouTube</span></span><span class="vg-arrow" aria-hidden="true">↗</span></a>
                         </div>
                         <div style="margin-left: auto; width: fit-content; background: rgba(255,255,255,0.05); padding: 10px 15px; border-radius: 8px; border: 1px solid rgba(174, 246, 73, 0.3);">
                             <div style="color: #aef649; font-size: 0.9rem; font-weight: bold; margin-bottom: 8px;">Recommended Buffs:</div>
@@ -2366,7 +2408,7 @@
                                 <li style="margin-bottom: 5px;"><strong style="color: #fff;">Damage:</strong> <strong style="color: #ffeb3b;">150-250 Million</strong></li>
                                 <li style="margin-bottom: 5px;"><strong style="color: #fff;">Difficulty:</strong> Medium</li>
                             </ul>
-                            <a href="https://youtu.be/bVwkyBgUWh4?si=TXWms3skNg2YmhGA" target="_blank" style="display: inline-block; margin-top: 10px; padding: 8px 16px; background: #e52d27; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 0.9rem;">▶ Watch Video Guide (Deda)</a>
+                            <a class="video-guide-card" href="https://youtu.be/bVwkyBgUWh4?si=TXWms3skNg2YmhGA" target="_blank" rel="noopener" aria-label="Watch the video guide by Deda on YouTube"><span class="vg-thumb"><img src="https://i.ytimg.com/vi/bVwkyBgUWh4/mqdefault.jpg" alt="" width="320" height="180" loading="lazy"><span class="vg-play" aria-hidden="true"></span></span><span class="vg-text"><span class="vg-label">Video guide</span><span class="vg-title">Watch this team in action</span><span class="vg-by">by Deda · YouTube</span></span><span class="vg-arrow" aria-hidden="true">↗</span></a>
                         </div>
                         <div style="margin-left: auto; width: fit-content; background: rgba(255,255,255,0.05); padding: 10px 15px; border-radius: 8px; border: 1px solid rgba(174, 246, 73, 0.3);">
                             <div style="color: #aef649; font-size: 0.9rem; font-weight: bold; margin-bottom: 8px;">Recommended Buffs:</div>
@@ -2504,7 +2546,7 @@
                                     <li style="margin-bottom: 5px;"><strong style="color: #fff;">Damage:</strong> <strong style="color: #ffeb3b;">60-115 Million</strong></li>
                                     <li style="margin-bottom: 5px;"><strong style="color: #fff;">Difficulty:</strong> Medium</li>
                                 </ul>
-                                <a href="https://youtu.be/bZg8l3ypERU?si=S1CJfVNt0oQEqEUf" target="_blank" style="display: inline-block; margin-top: 10px; padding: 8px 16px; background: #e52d27; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 0.9rem;">▶ Watch Video Guide (Deda)</a>
+                                <a class="video-guide-card" href="https://youtu.be/bZg8l3ypERU?si=S1CJfVNt0oQEqEUf" target="_blank" rel="noopener" aria-label="Watch the video guide by Deda on YouTube"><span class="vg-thumb"><img src="https://i.ytimg.com/vi/bZg8l3ypERU/mqdefault.jpg" alt="" width="320" height="180" loading="lazy"><span class="vg-play" aria-hidden="true"></span></span><span class="vg-text"><span class="vg-label">Video guide</span><span class="vg-title">Watch this team in action</span><span class="vg-by">by Deda · YouTube</span></span><span class="vg-arrow" aria-hidden="true">↗</span></a>
                             </div>
                             <div style="margin-left: auto; width: fit-content; background: rgba(255,255,255,0.05); padding: 10px 15px; border-radius: 8px; border: 1px solid rgba(174, 246, 73, 0.3);">
                                 <div style="color: #aef649; font-size: 0.9rem; font-weight: bold; margin-bottom: 8px;">Recommended Buffs:</div>
@@ -2543,7 +2585,7 @@
                                     <li style="margin-bottom: 5px;"><strong style="color: #fff;">Damage:</strong> <strong style="color: #ffeb3b;">150-250 Million</strong></li>
                                     <li style="margin-bottom: 5px;"><strong style="color: #fff;">Difficulty:</strong> Medium</li>
                                 </ul>
-                                <a href="https://youtu.be/bVwkyBgUWh4?si=TXWms3skNg2YmhGA" target="_blank" style="display: inline-block; margin-top: 10px; padding: 8px 16px; background: #e52d27; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 0.9rem;">▶ Watch Video Guide (Deda)</a>
+                                <a class="video-guide-card" href="https://youtu.be/bVwkyBgUWh4?si=TXWms3skNg2YmhGA" target="_blank" rel="noopener" aria-label="Watch the video guide by Deda on YouTube"><span class="vg-thumb"><img src="https://i.ytimg.com/vi/bVwkyBgUWh4/mqdefault.jpg" alt="" width="320" height="180" loading="lazy"><span class="vg-play" aria-hidden="true"></span></span><span class="vg-text"><span class="vg-label">Video guide</span><span class="vg-title">Watch this team in action</span><span class="vg-by">by Deda · YouTube</span></span><span class="vg-arrow" aria-hidden="true">↗</span></a>
                             </div>
                             <div style="margin-left: auto; width: fit-content; background: rgba(255,255,255,0.05); padding: 10px 15px; border-radius: 8px; border: 1px solid rgba(174, 246, 73, 0.3);">
                                 <div style="color: #aef649; font-size: 0.9rem; font-weight: bold; margin-bottom: 8px;">Recommended Buffs:</div>
