@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Trade Boy</title>
-    <link rel="stylesheet" href="home.css">
+    <title>Trade Boy - Hero Wars Guides, Tier Lists &amp; Draft Tools</title>
+    <meta name="description" content="Hero Wars Dominion Era strategy hub: boss teams for Osh and Maestro with exact timings, hero and titan tier lists, plus free live Draft Battle and Tournament tools.">
+    <link rel="canonical" href="https://trade-boy.com/">
     <script src="translations.js"></script>
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7790482039975365" crossorigin="anonymous"></script>
@@ -15,149 +16,194 @@
     <meta property="og:url" content="https://trade-boy.com/" />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content="#9333ea" />
+    <meta name="theme-color" content="#050505" />
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="manifest" href="/site.webmanifest">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oxanium:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="responsive.css">
     <link rel="stylesheet" href="buttons.css">
     <link rel="stylesheet" href="theme.css" id="theme-css">
     <script src="theme-switcher.js"></script>
     <script src="site-translate.js" defer></script>
-    <link rel="stylesheet" href="hero-framer.css">
-    <style>
-        /* Category filters above the guide cards */
-        .post-filters {
-            display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
-            margin: 0 auto 24px;
-        }
-        .post-filters .tab-btn { cursor: pointer; min-width: 76px; }
-        @media (max-width: 600px) {
-            .post-filters {
-                flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto;
-                padding-bottom: 4px; scrollbar-width: none;
-            }
-            .post-filters::-webkit-scrollbar { display: none; }
-            .post-filters .tab-btn { flex-shrink: 0; }
-        }
-    </style>
+    <!-- New home design (loaded last so it wins over the theme colours) -->
+    <link rel="stylesheet" href="home-v2.css">
 </head>
-<body>
-    <nav class="top-nav">
-        <a href="/" class="logo-container" style="text-decoration: none;">
-            <img src="logo.jpg" alt="Trade Boy Logo" class="logo-img">
-            <span class="logo" style="display: flex; align-items: center; gap: 8px;">Trade Boy 
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#aef649" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="Home">
-                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                </svg>
+<body class="home-v2">
+    <div class="hv-ambient" aria-hidden="true"></div>
+    <div class="hv-grid" aria-hidden="true"></div>
+
+    <!-- Starter pack: affiliate link + promo code -->
+    <div class="hv-promo">
+        <div class="hv-wrap">
+            <span class="hv-promo-item">
+                <span>🎁 <b>New player?</b><span class="hv-long"> Get free starter rewards</span></span>
+                <img src="affiliate-rewards-1.png" alt="Starter Pack Rewards: 10 Energy Potions, 100k Gold, 100 Emeralds, Maya">
+                <a class="hv-promo-link" href="https://odiencetrck.com/clk.php?lid=2279" target="_blank" rel="noopener noreferrer sponsored">Claim &amp; play →</a>
             </span>
-        </a>
-        <div class="search-container">
-            <input type="text" class="search-bar" data-i18n-placeholder="search_placeholder" placeholder="Search guides, heroes, teams...">
+            <span class="hv-promo-divider" aria-hidden="true"></span>
+            <span class="hv-promo-item">
+                <span><span class="hv-long">First 10 days, use </span>code</span>
+                <code class="hv-code promo-code-text notranslate" id="promo-code-val">TradeBoyMartha</code>
+                <button type="button" class="hv-copy" onclick="copyPromoCode(this)" title="Copy promo code"><span class="btn-text">Copy</span></button>
+                <img src="affiliate-rewards-2.png" alt="Promo Code Rewards: 10 Chests, 150k Gold, 800 Emeralds, Martha">
+            </span>
         </div>
-        <div style="display: flex; align-items: center; gap: 25px;">
+    </div>
+
+    <!-- Header: .top-nav and its last <div> are hooks for the theme switcher and language menu -->
+    <nav class="top-nav" aria-label="Main">
+        <a href="/" class="logo-container" aria-label="Trade Boy home">
+            <img src="logo.jpg" alt="Trade Boy Logo" class="logo-img">
+            <span class="logo notranslate">Trade <b>Boy</b></span>
+        </a>
+        <div class="hv-links">
+            <a class="on" href="#guides">Guides</a>
+            <a href="tier-list">Tier Lists</a>
+            <a href="team-build">Team Builder</a>
+            <a href="draft">Draft</a>
+            <a href="tournament">Tournament</a>
+        </div>
+        <div class="search-container">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <input type="text" class="search-bar" data-i18n-placeholder="search_placeholder" placeholder="Search guides, heroes, teams..." aria-label="Search guides">
+            <kbd aria-hidden="true">/</kbd>
+        </div>
+        <div>
             <div class="lang-menu-container" style="position: relative;">
-                <button class="nav-icon-btn" onclick="document.getElementById('lang-dropdown').style.display = document.getElementById('lang-dropdown').style.display === 'none' ? 'block' : 'none';">
-                    EN <span style="font-size: 1.2em; margin-top: -2px;">🌐</span>
+                <button type="button" class="nav-icon-btn" onclick="document.getElementById('lang-dropdown').style.display = document.getElementById('lang-dropdown').style.display === 'none' ? 'block' : 'none';">
+                    EN <span>🌐</span>
                 </button>
                 <div id="lang-dropdown" class="lang-dropdown" style="display: none;">
-                    <div class="lang-option active" onclick="selectLanguage(this, 'EN')">EN - English</div>
-                    <div class="lang-option" onclick="selectLanguage(this, 'RU')">RU - Русский</div>
-                    <div class="lang-option" onclick="selectLanguage(this, 'PT')">PT - Português</div>
-                    <div class="lang-option" onclick="selectLanguage(this, 'FR')">FR - Français</div>
-                    <div class="lang-option" onclick="selectLanguage(this, 'IT')">IT - Italiano</div>
-                    <div class="lang-option" onclick="selectLanguage(this, 'DE')">DE - Deutsch</div>
-                    <div class="lang-option" onclick="selectLanguage(this, 'ES')">ES - Español</div>
-                    <div class="lang-option" onclick="selectLanguage(this, 'PL')">PL - Polski</div>
-                    <div class="lang-option" onclick="selectLanguage(this, 'Zh-CN')">Zh-CN - 简体字</div>
-                    <div class="lang-option" onclick="selectLanguage(this, 'Zh-TW')">Zh-TW - 繁體中文</div>
-                    <div class="lang-option" onclick="selectLanguage(this, 'JA')">JA - 日本語</div>
-                    <div class="lang-option" onclick="selectLanguage(this, 'KO')">KO - 한국어</div>
-                    <div class="lang-option" onclick="selectLanguage(this, 'TH')">TH - ภาษาไทย</div>
+                    <div class="lang-option active">EN - English</div>
                 </div>
             </div>
-            
-            <div class="profile-container" style="margin-left: 10px;">
-                <div id="profile-btn" style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 5px 10px; border-radius: 20px; transition: background 0.2s;">
-                    <img id="user-avatar" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #aef649; display: none;">
-                    <span id="user-display" style="font-weight: bold;"></span>
+            <div class="profile-container">
+                <div id="profile-btn" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                    <img id="user-avatar" alt="Your avatar" style="border-radius: 50%; object-fit: cover; display: none;">
+                    <span id="user-display"></span>
                 </div>
-                <button class="logout-btn" id="logout-btn" data-i18n="logout">Logout</button>
+                <button type="button" class="logout-btn" id="logout-btn" data-i18n="logout">Logout</button>
             </div>
         </div>
     </nav>
 
-    <main class="main-content">
-        <!-- Hero Wars Starter Pack & Affiliate Banner -->
-        <div class="affiliate-banner-container">
-            <div class="affiliate-badge">🎁 Exclusive Hero Wars Starter Pack</div>
-            <div class="affiliate-cards-wrapper">
-                <!-- Card 1: Affiliate Link -->
-                <div class="affiliate-card">
-                    <div class="affiliate-card-header">
-                        <span class="affiliate-step">STEP 1</span>
-                        <h3 class="affiliate-title">Use my Affiliate link to get A head start:</h3>
+    <main>
+        <!-- Hero: one clear message + the featured guide -->
+        <section class="hv-hero">
+            <div class="hv-wrap">
+                <div>
+                    <span class="hv-eyebrow"><i></i>Updated for Dominion Era · 2026</span>
+                    <h1>Hero Wars strategy,<br><em>decoded.</em></h1>
+                    <p class="hv-lead">Boss teams with exact timings, tier lists, and free draft &amp; tournament tools, tested in real battles by Trade Boy.</p>
+                    <div class="hv-cta">
+                        <a class="hv-btn hv-btn-primary" href="#guides">Browse guides</a>
+                        <a class="hv-btn hv-btn-ghost" href="draft">Try Draft Battle</a>
                     </div>
-                    <div class="affiliate-rewards-box">
-                        <span class="rewards-label">Instant Starter Rewards:</span>
-                        <img src="affiliate-rewards-1.png" alt="Starter Pack Rewards: 10 Energy Potions, 100k Gold, 100 Emeralds, Maya" class="affiliate-reward-img">
+                    <div class="hv-stats">
+                        <div class="hv-stat"><b>1.72B</b><span>Max Osh damage guide</span></div>
+                        <div class="hv-stat"><b id="stat-guides">10</b><span>In-depth guides</span></div>
+                        <div class="hv-stat"><b id="stat-tools">7</b><span>Free battle tools</span></div>
                     </div>
-                    <a href="https://odiencetrck.com/clk.php?lid=2279" target="_blank" rel="noopener noreferrer" class="affiliate-cta-btn">
-                        <span>Claim Rewards & Play Now</span>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                    </a>
                 </div>
+                <a class="hv-featured" href="hero-wars-asgard-maximum-osh-damage">
+                    <span class="hv-ribbon">FEATURED</span>
+                    <img src="blog/osh-max/osh-max-damage-thumbnail.jpg" alt="Best team and secret strategy for maximum Osh damage" width="1280" height="720">
+                    <div class="hv-featured-body">
+                        <span class="hv-tag asgard">Asgard</span>
+                        <h3>Maximum 1.72B Osh Damage Guide</h3>
+                        <p>The exact team, buffs and manual timing to kill Osh twice in one battle.</p>
+                    </div>
+                </a>
+            </div>
+        </section>
 
-                <!-- Card 2: Promo Code -->
-                <div class="affiliate-card">
-                    <div class="affiliate-card-header">
-                        <span class="affiliate-step">STEP 2</span>
-                        <h3 class="affiliate-title">Within your 1st 10 days, use promo code:</h3>
+        <!-- Tools -->
+        <section class="hv-section" id="tools">
+            <div class="hv-wrap">
+                <div class="hv-sec-head">
+                    <div><h2>Battle tools</h2><p>Free, live and multiplayer. Jump straight in.</p></div>
+                </div>
+                <div class="hv-tools">
+                    <div class="hv-tool">
+                        <span class="hv-tool-go" aria-hidden="true">↗</span>
+                        <span class="hv-tool-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h12M3 18h7"/></svg></span>
+                        <h3><a href="tier-list">Tier Lists</a></h3>
+                        <p>Heroes and titans ranked for the current meta.</p>
+                        <div class="hv-sublinks"><a href="tier-list">Heroes</a><a href="titans-tier-list">Titans</a></div>
                     </div>
-                    <div class="promo-code-box">
-                        <span class="promo-code-text" id="promo-code-val">TradeBoyMartha</span>
-                        <button class="promo-copy-btn" onclick="copyPromoCode(this)" title="Copy Promo Code">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                            <span class="btn-text">Copy Code</span>
-                        </button>
+                    <div class="hv-tool">
+                        <span class="hv-tool-go" aria-hidden="true">↗</span>
+                        <span class="hv-tool-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3 4 7v6c0 4 3.5 7 8 8 4.5-1 8-4 8-8V7z"/></svg></span>
+                        <h3><a href="team-build">Team Builder</a></h3>
+                        <p>Build 5-hero lineups with pets and share them.</p>
                     </div>
-                    <div class="affiliate-rewards-box">
-                        <span class="rewards-label">Bonus Martha Rewards:</span>
-                        <img src="affiliate-rewards-2.png" alt="Promo Code Rewards: 10 Chests, 150k Gold, 800 Emeralds, Martha" class="affiliate-reward-img">
+                    <div class="hv-tool">
+                        <span class="hv-live">LIVE</span><span class="hv-tool-go" aria-hidden="true">↗</span>
+                        <span class="hv-tool-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m14.5 4 5.5 5.5L9 20.5 3.5 15zM13 7l4 4"/></svg></span>
+                        <h3><a href="draft">Draft Battles</a></h3>
+                        <p>Pick and ban against a friend in real time.</p>
+                        <div class="hv-sublinks"><a href="draft">Draft</a><a href="triple-draft">Triple</a><a href="mega-draft">Mega</a></div>
+                    </div>
+                    <div class="hv-tool">
+                        <span class="hv-live">LIVE</span><span class="hv-tool-go" aria-hidden="true">↗</span>
+                        <span class="hv-tool-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4"/></svg></span>
+                        <h3><a href="tournament">Tournament Arena</a></h3>
+                        <p>Host or join 4 to 32 player brackets.</p>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <h1 class="page-title" data-i18n="latest_guides">Latest Guides & Updates</h1>
-        
-        <div style="width: 100%; box-sizing: border-box; margin: 0 auto 30px auto; padding: 20px; background: rgba(0,0,0,0.6); border-radius: 10px; border-left: 4px solid #aef649; color: #ddd; font-family: Arial, sans-serif; line-height: 1.6; text-align: left;">
-            <h2 style="color: #aef649; margin-top: 0; font-size: 1.4rem;">Welcome to Trade Boy - The Ultimate Hero Wars Strategy Hub</h2>
-            <p style="margin-bottom: 10px;">Are you struggling to climb the Arena ranks, build the perfect Guild War defense, or defeat the Archdemon? You've come to the right place. Trade Boy is the premier destination for serious Hero Wars players looking to elevate their gameplay. We provide completely free, real-time interactive tools including the renowned Draft Battle simulator, advanced Team Builders, and up-to-date Meta Tier Lists.</p>
-            <p>Our goal is to give you the strategic edge over your opponents without wasting your hard-earned Emeralds. Explore our in-depth strategy guides below, test your drafted teams against the current meta, and stay ahead of the competition. Check out our <a href="articles.html" style="color: #aef649; font-weight: bold; text-decoration: none;">New Strategy Blog</a> for deep-dives into Titan building and beginner tips!</p>
-        </div>
+        <!-- Guides & tools grid with filters and search -->
+        <section class="hv-section" id="guides">
+            <div class="hv-wrap">
+                <div class="hv-sec-head">
+                    <div><h2>Latest guides</h2><p>Tested strategies with exact numbers and video proof.</p></div>
+                    <div class="hv-chips" id="post-filters" role="toolbar" aria-label="Filter guides">
+                        <button type="button" class="hv-chip active" data-filter="all" aria-pressed="true">All <small></small></button>
+                        <button type="button" class="hv-chip" data-filter="asgard" aria-pressed="false">Asgard <small></small></button>
+                        <button type="button" class="hv-chip" data-filter="titan" aria-pressed="false">Titan <small></small></button>
+                        <button type="button" class="hv-chip" data-filter="hero" aria-pressed="false">Hero <small></small></button>
+                        <button type="button" class="hv-chip" data-filter="event" aria-pressed="false">Event <small></small></button>
+                        <button type="button" class="hv-chip" data-filter="battle" aria-pressed="false">Battle <small></small></button>
+                    </div>
+                </div>
+                <div class="hv-cards" id="posts-grid"><!-- cards are generated below --></div>
+                <p class="hv-empty" id="posts-empty" style="display: none;">No guides match. Try another filter or search.</p>
+            </div>
+        </section>
 
-        <div class="post-filters" id="post-filters" role="toolbar" aria-label="Filter guides">
-            <button type="button" class="tab-btn active" data-filter="all" aria-pressed="true">All</button>
-            <button type="button" class="tab-btn" data-filter="asgard" aria-pressed="false">Asgard</button>
-            <button type="button" class="tab-btn" data-filter="titan" aria-pressed="false">Titan</button>
-            <button type="button" class="tab-btn" data-filter="hero" aria-pressed="false">Hero</button>
-            <button type="button" class="tab-btn" data-filter="event" aria-pressed="false">Event</button>
-            <button type="button" class="tab-btn" data-filter="battle" aria-pressed="false">Battle</button>
-        </div>
+        <!-- YouTube -->
+        <section class="hv-section">
+            <div class="hv-wrap">
+                <div class="hv-creator">
+                    <img src="logo.jpg" alt="Trade Boy">
+                    <div><h3>Every guide has video proof</h3><p>Watch the full battles, exact timings and buff setups on the Trade Boy YouTube channel.</p></div>
+                    <a class="hv-btn hv-btn-yt" href="https://www.youtube.com/@tradeboy1K" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+                </div>
+            </div>
+        </section>
 
-        <div class="grid" id="posts-grid">
-            <!-- Posts will be generated here -->
-        </div>
-        <p id="posts-empty" style="display: none; text-align: center; opacity: 0.75; margin: 30px 0;">No guides match. Try another filter or search.</p>
+        <!-- About (welcome text, kept for search engines) -->
+        <section class="hv-section">
+            <div class="hv-wrap">
+                <div class="hv-about">
+                    <h2>Welcome to Trade Boy - The Ultimate Hero Wars Strategy Hub</h2>
+                    <p>Are you struggling to climb the Arena ranks, build the perfect Guild War defense, or defeat the Archdemon? You've come to the right place. Trade Boy is the premier destination for serious Hero Wars players looking to elevate their gameplay. We provide completely free, real-time interactive tools including the renowned Draft Battle simulator, advanced Team Builders, and up-to-date Meta Tier Lists.</p>
+                    <p>Our goal is to give you the strategic edge over your opponents without wasting your hard-earned Emeralds. Explore our in-depth strategy guides above, test your drafted teams against the current meta, and stay ahead of the competition. Check out our <a href="articles.html">Strategy Blog</a> for deep-dives into Titan building and beginner tips!</p>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Avatar Change Modal -->
     <div id="avatar-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center;">
-        <div style="background: #1a1a1a; padding: 30px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.2); width: 400px; text-align: center;">
+        <div style="background: #1a1a1a; padding: 30px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.2); width: 400px; max-width: calc(100% - 32px); text-align: center;">
             <h2 style="color: #fff; margin-bottom: 20px;" data-i18n="change_avatar">Change Avatar</h2>
             <div id="modal-avatar-grid" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 25px;"></div>
             <button id="save-avatar-btn" style="padding: 10px 20px; border-radius: 8px; border: none; background: #aef649; color: #000; font-weight: bold; cursor: pointer;" data-i18n="save">Save</button>
@@ -165,50 +211,53 @@
         </div>
     </div>
 
-    <footer class="site-footer">
-        <div class="footer-content">
-            <div class="footer-left">
-                <a href="/" class="footer-logo-container">
-                    <img src="logo.jpg" alt="Trade Boy Logo" class="footer-logo-img">
-                    <span class="footer-logo-text">Trade Boy</span>
-                </a>
-                <p class="footer-slogan">ELEVATE YOUR HERO WARS STRATEGY.</p>
-            </div>
-            
-            <div class="footer-center">
-                <div class="footer-links">
-                    <a href="privacy.html">Privacy Policy</a> | 
-                    <a href="terms.html">Terms & Conditions</a> | 
-                    <a href="/disclaimer">Disclaimer</a> | 
-                    <a href="contact.html">Contact</a> | 
-                    <a href="about.html">About Us</a>
+    <footer class="hv-footer">
+        <div class="hv-wrap hv-footer-grid">
+            <div class="hv-footer-about">
+                <a href="/" class="hv-brand notranslate"><img src="logo.jpg" alt="">Trade <b>Boy</b></a>
+                <p>Free Hero Wars strategy hub: boss teams, tier lists, and live draft &amp; tournament tools. Elevate your Hero Wars strategy.</p>
+                <div class="hv-social">
+                    <a href="https://www.youtube.com/@tradeboy1K" title="YouTube" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+                    <a href="https://discord.com/" title="Discord Username: tradeboy_yt" target="_blank" rel="noopener" onclick="alert('Add me on Discord: tradeboy_yt');"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg></a>
+                    <a href="https://www.facebook.com/soc.mgma/" title="Facebook" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+                    <a href="mailto:contact@trade-boy.com" title="Email: contact@trade-boy.com"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg></a>
                 </div>
-                <p class="footer-copyright">TRADE BOY &copy; 2026 ALL RIGHTS RESERVED</p>
             </div>
-            
-            <div class="footer-right">
-                <h4 class="social-title">Social Links</h4>
-                <div class="social-icons">
-                    <!-- Discord -->
-                    <a href="https://discord.com/" class="social-icon" title="Discord Username: tradeboy_yt" target="_blank" onclick="alert('Add me on Discord: tradeboy_yt');">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
-                    </a>
-                    <!-- YouTube -->
-                    <a href="https://www.youtube.com/@tradeboy1K" class="social-icon" title="YouTube" target="_blank">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                    </a>
-                    <!-- Facebook -->
-                    <a href="https://www.facebook.com/soc.mgma/" class="social-icon" title="Facebook" target="_blank">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                    </a>
-                    <!-- Email -->
-                    <a href="mailto:contact@trade-boy.com" class="social-icon" title="Email: contact@trade-boy.com">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>
-                    </a>
-                </div>
-                <p class="footer-disclaimer">
-                    This website is not associated with Nexters, not sponsored by Nexters, and Nexters is not liable for it.
-                </p>
+            <div>
+                <h4>Guides</h4>
+                <ul>
+                    <li><a href="best-team-for-osh">Best Teams for Osh</a></li>
+                    <li><a href="best-team-for-maestro">Best Teams for Maestro</a></li>
+                    <li><a href="best-team-for-archdemon">Archdemon Teams</a></li>
+                    <li><a href="hero-wars-event-teams">Event Teams</a></li>
+                    <li><a href="articles.html">Blog &amp; Guides</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Tools</h4>
+                <ul>
+                    <li><a href="tier-list">Hero Tier List</a></li>
+                    <li><a href="titans-tier-list">Titan Tier List</a></li>
+                    <li><a href="team-build">Team Builder</a></li>
+                    <li><a href="draft">Draft Battle</a></li>
+                    <li><a href="tournament">Tournament Arena</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Trade Boy</h4>
+                <ul>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="privacy.html">Privacy Policy</a></li>
+                    <li><a href="terms.html">Terms &amp; Conditions</a></li>
+                    <li><a href="/disclaimer">Disclaimer</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="hv-legal">
+            <div class="hv-wrap">
+                <span>TRADE BOY &copy; 2026 ALL RIGHTS RESERVED</span>
+                <span>This website is not associated with Nexters, not sponsored by Nexters, and Nexters is not liable for it.</span>
             </div>
         </div>
     </footer>
@@ -221,38 +270,13 @@
                 menu.style.display = 'none';
             }
         });
-        
-        function selectLanguage(element, langCode) {
-            const btn = element.closest('.lang-menu-container').querySelector('.nav-icon-btn');
-            btn.innerHTML = langCode + ' <span style="font-size: 1.2em; margin-top: -2px;">🌐</span>';
-            const options = element.parentElement.querySelectorAll('.lang-option');
-            options.forEach(opt => opt.classList.remove('active'));
-            element.classList.add('active');
-            localStorage.setItem('selectedLang', langCode);
-            element.parentElement.style.display = 'none';
-            if (window.applyTranslations) window.applyTranslations(langCode);
-        }
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            const savedLang = localStorage.getItem('selectedLang') || 'EN';
-            const container = document.querySelector('.lang-menu-container');
-            if (container) {
-                const btn = container.querySelector('.nav-icon-btn');
-                btn.innerHTML = savedLang + ' <span style="font-size: 1.2em; margin-top: -2px;">🌐</span>';
-                const options = container.querySelectorAll('.lang-option');
-                options.forEach(opt => {
-                    if (opt.textContent.startsWith(savedLang)) opt.classList.add('active');
-                    else opt.classList.remove('active');
-                });
-            }
-            if (window.applyTranslations) window.applyTranslations(savedLang);
-        });
-        
+
+        // ---------- Login / profile ----------
         const user = localStorage.getItem('user');
         const userAvatarEl = document.getElementById('user-avatar');
         const profileBtn = document.getElementById('profile-btn');
         const logoutBtn = document.getElementById('logout-btn');
-        
+
         if (!user) {
             profileBtn.style.display = 'none';
             logoutBtn.textContent = 'Login';
@@ -262,19 +286,19 @@
             });
         } else {
             document.getElementById('user-display').textContent = user;
-            
+
             async function fetchUser() {
                 try {
-                    const res = await fetch('/api/user/' + user);
+                    const res = await fetch('/api/user/' + encodeURIComponent(user));
                     const data = await res.json();
-                    if(data.avatar) {
+                    if (data.avatar) {
                         localStorage.setItem('avatar', data.avatar);
                         userAvatarEl.src = 'avatars/' + data.avatar;
                         userAvatarEl.style.display = 'block';
                     }
-                } catch(e) {}
+                } catch (e) {}
             }
-            
+
             const localAvatar = localStorage.getItem('avatar');
             if (localAvatar) {
                 userAvatarEl.src = 'avatars/' + localAvatar;
@@ -282,27 +306,27 @@
             } else {
                 fetchUser();
             }
-            
+
             logoutBtn.addEventListener('click', () => {
-                if(confirm('Are you sure you want to logout?')) {
+                if (confirm('Are you sure you want to logout?')) {
                     localStorage.removeItem('user');
                     localStorage.removeItem('avatar');
                     window.location.href = '/login';
                 }
             });
         }
-        
-        // Avatar Modal Logic
+
+        // ---------- Avatar modal ----------
         const avatarModal = document.getElementById('avatar-modal');
         const modalGrid = document.getElementById('modal-avatar-grid');
         let newSelectedAvatar = null;
-        
+
         profileBtn.addEventListener('click', () => {
             avatarModal.style.display = 'flex';
             modalGrid.innerHTML = '';
             newSelectedAvatar = localStorage.getItem('avatar');
-            
-            for(let i=1; i<=10; i++) {
+
+            for (let i = 1; i <= 10; i++) {
                 const img = document.createElement('img');
                 img.src = `avatars/avatar${i}.jpg`;
                 img.style.width = '60px';
@@ -310,8 +334,8 @@
                 img.style.borderRadius = '50%';
                 img.style.cursor = 'pointer';
                 img.style.objectFit = 'cover';
-                img.style.border = `3px solid ${newSelectedAvatar === 'avatar'+i+'.jpg' ? '#aef649' : 'transparent'}`;
-                
+                img.style.border = `3px solid ${newSelectedAvatar === 'avatar' + i + '.jpg' ? '#aef649' : 'transparent'}`;
+
                 img.addEventListener('click', () => {
                     Array.from(modalGrid.children).forEach(el => el.style.border = '3px solid transparent');
                     img.style.border = '3px solid #aef649';
@@ -320,61 +344,67 @@
                 modalGrid.appendChild(img);
             }
         });
-        
+
         document.getElementById('cancel-avatar-btn').addEventListener('click', () => {
             avatarModal.style.display = 'none';
         });
-        
+
         document.getElementById('save-avatar-btn').addEventListener('click', async () => {
-            if(!newSelectedAvatar) return;
+            if (!newSelectedAvatar) return;
             try {
                 await fetch('/api/user/avatar', {
                     method: 'PUT',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({username: user, avatar: newSelectedAvatar})
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: user, avatar: newSelectedAvatar })
                 });
                 localStorage.setItem('avatar', newSelectedAvatar);
                 userAvatarEl.src = 'avatars/' + newSelectedAvatar;
                 avatarModal.style.display = 'none';
-            } catch(e) {
+            } catch (e) {
                 alert('Error saving avatar');
             }
         });
 
-        profileBtn.addEventListener('mouseover', () => profileBtn.style.background = 'rgba(255,255,255,0.1)');
-        profileBtn.addEventListener('mouseout', () => profileBtn.style.background = 'transparent');
-        
-        // ... (Posts logic follows)
-
-        // cat: which filter buttons show the card (a card can be in more than one)
+        // ---------- Guides & tools ----------
+        // cat:   which filter buttons show the card (a card can be in more than one)
+        // type:  'guide' or 'tool' (used for the hero stats)
+        // isNew: shows the NEW badge   video: shows "Video" in the card footer
         const posts = [
-            { id: 'blog', cat: [], title: 'Blog & Strategy Guides', desc: 'Read our full text guides on Hero Wars strategies, beginner tips, and titan building.', link: 'articles.html', img: 'blog-thumbnail.jpg' },
-            { id: 'osh-teams', cat: ['asgard'], title: 'Best Team for OSH', desc: 'Discover the most effective lineups for defeating OSH.', link: 'best-team-for-osh', img: 'osh-teams.jpg' },
-            { id: 'maestro-teams', cat: ['asgard'], title: 'Best Team for Maestro', desc: 'Top strategies and team comps to counter Maestro.', link: 'best-team-for-maestro', img: 'maestro-teams.jpg' },
-            { id: 'corvus-maestro', cat: ['asgard'], title: 'Corvus Team for Maestro', desc: 'Easy manual strategy: save Albus for the meteors to multiply Corvus damage.', link: 'hero-wars-maestro-corvus-team-manual-guide', img: 'blog/corvus-maestro/corvus-maestro-thumbnail.jpg' },
-            { id: 'isaac-osh-build', cat: ['asgard', 'hero'], title: 'Isaac Build for OSH', desc: 'What to upgrade and what to avoid on Isaac to max your OSH score.', link: 'isaac-build-for-osh', img: 'blog/isaac/isaac-osh-build-thumbnail.jpg' },
-            { id: 'osh-max-damage', cat: ['asgard'], title: 'Max Osh Damage: 1.72B', desc: 'The exact team, buffs and manual timing to kill Osh twice in one battle.', link: 'hero-wars-asgard-maximum-osh-damage', img: 'blog/osh-max/osh-max-damage-thumbnail.jpg' },
-            { id: 'titans-beginner-guide', cat: ['titan'], title: 'Titans Beginner Guide', desc: 'Best Titans to upgrade first and how to never die in the Dungeon.', link: 'hero-wars-titans-beginner-guide', img: 'blog/dungeon/titans-dungeon-guide-thumbnail.jpg' },
-            { id: 'top-5-heroes', cat: ['hero'], title: 'Top 5 Heroes to Upgrade', desc: 'Sebastian, Isaac, Nebula, Lyria and Fluffy: key skills and when to use them.', link: 'top-5-most-important-heroes-hero-wars', img: 'blog/top5/top-5-heroes-thumbnail.jpg' },
-            { id: 'event-teams', cat: ['event'], title: 'Event Teams', desc: 'Top tier combinations for the current events.', link: 'hero-wars-event-teams', img: 'event-teams.jpg' },
-            { id: 'archdemon-teams', cat: ['event'], title: 'Archdemon Teams', desc: 'Best formations to tackle the Archdemon.', link: 'best-team-for-archdemon', img: 'archdemon-teams.jpg' },
-            { id: 'tournament', cat: ['battle'], title: 'Tournament Arena (New)', desc: 'Host or join live 4/8/16/32 player tournaments! Draft battles, bracket progression & combat showdowns.', link: 'tournament', img: 'tournament-arena-thumb.jpg' },
-            { id: 'draft-battle', cat: ['battle'], title: 'Draft Battle', desc: 'Strategies and tips for dominating in Draft Battles.', link: 'draft', img: 'draft-thumb.jpg' },
-            { id: 'triple-draft-battle', cat: ['battle'], title: 'Triple Draft Battle', desc: 'Draft 5 Heroes and 1 Pet by picking 1 from 3 options each round!', link: 'triple-draft', img: 'triple-draft-thumb.jpg' },
-            { id: 'mega-draft-battle', cat: ['battle'], title: 'Mega Draft Battle', desc: 'Pick from a shared pool to build the ultimate team.', link: 'mega-draft', img: 'mega-draft-thumb.jpg' },
-            { id: 'team-build', cat: ['hero'], title: 'Team Build', desc: 'Comprehensive guide to building a balanced team.', link: 'team-build', img: 'team-build.jpg' },
-            { id: 'heroes', cat: ['hero'], title: 'Heroes', desc: 'Tier list and analysis of the best heroes.', link: 'tier-list', img: 'heroes-tier-list-thumb.jpg' },
-            { id: 'titans', cat: ['titan'], title: 'Titans', desc: 'Maximize your titans damage and utility.', link: 'titans-tier-list', img: 'titans-tier-list-thumb.jpg' }
+            { id: 'osh-teams', cat: ['asgard'], type: 'guide', video: true, title: 'Best Team for OSH', desc: 'Discover the most effective lineups for defeating OSH.', link: 'best-team-for-osh', img: 'osh-teams.jpg' },
+            { id: 'maestro-teams', cat: ['asgard'], type: 'guide', video: true, title: 'Best Team for Maestro', desc: 'Top strategies and team comps to counter Maestro.', link: 'best-team-for-maestro', img: 'maestro-teams.jpg' },
+            { id: 'corvus-maestro', cat: ['asgard'], type: 'guide', isNew: true, video: true, title: 'Corvus Team for Maestro', desc: 'Easy manual strategy: save Albus for the meteors to multiply Corvus damage.', link: 'hero-wars-maestro-corvus-team-manual-guide', img: 'blog/corvus-maestro/corvus-maestro-thumbnail.jpg' },
+            { id: 'isaac-osh-build', cat: ['asgard', 'hero'], type: 'guide', isNew: true, title: 'Isaac Build for OSH', desc: 'What to upgrade and what to avoid on Isaac to max your OSH score.', link: 'isaac-build-for-osh', img: 'blog/isaac/isaac-osh-build-thumbnail.jpg' },
+            { id: 'osh-max-damage', cat: ['asgard'], type: 'guide', isNew: true, video: true, title: 'Max Osh Damage: 1.72B', desc: 'The exact team, buffs and manual timing to kill Osh twice in one battle.', link: 'hero-wars-asgard-maximum-osh-damage', img: 'blog/osh-max/osh-max-damage-thumbnail.jpg' },
+            { id: 'titans-beginner-guide', cat: ['titan'], type: 'guide', isNew: true, video: true, title: 'Titans Beginner Guide', desc: 'Best Titans to upgrade first and how to never die in the Dungeon.', link: 'hero-wars-titans-beginner-guide', img: 'blog/dungeon/titans-dungeon-guide-thumbnail.jpg' },
+            { id: 'top-5-heroes', cat: ['hero'], type: 'guide', isNew: true, title: 'Top 5 Heroes to Upgrade', desc: 'Sebastian, Isaac, Nebula, Lyria and Fluffy: key skills and when to use them.', link: 'top-5-most-important-heroes-hero-wars', img: 'blog/top5/top-5-heroes-thumbnail.jpg' },
+            { id: 'event-teams', cat: ['event'], type: 'guide', title: 'Event Teams', desc: 'Top tier combinations for the current events.', link: 'hero-wars-event-teams', img: 'event-teams.jpg' },
+            { id: 'archdemon-teams', cat: ['event'], type: 'guide', title: 'Archdemon Teams', desc: 'Best formations to tackle the Archdemon.', link: 'best-team-for-archdemon', img: 'archdemon-teams.jpg' },
+            { id: 'blog', cat: [], type: 'guide', title: 'Blog & Strategy Guides', desc: 'Read our full text guides on Hero Wars strategies, beginner tips, and titan building.', link: 'articles.html', img: 'blog-thumbnail.jpg' },
+            { id: 'tournament', cat: ['battle'], type: 'tool', title: 'Tournament Arena', desc: 'Host or join live 4/8/16/32 player tournaments! Draft battles, bracket progression & combat showdowns.', link: 'tournament', img: 'tournament-arena-thumb.jpg' },
+            { id: 'draft-battle', cat: ['battle'], type: 'tool', title: 'Draft Battle', desc: 'Strategies and tips for dominating in Draft Battles.', link: 'draft', img: 'draft-thumb.jpg' },
+            { id: 'triple-draft-battle', cat: ['battle'], type: 'tool', title: 'Triple Draft Battle', desc: 'Draft 5 Heroes and 1 Pet by picking 1 from 3 options each round!', link: 'triple-draft', img: 'triple-draft-thumb.jpg' },
+            { id: 'mega-draft-battle', cat: ['battle'], type: 'tool', title: 'Mega Draft Battle', desc: 'Pick from a shared pool to build the ultimate team.', link: 'mega-draft', img: 'mega-draft-thumb.jpg' },
+            { id: 'team-build', cat: ['hero'], type: 'tool', title: 'Team Build', desc: 'Comprehensive guide to building a balanced team.', link: 'team-build', img: 'team-build.jpg' },
+            { id: 'heroes', cat: ['hero'], type: 'tool', title: 'Heroes Tier List', desc: 'Tier list and analysis of the best heroes.', link: 'tier-list', img: 'heroes-tier-list-thumb.jpg' },
+            { id: 'titans', cat: ['titan'], type: 'tool', title: 'Titans Tier List', desc: 'Maximize your titans damage and utility.', link: 'titans-tier-list', img: 'titans-tier-list-thumb.jpg' }
         ];
 
+        const CAT_LABELS = { asgard: 'Asgard', titan: 'Titan', hero: 'Hero', event: 'Event', battle: 'Battle' };
         const grid = document.getElementById('posts-grid');
         const searchBar = document.querySelector('.search-bar');
-        
         const filterBar = document.getElementById('post-filters');
         const emptyMsg = document.getElementById('posts-empty');
         const FILTERS = ['all', 'asgard', 'titan', 'hero', 'event', 'battle'];
         // The chosen filter is kept in the URL (e.g. trade-boy.com/#asgard) so it can be shared
         let activeFilter = FILTERS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'all';
+
+        // Hero stats and filter counts come from the list above, so they stay correct
+        document.getElementById('stat-guides').textContent = posts.filter(p => p.type === 'guide').length;
+        document.getElementById('stat-tools').textContent = posts.filter(p => p.type === 'tool').length;
+        filterBar.querySelectorAll('[data-filter]').forEach(b => {
+            const f = b.dataset.filter;
+            b.querySelector('small').textContent = f === 'all' ? posts.length : posts.filter(p => (p.cat || []).includes(f)).length;
+        });
 
         function setFilter(f) {
             activeFilter = f;
@@ -394,58 +424,76 @@
 
         function renderPosts(query = '') {
             grid.innerHTML = '';
-            const lowerQuery = query.toLowerCase();
-
-            const filteredPosts = posts.filter(post =>
-                (activeFilter === 'all' || (post.cat || []).includes(activeFilter)) && (
-                post.title.toLowerCase().includes(lowerQuery) ||
-                post.desc.toLowerCase().includes(lowerQuery))
+            const q = query.trim().toLowerCase();
+            const list = posts.filter(post =>
+                (activeFilter === 'all' || (post.cat || []).includes(activeFilter)) &&
+                (post.title.toLowerCase().includes(q) || post.desc.toLowerCase().includes(q))
             );
-            emptyMsg.style.display = filteredPosts.length ? 'none' : 'block';
+            emptyMsg.style.display = list.length ? 'none' : 'block';
 
-            filteredPosts.forEach(post => {
+            list.forEach(post => {
+                const cat = (post.cat || [])[0];
                 const card = document.createElement('a');
                 card.href = post.link ? post.link : `post?id=${post.id}`;
-                card.className = 'card';
-                
+                card.className = 'hv-card';
                 card.innerHTML = `
-                    <img src="${post.img || 'thumbnail.jpg'}" alt="${post.title}" class="thumbnail">
-                    <div class="card-content">
-                        <h3 class="card-title">${post.title}</h3>
-                        <p class="card-excerpt">${post.desc}</p>
+                    <div class="hv-thumb">
+                        <img src="${post.img || 'thumbnail.jpg'}" alt="${post.title}" loading="lazy">
+                        ${post.isNew ? '<span class="hv-new">NEW</span>' : ''}
                     </div>
-                `;
+                    <div class="hv-card-body">
+                        <span class="hv-tag ${cat || ''}">${cat ? CAT_LABELS[cat] : 'Hub'}</span>
+                        <h3>${post.title}</h3>
+                        <p>${post.desc}</p>
+                        <div class="hv-meta">
+                            <span>${post.type === 'tool' ? 'Free tool' : 'Guide'}</span>
+                            ${post.video ? '<span>▶ Video</span>' : ''}
+                        </div>
+                    </div>`;
                 grid.appendChild(card);
             });
         }
-        
-        searchBar.addEventListener('input', (e) => {
-            renderPosts(e.target.value);
-        });
-        
-        setFilter(activeFilter);
 
-        // Copy Promo Code to clipboard
+        searchBar.addEventListener('input', (e) => renderPosts(e.target.value));
+        // Enter jumps down to the results
+        searchBar.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') document.getElementById('guides').scrollIntoView({ behavior: 'smooth' });
+        });
+        // Press "/" anywhere to start searching
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '/' && !/input|textarea|select/i.test(document.activeElement.tagName)) {
+                e.preventDefault();
+                searchBar.focus();
+            }
+        });
+
+        setFilter(activeFilter);
+        // Shared filter link (e.g. /#asgard): open with the guides in view
+        if (activeFilter !== 'all') {
+            requestAnimationFrame(() => document.getElementById('guides').scrollIntoView());
+        }
+
+        // ---------- Copy promo code ----------
         function copyPromoCode(btn) {
             const code = 'TradeBoyMartha';
-            const textSpan = btn.querySelector('.btn-text');
-            const orig = textSpan ? textSpan.textContent : 'Copy Code';
-
+            const label = btn.querySelector('.btn-text');
+            const done = () => {
+                btn.classList.add('copied');
+                if (label) label.textContent = 'Copied ✓';
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                    if (label) label.textContent = 'Copy';
+                }, 2000);
+            };
             if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(code).then(() => {
-                    if (textSpan) textSpan.textContent = 'Copied! ✅';
-                    btn.style.background = '#ffd700';
-                    setTimeout(() => {
-                        if (textSpan) textSpan.textContent = orig;
-                        btn.style.background = '#aef649';
-                    }, 2000);
-                }).catch(() => fallbackCopy(code, btn, textSpan, orig));
+                navigator.clipboard.writeText(code).then(done).catch(() => { fallbackCopy(code); done(); });
             } else {
-                fallbackCopy(code, btn, textSpan, orig);
+                fallbackCopy(code);
+                done();
             }
         }
 
-        function fallbackCopy(code, btn, textSpan, orig) {
+        function fallbackCopy(code) {
             const ta = document.createElement('textarea');
             ta.value = code;
             ta.style.position = 'fixed';
@@ -454,14 +502,7 @@
             ta.select();
             document.execCommand('copy');
             document.body.removeChild(ta);
-            if (textSpan) textSpan.textContent = 'Copied! ✅';
-            btn.style.background = '#ffd700';
-            setTimeout(() => {
-                if (textSpan) textSpan.textContent = orig;
-                btn.style.background = '#aef649';
-            }, 2000);
         }
     </script>
-<script src="hero-framer.js"></script>
 </body>
 </html>
