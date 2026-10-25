@@ -27,6 +27,22 @@
     <script src="theme-switcher.js"></script>
     <script src="site-translate.js" defer></script>
     <link rel="stylesheet" href="hero-framer.css">
+    <style>
+        /* Category filters above the guide cards */
+        .post-filters {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+            margin: 0 auto 24px;
+        }
+        .post-filters .tab-btn { cursor: pointer; min-width: 76px; }
+        @media (max-width: 600px) {
+            .post-filters {
+                flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto;
+                padding-bottom: 4px; scrollbar-width: none;
+            }
+            .post-filters::-webkit-scrollbar { display: none; }
+            .post-filters .tab-btn { flex-shrink: 0; }
+        }
+    </style>
 </head>
 <body>
     <nav class="top-nav">
@@ -124,9 +140,19 @@
             <p>Our goal is to give you the strategic edge over your opponents without wasting your hard-earned Emeralds. Explore our in-depth strategy guides below, test your drafted teams against the current meta, and stay ahead of the competition. Check out our <a href="articles.html" style="color: #aef649; font-weight: bold; text-decoration: none;">New Strategy Blog</a> for deep-dives into Titan building and beginner tips!</p>
         </div>
 
+        <div class="post-filters" id="post-filters" role="toolbar" aria-label="Filter guides">
+            <button type="button" class="tab-btn active" data-filter="all" aria-pressed="true">All</button>
+            <button type="button" class="tab-btn" data-filter="asgard" aria-pressed="false">Asgard</button>
+            <button type="button" class="tab-btn" data-filter="titan" aria-pressed="false">Titan</button>
+            <button type="button" class="tab-btn" data-filter="hero" aria-pressed="false">Hero</button>
+            <button type="button" class="tab-btn" data-filter="event" aria-pressed="false">Event</button>
+            <button type="button" class="tab-btn" data-filter="battle" aria-pressed="false">Battle</button>
+        </div>
+
         <div class="grid" id="posts-grid">
             <!-- Posts will be generated here -->
         </div>
+        <p id="posts-empty" style="display: none; text-align: center; opacity: 0.75; margin: 30px 0;">No guides match. Try another filter or search.</p>
     </main>
 
     <!-- Avatar Change Modal -->
@@ -320,37 +346,62 @@
         
         // ... (Posts logic follows)
 
+        // cat: which filter buttons show the card (a card can be in more than one)
         const posts = [
-            { id: 'blog', title: 'Blog & Strategy Guides', desc: 'Read our full text guides on Hero Wars strategies, beginner tips, and titan building.', link: 'articles.html', img: 'blog-thumbnail.jpg' },
-            { id: 'osh-teams', title: 'Best Team for OSH', desc: 'Discover the most effective lineups for defeating OSH.', link: 'best-team-for-osh', img: 'osh-teams.jpg' },
-            { id: 'maestro-teams', title: 'Best Team for Maestro', desc: 'Top strategies and team comps to counter Maestro.', link: 'best-team-for-maestro', img: 'maestro-teams.jpg' },
-            { id: 'isaac-osh-build', title: 'Isaac Build for OSH', desc: 'What to upgrade and what to avoid on Isaac to max your OSH score.', link: 'isaac-build-for-osh', img: 'blog/isaac/isaac-osh-build-thumbnail.jpg' },
-            { id: 'osh-max-damage', title: 'Max Osh Damage: 1.72B', desc: 'The exact team, buffs and manual timing to kill Osh twice in one battle.', link: 'hero-wars-asgard-maximum-osh-damage', img: 'blog/osh-max/osh-max-damage-thumbnail.jpg' },
-            { id: 'titans-beginner-guide', title: 'Titans Beginner Guide', desc: 'Best Titans to upgrade first and how to never die in the Dungeon.', link: 'hero-wars-titans-beginner-guide', img: 'blog/dungeon/titans-dungeon-guide-thumbnail.jpg' },
-            { id: 'top-5-heroes', title: 'Top 5 Heroes to Upgrade', desc: 'Sebastian, Isaac, Nebula, Lyria and Fluffy: key skills and when to use them.', link: 'top-5-most-important-heroes-hero-wars', img: 'blog/top5/top-5-heroes-thumbnail.jpg' },
-            { id: 'event-teams', title: 'Event Teams', desc: 'Top tier combinations for the current events.', link: 'hero-wars-event-teams', img: 'event-teams.jpg' },
-            { id: 'archdemon-teams', title: 'Archdemon Teams', desc: 'Best formations to tackle the Archdemon.', link: 'best-team-for-archdemon', img: 'archdemon-teams.jpg' },
-            { id: 'tournament', title: 'Tournament Arena (New)', desc: 'Host or join live 4/8/16/32 player tournaments! Draft battles, bracket progression & combat showdowns.', link: 'tournament', img: 'tournament-arena-thumb.jpg' },
-            { id: 'draft-battle', title: 'Draft Battle', desc: 'Strategies and tips for dominating in Draft Battles.', link: 'draft', img: 'draft-thumb.jpg' },
-            { id: 'triple-draft-battle', title: 'Triple Draft Battle', desc: 'Draft 5 Heroes and 1 Pet by picking 1 from 3 options each round!', link: 'triple-draft', img: 'triple-draft-thumb.jpg' },
-            { id: 'mega-draft-battle', title: 'Mega Draft Battle', desc: 'Pick from a shared pool to build the ultimate team.', link: 'mega-draft', img: 'mega-draft-thumb.jpg' },
-            { id: 'team-build', title: 'Team Build', desc: 'Comprehensive guide to building a balanced team.', link: 'team-build', img: 'team-build.jpg' },
-            { id: 'heroes', title: 'Heroes', desc: 'Tier list and analysis of the best heroes.', link: 'tier-list', img: 'heroes-tier-list-thumb.jpg' },
-            { id: 'titans', title: 'Titans', desc: 'Maximize your titans damage and utility.', link: 'titans-tier-list', img: 'titans-tier-list-thumb.jpg' }
+            { id: 'blog', cat: [], title: 'Blog & Strategy Guides', desc: 'Read our full text guides on Hero Wars strategies, beginner tips, and titan building.', link: 'articles.html', img: 'blog-thumbnail.jpg' },
+            { id: 'osh-teams', cat: ['asgard'], title: 'Best Team for OSH', desc: 'Discover the most effective lineups for defeating OSH.', link: 'best-team-for-osh', img: 'osh-teams.jpg' },
+            { id: 'maestro-teams', cat: ['asgard'], title: 'Best Team for Maestro', desc: 'Top strategies and team comps to counter Maestro.', link: 'best-team-for-maestro', img: 'maestro-teams.jpg' },
+            { id: 'isaac-osh-build', cat: ['asgard', 'hero'], title: 'Isaac Build for OSH', desc: 'What to upgrade and what to avoid on Isaac to max your OSH score.', link: 'isaac-build-for-osh', img: 'blog/isaac/isaac-osh-build-thumbnail.jpg' },
+            { id: 'osh-max-damage', cat: ['asgard'], title: 'Max Osh Damage: 1.72B', desc: 'The exact team, buffs and manual timing to kill Osh twice in one battle.', link: 'hero-wars-asgard-maximum-osh-damage', img: 'blog/osh-max/osh-max-damage-thumbnail.jpg' },
+            { id: 'titans-beginner-guide', cat: ['titan'], title: 'Titans Beginner Guide', desc: 'Best Titans to upgrade first and how to never die in the Dungeon.', link: 'hero-wars-titans-beginner-guide', img: 'blog/dungeon/titans-dungeon-guide-thumbnail.jpg' },
+            { id: 'top-5-heroes', cat: ['hero'], title: 'Top 5 Heroes to Upgrade', desc: 'Sebastian, Isaac, Nebula, Lyria and Fluffy: key skills and when to use them.', link: 'top-5-most-important-heroes-hero-wars', img: 'blog/top5/top-5-heroes-thumbnail.jpg' },
+            { id: 'event-teams', cat: ['event'], title: 'Event Teams', desc: 'Top tier combinations for the current events.', link: 'hero-wars-event-teams', img: 'event-teams.jpg' },
+            { id: 'archdemon-teams', cat: ['event'], title: 'Archdemon Teams', desc: 'Best formations to tackle the Archdemon.', link: 'best-team-for-archdemon', img: 'archdemon-teams.jpg' },
+            { id: 'tournament', cat: ['battle'], title: 'Tournament Arena (New)', desc: 'Host or join live 4/8/16/32 player tournaments! Draft battles, bracket progression & combat showdowns.', link: 'tournament', img: 'tournament-arena-thumb.jpg' },
+            { id: 'draft-battle', cat: ['battle'], title: 'Draft Battle', desc: 'Strategies and tips for dominating in Draft Battles.', link: 'draft', img: 'draft-thumb.jpg' },
+            { id: 'triple-draft-battle', cat: ['battle'], title: 'Triple Draft Battle', desc: 'Draft 5 Heroes and 1 Pet by picking 1 from 3 options each round!', link: 'triple-draft', img: 'triple-draft-thumb.jpg' },
+            { id: 'mega-draft-battle', cat: ['battle'], title: 'Mega Draft Battle', desc: 'Pick from a shared pool to build the ultimate team.', link: 'mega-draft', img: 'mega-draft-thumb.jpg' },
+            { id: 'team-build', cat: ['hero'], title: 'Team Build', desc: 'Comprehensive guide to building a balanced team.', link: 'team-build', img: 'team-build.jpg' },
+            { id: 'heroes', cat: ['hero'], title: 'Heroes', desc: 'Tier list and analysis of the best heroes.', link: 'tier-list', img: 'heroes-tier-list-thumb.jpg' },
+            { id: 'titans', cat: ['titan'], title: 'Titans', desc: 'Maximize your titans damage and utility.', link: 'titans-tier-list', img: 'titans-tier-list-thumb.jpg' }
         ];
 
         const grid = document.getElementById('posts-grid');
         const searchBar = document.querySelector('.search-bar');
         
+        const filterBar = document.getElementById('post-filters');
+        const emptyMsg = document.getElementById('posts-empty');
+        const FILTERS = ['all', 'asgard', 'titan', 'hero', 'event', 'battle'];
+        // The chosen filter is kept in the URL (e.g. trade-boy.com/#asgard) so it can be shared
+        let activeFilter = FILTERS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'all';
+
+        function setFilter(f) {
+            activeFilter = f;
+            filterBar.querySelectorAll('[data-filter]').forEach(b => {
+                const on = b.dataset.filter === f;
+                b.classList.toggle('active', on);
+                b.setAttribute('aria-pressed', on ? 'true' : 'false');
+            });
+            history.replaceState(null, '', f === 'all' ? location.pathname + location.search : '#' + f);
+            renderPosts(searchBar.value);
+        }
+
+        filterBar.addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-filter]');
+            if (btn) setFilter(btn.dataset.filter);
+        });
+
         function renderPosts(query = '') {
             grid.innerHTML = '';
             const lowerQuery = query.toLowerCase();
-            
-            const filteredPosts = posts.filter(post => 
-                post.title.toLowerCase().includes(lowerQuery) || 
-                post.desc.toLowerCase().includes(lowerQuery)
+
+            const filteredPosts = posts.filter(post =>
+                (activeFilter === 'all' || (post.cat || []).includes(activeFilter)) && (
+                post.title.toLowerCase().includes(lowerQuery) ||
+                post.desc.toLowerCase().includes(lowerQuery))
             );
-            
+            emptyMsg.style.display = filteredPosts.length ? 'none' : 'block';
+
             filteredPosts.forEach(post => {
                 const card = document.createElement('a');
                 card.href = post.link ? post.link : `post?id=${post.id}`;
@@ -371,7 +422,7 @@
             renderPosts(e.target.value);
         });
         
-        renderPosts();
+        setFilter(activeFilter);
 
         // Copy Promo Code to clipboard
         function copyPromoCode(btn) {
