@@ -110,7 +110,8 @@
                         <div class="hv-stat"><b id="stat-tools">7</b><span>Free battle tools</span></div>
                     </div>
                 </div>
-                <a class="hv-featured" href="top-5-most-important-heroes-hero-wars">
+                <!-- Default featured guide; the weekend schedule below swaps it automatically -->
+                <a class="hv-featured" id="featured" href="top-5-most-important-heroes-hero-wars">
                     <span class="hv-ribbon">FEATURED</span>
                     <img src="blog/top5/top-5-heroes-thumbnail.jpg" alt="Top 5 heroes you must upgrade in Hero Wars" width="1280" height="720">
                     <div class="hv-featured-body">
@@ -439,6 +440,62 @@
         if (activeFilter !== 'all' || sentQuery) {
             requestAnimationFrame(() => document.getElementById('guides').scrollIntoView());
         }
+
+        // ---------- Featured guide schedule (Bangladesh time, UTC+6) ----------
+        // Weekdays: Top 5 Heroes. Friday 8:00 AM -> Monday 8:00 AM: Osh and Maestro take turns,
+        // starting with Osh on Friday 30 Oct 2026, then Maestro on 6 Nov, Osh on 13 Nov, and so on.
+        const FEATURED = {
+            top5: {
+                link: 'top-5-most-important-heroes-hero-wars', img: 'blog/top5/top-5-heroes-thumbnail.jpg',
+                alt: 'Top 5 heroes you must upgrade in Hero Wars', tag: 'hero', tagText: 'Hero',
+                title: 'Top 5 Heroes You Must Upgrade',
+                desc: 'Sebastian, Isaac, Nebula, Lyria and Fluffy: their key skills and when to use each one.'
+            },
+            osh: {
+                link: 'best-team-for-osh', img: 'osh-teams.jpg',
+                alt: 'All best teams for Osh in Hero Wars', tag: 'asgard', tagText: 'Asgard',
+                title: 'All Best Teams for Osh',
+                desc: 'Every tested Osh lineup this weekend, from easy auto teams to the 1.72B manual combo.'
+            },
+            maestro: {
+                link: 'best-team-for-maestro', img: 'maestro-teams.jpg',
+                alt: 'All best teams for Maestro in Hero Wars', tag: 'asgard', tagText: 'Asgard',
+                title: 'All Best Teams for Maestro',
+                desc: 'Hard and easy mode Maestro lineups with buffs and video guides for this weekend.'
+            }
+        };
+        const BD_OFFSET = 6 * 3600e3;          // Bangladesh is UTC+6 all year (no daylight saving)
+        const DAY = 864e5, WEEK = 7 * DAY;
+        const FIRST_OSH_WEEKEND = Date.UTC(2026, 9, 30, 8);   // Fri 30 Oct 2026, 8:00 AM on a Bangladesh clock
+
+        function featuredFor(date) {
+            const bd = date.getTime() + BD_OFFSET;              // "Bangladesh clock" in ms, read with UTC getters
+            const d = new Date(bd);
+            const sinceFriday = (d.getUTCDay() - 5 + 7) % 7;    // 0 = Friday
+            let start = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() - sinceFriday, 8);
+            if (start > bd) start -= WEEK;                      // Friday before 8 AM belongs to last week
+            if (bd >= start + 3 * DAY) return 'top5';           // after Monday 8 AM: normal days
+            const weeks = Math.round((start - FIRST_OSH_WEEKEND) / WEEK);
+            if (weeks < 0) return 'top5';                       // before the schedule starts
+            return weeks % 2 === 0 ? 'osh' : 'maestro';
+        }
+
+        let shownFeatured = 'top5';
+        function applyFeatured() {
+            const key = featuredFor(new Date());
+            if (key === shownFeatured) return;
+            const f = FEATURED[key], el = document.getElementById('featured');
+            el.href = f.link;
+            const img = el.querySelector('img');
+            img.src = f.img; img.alt = f.alt;
+            const tag = el.querySelector('.hv-tag');
+            tag.className = 'hv-tag ' + f.tag; tag.textContent = f.tagText;
+            el.querySelector('h3').textContent = f.title;
+            el.querySelector('p').textContent = f.desc;
+            shownFeatured = key;
+        }
+        applyFeatured();
+        setInterval(applyFeatured, 60 * 1000);   // switches on time even if the page stays open
 
         // ---------- Copy promo code ----------
         function copyPromoCode(btn) {
