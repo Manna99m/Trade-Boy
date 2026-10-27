@@ -248,8 +248,15 @@
             if (!opt) return;
             const theme = opt.dataset.themeOption;
             menu.style.display = 'none';
-            if (theme === getTheme()) return;
+            const previous = getTheme();
+            if (theme === previous) return;
             try { localStorage.setItem('siteTheme', theme); } catch (err) {}
+            // Same look on screen (e.g. Dark -> System on a dark device): switch quietly, no animation
+            if (resolveTheme(theme) === resolveTheme(previous)) {
+                applyTheme(theme);
+                render(theme);
+                return;
+            }
             playSwitchAnimation(theme, () => render(theme));
         });
 
