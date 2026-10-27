@@ -137,13 +137,27 @@ html body.home-v2 .hv-copy.copied { background: var(--hv-lime) !important; color
 .hv-promo-divider { width: 1px; height: 20px; background: var(--hv-line-2); }
 
 /* ---------- Header (keeps the .top-nav hooks the theme/language scripts use) ---------- */
-html body.home-v2 .top-nav {
+/* Promo strip + header share one pinned block (.hv-masthead), so ad scripts
+   can't slot anything between them */
+.hv-masthead {
     position: sticky; top: 0; z-index: 100;
+    background: var(--hv-header);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--hv-line);
+}
+.hv-masthead .hv-promo {
+    max-height: 140px; overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.25s ease, border-color 0.3s ease;
+}
+/* Scrolled down: fold the promo strip away so the pinned header stays slim */
+.hv-masthead.scrolled .hv-promo { max-height: 0; opacity: 0; border-bottom-color: transparent; }
+html body.home-v2 .top-nav {
+    position: relative; top: auto; z-index: 1;
     display: flex; align-items: center; gap: 22px; flex-wrap: nowrap;
     height: 68px; padding: 0 max(40px, calc((100% - 1920px) / 2)) !important;
-    background: var(--hv-header) !important;
-    backdrop-filter: blur(14px) !important; -webkit-backdrop-filter: blur(14px) !important;
-    border-bottom: 1px solid var(--hv-line) !important; box-shadow: none !important;
+    background: transparent !important;
+    backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+    border-bottom: 0 !important; box-shadow: none !important;
 }
 html body.home-v2 .logo-container { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; overflow: visible; }
 html body.home-v2 .logo-img { width: 34px !important; height: 34px !important; border-radius: 10px; border: 1px solid var(--hv-line-2); object-fit: cover; }

@@ -37,6 +37,9 @@
     <div class="hv-ambient" aria-hidden="true"></div>
     <div class="hv-grid" aria-hidden="true"></div>
 
+    <!-- Promo strip + header in ONE block, so Google Auto Ads has no gap to put an ad between them.
+         The whole block stays pinned at the top; the promo strip folds away once you scroll. -->
+    <header class="hv-masthead" id="masthead">
     <!-- Starter pack: affiliate link + promo code -->
     <div class="hv-promo">
         <div class="hv-wrap">
@@ -91,6 +94,7 @@
             </div>
         </div>
     </nav>
+    </header>
 
     <main>
         <!-- Hero: one clear message + the featured guide -->
@@ -496,6 +500,16 @@
         }
         applyFeatured();
         setInterval(applyFeatured, 60 * 1000);   // switches on time even if the page stays open
+
+        // ---------- Fold the promo strip away once the page is scrolled ----------
+        const masthead = document.getElementById('masthead');
+        // Two thresholds so it can't flicker while the strip folds
+        const onScroll = () => {
+            if (window.scrollY > 120) masthead.classList.add('scrolled');
+            else if (window.scrollY < 40) masthead.classList.remove('scrolled');
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
 
         // ---------- Copy promo code ----------
         function copyPromoCode(btn) {
