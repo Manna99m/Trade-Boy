@@ -1314,6 +1314,18 @@ function processTourMegaPick(tour, match, socketId, type, item) {
     }
 }
 
+// Player names are typed freely (login is optional), and they are shown to other
+// players and placed inside buttons, so strip anything that could break the page
+// and cap the length. public/player-name.js cleans names exactly the same way.
+function cleanName(raw, fallback = 'Guest') {
+    const name = String(raw == null ? '' : raw)
+        .replace(/[\u0000-\u001f\u007f<>"'`\\]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .slice(0, 20);
+    return name || fallback;
+}
+
 io.on('connection', (socket) => {
     // An error inside one handler (e.g. a malformed message) must not crash
     // the whole server, so every handler below runs inside try/catch.
@@ -1331,7 +1343,7 @@ io.on('connection', (socket) => {
         (room.p1.id === socket.id || room.p2.id === socket.id);
 
     socket.on('joinRandom', (username) => {
-        socket.username = username;
+        socket.username = cleanName(username);
         if (randomQueue.includes(socket)) return; // double click: don't match with yourself
         randomQueue.push(socket);
         if (randomQueue.length >= 2) {
@@ -1348,7 +1360,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('createCustom', (username) => {
-        socket.username = username;
+        socket.username = cleanName(username);
         const roomId = generateRoomId();
         socket.join(roomId);
         rooms[roomId] = { p1: socket, status: 'waiting' };
@@ -1356,7 +1368,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('joinCustom', ({ roomId, username }) => {
-        socket.username = username;
+        socket.username = cleanName(username);
         const room = rooms[roomId];
         if (room && room.status === 'waiting' && !room.p2) {
             socket.join(roomId);
@@ -1385,7 +1397,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('joinTripleRandom', (username) => {
-        socket.username = username;
+        socket.username = cleanName(username);
         if (tripleRandomQueue.includes(socket)) return;
         tripleRandomQueue.push(socket);
         if (tripleRandomQueue.length >= 2) {
@@ -1402,7 +1414,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('createTripleCustom', (username) => {
-        socket.username = username;
+        socket.username = cleanName(username);
         const roomId = generateRoomId();
         socket.join(roomId);
         tripleRooms[roomId] = { p1: socket, status: 'waiting' };
@@ -1410,7 +1422,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('joinTripleCustom', ({ roomId, username }) => {
-        socket.username = username;
+        socket.username = cleanName(username);
         const room = tripleRooms[roomId];
         if (room && room.status === 'waiting' && !room.p2) {
             socket.join(roomId);
@@ -1438,7 +1450,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('joinMegaRandom', (username) => {
-        socket.username = username;
+        socket.username = cleanName(username);
         if (megaRandomQueue.includes(socket)) return;
         megaRandomQueue.push(socket);
         if (megaRandomQueue.length >= 2) {
@@ -1455,7 +1467,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('createMegaCustom', (username) => {
-        socket.username = username;
+        socket.username = cleanName(username);
         const roomId = generateRoomId();
         socket.join(roomId);
         megaRooms[roomId] = { p1: socket, status: 'waiting' };
@@ -1463,7 +1475,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('joinMegaCustom', ({ roomId, username }) => {
-        socket.username = username;
+        socket.username = cleanName(username);
         const room = megaRooms[roomId];
         if (room && room.status === 'waiting' && !room.p2) {
             socket.join(roomId);
@@ -1609,7 +1621,7 @@ io.on('connection', (socket) => {
             gameMode: mode,
             hostKey: hostKey.trim(),
             hostSocketId: socket.id,
-            hostUsername: username || 'Tournament Host',
+            hostUsername: cleanName(username, 'Tournament Host'),
             status: 'lobby',
             currentRoundIndex: 0,
             totalRounds: totalRounds,
@@ -1638,6 +1650,15 @@ io.on('connection', (socket) => {
 
         if (!tour) {
             return socket.emit('tourError', 'Tournament not found. Please check the Tour ID.');
+        }
+
+        username = cleanName(username);
+        // A matching name normally means the same player reconnecting. Names are typed
+        // freely now, so only allow that if the earlier player has actually disconnected;
+        // otherwise someone could take over another player's spot by typing their name.
+        const sameName = tour.players.find(p => p.username === username);
+        if (sameName && sameName.socketId !== socket.id && io.sockets.sockets.get(sameName.socketId)) {
+            return socket.emit('tourError', `The name "${username}" is already taken in this tournament. Please type a different name.`);
         }
 
         socket.join(`tour_${cleanId}`);
@@ -1711,6 +1732,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('leaveTournament', ({ tourId, username }) => {
+        username = cleanName(username);
         const cleanId = (tourId || '').trim().toUpperCase();
         const tour = tournaments[cleanId];
         if (!tour) return;
