@@ -3,31 +3,39 @@
 // ============================================================
 
 // User & Avatar Management
-let currentUser = localStorage.getItem('user');
+// Login is optional. The name used in the tournament is the "Your Name" box,
+// else the account name, else a guest name that stays the same on this device.
+const accountUser = localStorage.getItem('user');
+let currentUser = TBPlayer.getName();
 let currentAvatar = localStorage.getItem('avatar') || 'avatar1.jpg';
 
-if (!currentUser) {
-    currentUser = 'Guest_' + Math.floor(1000 + Math.random() * 9000);
-}
-
 const userDisplayEl = document.getElementById('user-display');
-if (userDisplayEl) userDisplayEl.textContent = currentUser;
-
 const userAvatarEl = document.getElementById('user-avatar');
-if (userAvatarEl) {
-    userAvatarEl.src = 'avatars/' + currentAvatar;
-    userAvatarEl.style.display = 'block';
-}
-
 const logoutBtn = document.getElementById('logout-btn');
-if (logoutBtn) {
-    logoutBtn.addEventListener('click', () => {
-        if (confirm('Are you sure you want to logout?')) {
-            localStorage.removeItem('user');
-            localStorage.removeItem('avatar');
-            window.location.href = '/';
-        }
-    });
+
+if (accountUser) {
+    if (userDisplayEl) userDisplayEl.textContent = accountUser;
+    if (userAvatarEl) {
+        userAvatarEl.src = 'avatars/' + currentAvatar;
+        userAvatarEl.style.display = 'block';
+    }
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('user');
+                localStorage.removeItem('avatar');
+                window.location.reload();
+            }
+        });
+    }
+} else {
+    if (userDisplayEl) userDisplayEl.style.display = 'none';
+    if (userAvatarEl) userAvatarEl.style.display = 'none';
+    if (logoutBtn) {
+        logoutBtn.textContent = 'Login';
+        logoutBtn.removeAttribute('data-i18n');
+        logoutBtn.addEventListener('click', () => { window.location.href = '/login'; });
+    }
 }
 
 // Language Selector Support
@@ -188,7 +196,9 @@ btnJoinTour.addEventListener('click', () => {
         return;
     }
     if (playerId) localStorage.setItem('hw_player_id', playerId);
-    joinStatusMsg.textContent = 'Connecting to tournament ' + tourId + '...';
+    // Name from the optional box (cleaned the same way as on the server)
+    currentUser = TBPlayer.getName('input-join-player-name');
+    joinStatusMsg.textContent = 'Connecting to tournament ' + tourId + ' as ' + currentUser + '...';
     joinStatusMsg.style.color = '#aef649';
     socket.emit('joinTournament', {
         tourId,

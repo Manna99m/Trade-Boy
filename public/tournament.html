@@ -102,6 +102,7 @@
                     
                     <div class="input-action-group">
                         <input type="text" id="input-join-tour-id" class="tour-input" placeholder="Enter Tour ID (e.g. TB-8492)" maxlength="16">
+                        <input type="text" id="input-join-player-name" class="tour-input" placeholder="Your Name (optional)" maxlength="20" autocomplete="nickname" data-player-name>
                         <input type="text" id="input-join-player-id" class="tour-input" placeholder="In-Game Player ID (e.g. 12345678)" maxlength="20">
                         
                         <div class="platform-selector-group">
@@ -635,6 +636,7 @@
     </div>
 
     <!-- Audio Beep Engine & Tournament Client Logic -->
+    <script src="player-name.js"></script>
     <script src="patron-selection.js"></script>
     <script src="tournament.js"></script>
     <script src="hero-framer.js"></script>

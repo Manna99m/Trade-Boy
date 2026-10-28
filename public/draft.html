@@ -77,6 +77,11 @@
         <div id="lobby-screen">
             <h1 class="page-title" data-i18n="draft_title">Draft Battle Mode</h1>
             <p style="color: #ffffff; font-size: 1.1rem; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); margin-bottom: 30px;" data-i18n="draft_desc">Queue up to draft 5 Heroes and 1 Pet against an opponent!</p>
+            <div class="player-name-box">
+                <label for="player-name-input">Your name <span>(optional)</span></label>
+                <input type="text" id="player-name-input" data-player-name maxlength="20" autocomplete="nickname" placeholder="Shown to your opponent">
+                <small>No account needed. Leave empty to play as a guest.</small>
+            </div>
             <div style="display: flex; gap: 20px; justify-content: center; margin-bottom: 30px;">
                 <button class="action-btn" id="btn-random" data-i18n="join_random">Join Random Match</button>
                 <button class="action-btn" id="btn-create" data-i18n="create_custom">Create Custom Match</button>
@@ -193,6 +198,7 @@
             <p>Practice your drafting mechanics, learn hero synergies, and outsmart your opponents by anticipating their win conditions. Use this tool alongside your guildmates to hone your competitive edge for the next Clash of Worlds or Guild War season.</p>
         </div>
 </main>
+    <script src="player-name.js"></script>
     <script src="patron-selection.js"></script>
     <script src="draft.js"></script>
 

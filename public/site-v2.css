@@ -203,6 +203,23 @@ html body.site-v2 .hero-btn {
 }
 html body.site-v2 .hero-btn:hover { border-color: var(--hv-gold-line) !important; background: var(--hv-gold-soft) !important; }
 
+/* ---------- Optional player name (draft lobbies) ---------- */
+.player-name-box {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    width: 100%; max-width: 340px; margin: 0 auto 26px; font-family: var(--hv-body);
+}
+html body.site-v2 .player-name-box label { color: var(--hv-text) !important; font-weight: 700; font-size: 0.95rem; }
+html body.site-v2 .player-name-box label span { color: var(--hv-dim); font-weight: 500; }
+html body.site-v2 .player-name-box input,
+html body.site-v2 .player-name-box input[type="text"] {
+    width: 100%; height: 44px; padding: 0 14px !important; border-radius: 12px !important; text-align: center;
+    border: 1px solid var(--hv-line-2) !important; background: var(--hv-surface) !important; color: var(--hv-text) !important;
+    font: 600 1rem var(--hv-body) !important; outline: none; box-shadow: none !important;
+}
+html body.site-v2 .player-name-box input::placeholder { color: var(--hv-dim); font-weight: 400; }
+html body.site-v2 .player-name-box input:focus { border-color: var(--hv-gold-line) !important; background: var(--hv-surface-2) !important; }
+html body.site-v2 .player-name-box small { color: var(--hv-dim); font-size: 0.8rem; }
+
 /* ---------- Footer (same as the home page) ---------- */
 .hv-footer { margin-top: 48px; border-top: 1px solid var(--hv-line); background: rgba(0, 0, 0, 0.3); font-family: var(--hv-body); color: var(--hv-muted); }
 html[data-theme="light"] body.site-v2 .hv-footer { background: rgba(255, 255, 255, 0.55); }

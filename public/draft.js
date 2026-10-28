@@ -1,22 +1,32 @@
+// Login is optional: guests can play too (see player-name.js for the name used)
 const user = localStorage.getItem('user');
-if (!user) {
-    window.location.href = '/login';
-}
-document.getElementById('user-display').textContent = user;
-const avatar = localStorage.getItem('avatar');
-if (avatar) {
+const userDisplayEl = document.getElementById('user-display');
+const logoutBtn = document.getElementById('logout-btn');
+if (user) {
+    if (userDisplayEl) userDisplayEl.textContent = user;
+    const avatar = localStorage.getItem('avatar');
     const avatarEl = document.getElementById('user-avatar');
-    if (avatarEl) {
+    if (avatar && avatarEl) {
         avatarEl.src = 'avatars/' + avatar;
         avatarEl.style.display = 'block';
     }
-}
-document.getElementById('logout-btn').addEventListener('click', () => {
-    if(confirm('Are you sure you want to logout?')) {
-        localStorage.removeItem('user');
-        window.location.href = '/';
+    if (logoutBtn) logoutBtn.addEventListener('click', () => {
+        if (confirm('Are you sure you want to logout?')) {
+            localStorage.removeItem('user');
+            localStorage.removeItem('avatar');
+            window.location.reload();
+        }
+    });
+} else {
+    if (userDisplayEl) userDisplayEl.style.display = 'none';
+    if (logoutBtn) {
+        logoutBtn.textContent = 'Login';
+        logoutBtn.removeAttribute('data-i18n');
+        logoutBtn.addEventListener('click', () => { window.location.href = '/login'; });
     }
-});
+}
+// Name shown to the opponent: the name box, else the account name, else a guest name
+const playerName = () => TBPlayer.getName('player-name-input');
 
 const socket = io();
 
@@ -106,20 +116,20 @@ let timerInterval;
 document.getElementById('btn-random').addEventListener('click', () => {
     lobbyStatus.textContent = "Joining random queue...";
     startMatchmakingTimer();
-    socket.emit('joinRandom', user);
+    socket.emit('joinRandom', playerName());
 });
 
 document.getElementById('btn-create').addEventListener('click', () => {
     lobbyStatus.textContent = "Creating room...";
     startMatchmakingTimer();
-    socket.emit('createCustom', user);
+    socket.emit('createCustom', playerName());
 });
 
 document.getElementById('btn-join').addEventListener('click', () => {
     const roomId = document.getElementById('room-input').value.trim().toUpperCase();
     if (roomId) {
         lobbyStatus.textContent = "Joining room " + roomId + "...";
-        socket.emit('joinCustom', { roomId, username: user });
+        socket.emit('joinCustom', { roomId, username: playerName() });
         myRoomId = roomId;
     }
 });
@@ -165,7 +175,7 @@ socket.on('gameStarted', (data) => {
         }
     }
     
-    document.getElementById('my-team-title').textContent = user + "'s Team";
+    document.getElementById('my-team-title').textContent = playerName() + "'s Team";
     const myAvatarEl = document.getElementById('my-team-avatar');
     if (myAvatarEl && localStorage.getItem('avatar')) {
         myAvatarEl.src = 'avatars/' + localStorage.getItem('avatar');

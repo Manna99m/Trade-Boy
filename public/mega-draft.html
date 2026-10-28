@@ -78,6 +78,11 @@
         <div id="lobby-screen">
             <h1 class="page-title" data-i18n="mega_draft_title" style="margin-bottom: 5px;">Mega Draft Battle</h1>
             <p class="mode-desc" data-i18n="mega_draft_desc" style="color: #ffffff; font-size: 1.1rem; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); margin-bottom: 15px;">Queue up to draft 5 Heroes and 1 Pet against an opponent in Mega Draft!</p>
+            <div class="player-name-box">
+                <label for="player-name-input">Your name <span>(optional)</span></label>
+                <input type="text" id="player-name-input" data-player-name maxlength="20" autocomplete="nickname" placeholder="Shown to your opponent">
+                <small>No account needed. Leave empty to play as a guest.</small>
+            </div>
             <div style="display: flex; gap: 20px; justify-content: center; margin-bottom: 30px;">
                 <button class="action-btn" id="btn-random" data-i18n="join_random">Join Random Match</button>
                 <button class="action-btn" id="btn-create" data-i18n="create_custom">Create Custom Match</button>
@@ -176,6 +181,7 @@
             <p>Use our Mega Draft simulator to practice these high-stakes scenarios. Learn how to allocate your tanks, split your healers, and distribute your damage dealers across your draft efficiently. Perfecting your Mega Draft strategy is the true mark of a Hero Wars Grandmaster.</p>
         </div>
 </main>
+    <script src="player-name.js"></script>
     <script src="patron-selection.js"></script>
     <script src="mega-draft.js"></script>
 

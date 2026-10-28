@@ -77,6 +77,11 @@
         <div id="lobby-screen">
             <h1 class="page-title" data-i18n="triple_draft_title">Triple Draft Battle</h1>
             <p style="color: #ffffff; font-size: 1.1rem; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); margin-bottom: 30px;" data-i18n="triple_draft_desc">Queue up to draft 5 Heroes and 1 Pet by picking 1 from 3 options each round!</p>
+            <div class="player-name-box">
+                <label for="player-name-input">Your name <span>(optional)</span></label>
+                <input type="text" id="player-name-input" data-player-name maxlength="20" autocomplete="nickname" placeholder="Shown to your opponent">
+                <small>No account needed. Leave empty to play as a guest.</small>
+            </div>
             <div style="display: flex; gap: 20px; justify-content: center; margin-bottom: 30px;">
                 <button class="action-btn" id="btn-random" data-i18n="join_random">Join Random Match</button>
                 <button class="action-btn" id="btn-create" data-i18n="create_custom">Create Custom Match</button>
@@ -200,6 +205,7 @@
             <p>By simulating Triple Drafts with our tool, you will learn how to build cohesive primary, secondary, and tertiary teams. You'll master the art of the 'hidden pick' and learn how to bait your opponent into over-committing to counter a strategy you aren't even relying on. Elevate your Grand Arena performance today!</p>
         </div>
 </main>
+    <script src="player-name.js"></script>
     <script src="patron-selection.js"></script>
     <script src="triple-draft.js"></script>
 
