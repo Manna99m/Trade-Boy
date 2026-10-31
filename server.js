@@ -171,7 +171,7 @@ app.get('/heroes/Avalon.png', (req, res) => {
     app.get(`/${folder}/:file`, (req, res, next) => {
         const filePath = path.join(__dirname, 'public', folder, req.params.file);
         if (fs.existsSync(filePath)) {
-            return res.sendFile(filePath);
+            return res.sendFile(filePath, { dotfiles: 'allow' });
         }
         const dir = path.join(__dirname, 'public', folder);
         fs.readdir(dir, (err, files) => {
@@ -180,7 +180,7 @@ app.get('/heroes/Avalon.png', (req, res) => {
             const targetBase = targetLower.replace(/\.[^/.]+$/, "");
             const match = files.find(f => f.toLowerCase() === targetLower || f.toLowerCase().startsWith(targetBase + '.'));
             if (match) {
-                return res.sendFile(path.join(dir, match));
+                return res.sendFile(path.join(dir, match), { dotfiles: 'allow' });
             }
             next();
         });
