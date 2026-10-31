@@ -53,8 +53,8 @@ const GUIDES = {
     },
     'best-team-for-archdemon': {
         id: 'archdemon-teams',
-        title: 'Best Team for Archdemon in Hero Wars (2026) | Trade Boy',
-        desc: 'Best Hero Wars teams for the Archdemon: top lineups with damage, playstyle, difficulty, recommended buffs and video guides.',
+        title: 'Best Team for Archdemon in Hero Wars (18.4B+ Spooky Festival) | Trade Boy',
+        desc: 'Best Hero Wars teams for the Archdemon in the Spooky Festival: proven 18.4 Billion+ lineups from Buff 110 to Buff 250, with Talisman Capital Bonus, exact hero ranks and pet patrons.',
         img: 'archdemon-teams.jpg'
     },
     'hero-wars-event-teams': {
