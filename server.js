@@ -166,6 +166,27 @@ app.get('/heroes/Avalon.png', (req, res) => {
     res.redirect('/heroes/Alvanor.png');
 });
 
+// Case-insensitive & extension-tolerant asset resolver for Linux/Render production
+['heroes', 'pets', 'patrons', 'talismans'].forEach(folder => {
+    app.get(`/${folder}/:file`, (req, res, next) => {
+        const filePath = path.join(__dirname, 'public', folder, req.params.file);
+        if (fs.existsSync(filePath)) {
+            return res.sendFile(filePath);
+        }
+        const dir = path.join(__dirname, 'public', folder);
+        fs.readdir(dir, (err, files) => {
+            if (err || !files) return next();
+            const targetLower = req.params.file.toLowerCase();
+            const targetBase = targetLower.replace(/\.[^/.]+$/, "");
+            const match = files.find(f => f.toLowerCase() === targetLower || f.toLowerCase().startsWith(targetBase + '.'));
+            if (match) {
+                return res.sendFile(path.join(dir, match));
+            }
+            next();
+        });
+    });
+});
+
 app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] }));
 
 // Initialize users.json if it doesn't exist
