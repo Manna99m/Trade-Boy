@@ -77,6 +77,9 @@ const HERO_POSITIONS = {
   "Thea.png": 71,
   "Tristan.png": 15,
   "yasmine.png": 20,
+  "Wodryn.png": 6,
+  "wodryn.png": 6,
+  "Adam.png": 47,
   "Ziri.png": 7
 };
 

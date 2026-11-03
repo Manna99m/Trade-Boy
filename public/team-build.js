@@ -9,7 +9,7 @@ const heroes = [
     "Lilith.png", "Lyria.png", "Markus.png", "Martha.png", "Maya.png", "Mojo.png", 
     "Mushy and Shroom.png", "Nebula.png", "Ninja Turtles.png", "Omen.png", "Orion.png", "Peppy.png", 
     "Phobos.png", "Polaris.png", "Quing Mao.png", "Rufus.png", "Satori.png", "Sebastian.png", 
-    "Thea.png", "Tristan.png", "Ziri.png", "corvus.png", "isaac.png", "morrigan.png", "yasmine.png",
+    "Thea.png", "Tristan.png", "Wodryn.png", "Ziri.png", "corvus.png", "isaac.png", "morrigan.png", "yasmine.png",
     "adam.webp", "byrna.webp", "eva.webp", "somna.webp", "fluffy.webp"
 ];
 
@@ -111,7 +111,8 @@ const patronRules = {
         "Orion.png",
         "Peppy.png",
         "somna.webp",
-        "Thea.png"
+        "Thea.png",
+        "Wodryn.png"
     ],
     "Biscuit.png": [
         "Alvanor.png",
@@ -155,7 +156,8 @@ const patronRules = {
         "Peppy.png",
         "Polaris.png",
         "Ninja Turtles.png",
-        "Ziri.png"
+        "Ziri.png",
+        "Wodryn.png"
     ],
     "Cain.png": [
         "adam.webp",
@@ -197,7 +199,8 @@ const patronRules = {
         "yasmine.png",
         "somna.webp",
         "Ziri.png",
-        "Tristan.png"
+        "Tristan.png",
+        "Wodryn.png"
     ],
     "Khorus.png": [
         "Alvanor.png",
@@ -307,7 +310,8 @@ const patronRules = {
         "Rufus.png",
         "Ninja Turtles.png",
         "somna.webp",
-        "Ziri.png"
+        "Ziri.png",
+        "Wodryn.png"
     ],
     "Robin.png": [
         "Alvanor.png",

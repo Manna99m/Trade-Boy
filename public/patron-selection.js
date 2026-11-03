@@ -32,7 +32,7 @@ const PATRON_RULES = {
         "Lars.png", "Jordgen.png", "Kai.png", "Julias.png", "Krista.png",
         "Mojo.png", "Lian.png", "Martha.png", "Mushy and Shroom.png", "Maya.png",
         "Markus.png", "morrigan.png", "Phobos.png", "Satori.png", "Rufus.png",
-        "Orion.png", "Peppy.png", "somna.webp", "Thea.png"
+        "Orion.png", "Peppy.png", "somna.webp", "Thea.png", "Wodryn.png"
     ],
     "Biscuit.png": [
         "Alvanor.png", "Avalon.png",
@@ -43,7 +43,7 @@ const PATRON_RULES = {
         "Iris.png", "Judge.png", "Lars.png", "Kai.png", "Kayla.png",
         "Julias.png", "Krista.png", "Mojo.png", "Lian.png", "Lilith.png",
         "Maya.png", "Lyria.png", "Phobos.png", "Satori.png", "Rufus.png",
-        "Orion.png", "Peppy.png", "Polaris.png", "Ninja Turtles.png", "Ziri.png"
+        "Orion.png", "Peppy.png", "Polaris.png", "Ninja Turtles.png", "Ziri.png", "Wodryn.png"
     ],
     "Cain.png": [
         "adam.webp", "Dante.png", "Aurora.png", "Elmir.png", "Dark star.png",
@@ -55,7 +55,7 @@ const PATRON_RULES = {
         "eva.webp", "Dark star.png", "Galahad.png", "Guus.png", "Ginger.png",
         "Ishmael.png", "Jhu.png", "Lara Croft.png", "Karkh.png", "Keira.png",
         "Lyria.png", "Sebastian.png", "Ninja Turtles.png", "Quing Mao.png",
-        "yasmine.png", "somna.webp", "Ziri.png", "Tristan.png"
+        "yasmine.png", "somna.webp", "Ziri.png", "Tristan.png", "Wodryn.png"
     ],
     "Khorus.png": [
         "Alvanor.png", "Avalon.png",
@@ -87,7 +87,7 @@ const PATRON_RULES = {
         "Jet.png", "Judge.png", "Jordgen.png", "Julias.png", "Lilith.png",
         "Martha.png", "Mushy and Shroom.png", "Markus.png", "Lyria.png",
         "morrigan.png", "Sebastian.png", "Rufus.png", "Ninja Turtles.png",
-        "somna.webp", "Ziri.png"
+        "somna.webp", "Ziri.png", "Wodryn.png"
     ],
     "Robin.png": [
         "Alvanor.png", "Avalon.png",
