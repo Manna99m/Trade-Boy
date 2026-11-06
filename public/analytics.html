@@ -490,7 +490,7 @@
             <div class="lock-icon">🔒</div>
             <h2 class="lock-title">Trade Boy Analytics</h2>
             <p class="lock-subtitle">Enter your Admin Key or password to view live traffic</p>
-            <input type="password" id="admin-pass" class="lock-input" placeholder="Enter Admin Key (e.g. tradeboy2026)" autofocus>
+            <input type="password" id="admin-pass" class="lock-input" placeholder="Enter Admin Key..." autocomplete="off" autofocus>
             <button class="btn btn-gold" style="width: 100%; justify-content: center;" onclick="verifyAndUnlock()">Unlock Dashboard</button>
             <p id="lock-error" style="color: #ef4444; font-size: 0.8rem; margin-top: 12px; display: none;">Invalid Admin Key</p>
         </div>
@@ -655,15 +655,14 @@
         }
 
         function checkAuth() {
-            const key = getStoredKey();
-            const urlKey = new URLSearchParams(window.location.search).get('key');
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlKey = urlParams.get('key');
             if (urlKey) {
+                history.replaceState(null, '', window.location.pathname);
                 localStorage.setItem('tb_analytics_key', urlKey);
-                document.getElementById('lock-screen').style.display = 'none';
-                return fetchData();
             }
+            const key = getStoredKey();
             if (key) {
-                document.getElementById('lock-screen').style.display = 'none';
                 return fetchData();
             }
             document.getElementById('lock-screen').style.display = 'flex';
@@ -716,9 +715,12 @@
                 const res = await fetch(`/api/analytics/stats?range=${currentRange}&key=${encodeURIComponent(key)}`);
                 if (res.status === 401) {
                     logout();
+                    const err = document.getElementById('lock-error');
+                    if (err) err.style.display = 'block';
                     return;
                 }
                 const data = await res.json();
+                document.getElementById('lock-screen').style.display = 'none';
                 renderDashboard(data);
                 document.getElementById('last-updated').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
             } catch (e) {

@@ -723,13 +723,47 @@ function isValidHostKey(key) {
 }
 
 // ---------- Visitor Analytics API ----------
+function isValidAnalyticsKey(key) {
+    if (typeof key !== 'string' || !key.trim()) return false;
+    const cleanKey = key.trim();
+
+    // Explicitly reject previously leaked placeholder keys
+    if (cleanKey.toLowerCase() === 'tradeboy2026') return false;
+
+    // 1. Custom environment variable (recommended for Render production)
+    if (process.env.ANALYTICS_KEY && cleanKey === process.env.ANALYTICS_KEY.trim()) return true;
+    if (process.env.ADMIN_KEY && cleanKey === process.env.ADMIN_KEY.trim()) return true;
+
+    // 2. Dedicated private secret keys
+    const PRIVATE_ANALYTICS_KEYS = [
+        'tb-manna-analytics-2026',
+        'TB-Stats-7799'
+    ];
+    if (PRIVATE_ANALYTICS_KEYS.some(k => k.toLowerCase() === cleanKey.toLowerCase())) return true;
+
+    // 3. Site owner's account password (for user 'Manna' or 'Tradeboy')
+    try {
+        if (fs.existsSync(USERS_FILE)) {
+            const users = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
+            const adminUsers = users.filter(u => ['manna', 'tradeboy'].includes((u.username || '').toLowerCase()));
+            for (const admin of adminUsers) {
+                if (verifyPassword(cleanKey, admin.password)) {
+                    return true;
+                }
+            }
+        }
+    } catch (e) {}
+
+    return false;
+}
+
 app.get('/analytics', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'analytics.html'));
 });
 
 app.get('/api/analytics/stats', (req, res) => {
     const key = req.query.key || req.headers['x-admin-key'];
-    if (!isValidHostKey(key)) {
+    if (!isValidAnalyticsKey(key)) {
         return res.status(401).json({ error: 'Unauthorized: Invalid Admin Key' });
     }
     const range = req.query.range || '7d';
