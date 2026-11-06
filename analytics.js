@@ -6,6 +6,10 @@ const crypto = require('crypto');
 const DATA_FILE = path.join(__dirname, 'analytics-data.json');
 const SALT = crypto.randomBytes(16).toString('hex');
 
+// Bot & Scanner regexes
+const BOT_REGEX = /bot|crawler|spider|crawling|googlebot|bingbot|yandex|baidu|duckduckbot|slurp|twitterbot|facebookexternalhit|discordbot|curl|wget|postman|headlesschrome|bytespider|ahrefsbot|semrushbot|dotbot/i;
+const SCANNER_PROBE_REGEX = /(^\/wp-|\.php($|\?)|\.env|\.git|\/phpmyadmin|\/xmlrpc|\/boaform|\/cgi-bin|\/actuator|\/config|\/setup|\/shell|\/eval)/i;
+
 // In-memory data store
 let data = {
     daily: {},      // 'YYYY-MM-DD' -> { pageviews, uniques: [hashes], pages: {}, referrers: {}, countries: {}, devices: {}, events: {} }
@@ -22,6 +26,15 @@ try {
         if (raw && typeof raw.daily === 'object') {
             data.daily = raw.daily;
             data.recentVisits = Array.isArray(raw.recentVisits) ? raw.recentVisits : [];
+            // Clean up any stray scanner probes from past logs
+            data.recentVisits = data.recentVisits.filter(v => v && !SCANNER_PROBE_REGEX.test(v.page));
+            Object.values(data.daily).forEach(rec => {
+                if (rec && rec.pages) {
+                    Object.keys(rec.pages).forEach(p => {
+                        if (SCANNER_PROBE_REGEX.test(p)) delete rec.pages[p];
+                    });
+                }
+            });
         }
     }
 } catch (e) {
@@ -62,9 +75,6 @@ function saveToDisk() {
 // Save on process exit
 process.on('SIGINT', saveToDisk);
 process.on('SIGTERM', saveToDisk);
-
-// Bot regex
-const BOT_REGEX = /bot|crawler|spider|crawling|googlebot|bingbot|yandex|baidu|duckduckbot|slurp|twitterbot|facebookexternalhit|discordbot|curl|wget|postman|headlesschrome|bytespider|ahrefsbot|semrushbot|dotbot/i;
 
 function isBot(ua) {
     return !ua || BOT_REGEX.test(ua);
@@ -154,66 +164,73 @@ function trackMiddleware(req, res, next) {
     if (req.method !== 'GET') return next();
 
     const urlPath = req.originalUrl || req.url;
-    // Skip static assets, socket.io, api routes, and analytics routes
+    // Skip static assets, socket.io, api routes, analytics routes, and scanner probes
     if (STATIC_EXT_REGEX.test(urlPath)) return next();
     if (urlPath.startsWith('/socket.io') || urlPath.startsWith('/api/') || urlPath.startsWith('/analytics')) return next();
+    if (SCANNER_PROBE_REGEX.test(urlPath)) return next();
 
     const ua = req.headers['user-agent'] || '';
     if (isBot(ua)) return next();
 
-    const dayKey = getTodayKey();
-    initDailyRecord(dayKey);
+    // Hook into response finish to ensure only successfully served pages (< 400 status) are logged
+    res.on('finish', () => {
+        if (res.statusCode >= 400) return; // Ignore 404s, 500s, scanner probes
 
-    const record = data.daily[dayKey];
-    const hash = getVisitorHash(req);
-    const page = normalizePath(urlPath);
-    const rawRef = req.headers['referer'] || req.headers['referrer'] || '';
-    const ref = parseReferrer(rawRef);
-    const country = getCountry(req);
-    const device = parseDevice(ua);
+        const dayKey = getTodayKey();
+        initDailyRecord(dayKey);
 
-    // Record active ping
-    activeVisitors.set(hash, Date.now());
+        const record = data.daily[dayKey];
+        const hash = getVisitorHash(req);
+        const page = normalizePath(urlPath);
+        const rawRef = req.headers['referer'] || req.headers['referrer'] || '';
+        const ref = parseReferrer(rawRef);
+        const country = getCountry(req);
+        const device = parseDevice(ua);
 
-    // Pageview
-    record.pageviews = (record.pageviews || 0) + 1;
+        // Record active ping
+        activeVisitors.set(hash, Date.now());
 
-    // Unique visitor check
-    let isNewVisitor = false;
-    if (!Array.isArray(record.uniques)) record.uniques = [];
-    if (!record.uniques.includes(hash)) {
-        record.uniques.push(hash);
-        isNewVisitor = true;
-    }
+        // Pageview
+        record.pageviews = (record.pageviews || 0) + 1;
 
-    // Top pages
-    record.pages[page] = (record.pages[page] || 0) + 1;
+        // Unique visitor check
+        let isNewVisitor = false;
+        if (!Array.isArray(record.uniques)) record.uniques = [];
+        if (!record.uniques.includes(hash)) {
+            record.uniques.push(hash);
+            isNewVisitor = true;
+        }
 
-    // Referrers (ignore pure internal clicks to keep acquisition sources clear)
-    if (ref !== 'Internal') {
-        record.referrers[ref] = (record.referrers[ref] || 0) + 1;
-    }
+        // Top pages
+        record.pages[page] = (record.pages[page] || 0) + 1;
 
-    // Countries
-    record.countries[country] = (record.countries[country] || 0) + 1;
+        // Referrers (ignore pure internal clicks to keep acquisition sources clear)
+        if (ref !== 'Internal') {
+            record.referrers[ref] = (record.referrers[ref] || 0) + 1;
+        }
 
-    // Devices
-    record.devices[device] = (record.devices[device] || 0) + 1;
+        // Countries
+        record.countries[country] = (record.countries[country] || 0) + 1;
 
-    // Recent visits log (keep 40 latest)
-    data.recentVisits.unshift({
-        time: new Date().toISOString(),
-        page,
-        ref: ref === 'Internal' ? 'Direct' : ref,
-        country,
-        device,
-        isNew: isNewVisitor
+        // Devices
+        record.devices[device] = (record.devices[device] || 0) + 1;
+
+        // Recent visits log (keep 40 latest)
+        data.recentVisits.unshift({
+            time: new Date().toISOString(),
+            page,
+            ref: ref === 'Internal' ? 'Direct' : ref,
+            country,
+            device,
+            isNew: isNewVisitor
+        });
+        if (data.recentVisits.length > 40) {
+            data.recentVisits.length = 40;
+        }
+
+        scheduleSave();
     });
-    if (data.recentVisits.length > 40) {
-        data.recentVisits.length = 40;
-    }
 
-    scheduleSave();
     next();
 }
 
