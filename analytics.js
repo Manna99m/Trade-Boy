@@ -10,6 +10,9 @@ const SALT = crypto.randomBytes(16).toString('hex');
 const BOT_REGEX = /bot|crawler|spider|crawling|googlebot|bingbot|yandex|baidu|duckduckbot|slurp|twitterbot|facebookexternalhit|discordbot|curl|wget|postman|headlesschrome|bytespider|ahrefsbot|semrushbot|dotbot/i;
 const SCANNER_PROBE_REGEX = /(^\/wp-|\.php($|\?)|\.env|\.git|\/phpmyadmin|\/xmlrpc|\/boaform|\/cgi-bin|\/actuator|\/config|\/setup|\/shell|\/eval)/i;
 
+// Cache of recently previewed URLs by Discord's preview bot (solves Discord desktop "Dark Social" missing referer)
+const discordRecentPreviews = new Map();
+
 // In-memory data store
 let data = {
     daily: {},      // 'YYYY-MM-DD' -> { pageviews, uniques: [hashes], pages: {}, referrers: {}, countries: {}, devices: {}, events: {} }
@@ -93,27 +96,66 @@ function getVisitorHash(req) {
     return crypto.createHash('sha256').update(ip + ua + today + SALT).digest('hex').slice(0, 16);
 }
 
-function parseReferrer(ref) {
-    if (!ref) return 'Direct / None';
-    try {
-        const lower = ref.toLowerCase();
-        if (lower.startsWith('android-app://com.discord') || lower.includes('discord')) return 'Discord';
-        if (lower.startsWith('android-app://com.google') || lower.includes('google.')) return 'Google';
-        if (lower.includes('youtube.com') || lower.includes('youtu.be')) return 'YouTube';
-        if (lower.includes('reddit.com')) return 'Reddit';
-        if (lower.includes('facebook.com') || lower.includes('fb.me')) return 'Facebook';
-        if (lower.includes('twitter.com') || lower.includes('x.com') || lower.includes('t.co')) return 'Twitter / X';
-        if (lower.includes('t.me') || lower.includes('telegram')) return 'Telegram';
-        if (lower.includes('vk.com')) return 'VKontakte';
+function parseReferrer(ref, reqUrl, ua, pagePath) {
+    // 1. Explicit query parameters (e.g. ?ref=discord, ?utm_source=discord, ?src=discord, ?discord)
+    if (reqUrl) {
+        try {
+            const parsed = new URL(reqUrl, 'https://trade-boy.com');
+            const search = parsed.search.toLowerCase();
+            const qRef = (parsed.searchParams.get('ref') || 
+                          parsed.searchParams.get('utm_source') || 
+                          parsed.searchParams.get('source') || 
+                          parsed.searchParams.get('src') || '').toLowerCase();
 
-        const host = new URL(ref).hostname.toLowerCase();
-        if (host.includes('trade-boy.com') || host.includes('trade-boy.onrender.com') || host.includes('localhost')) {
-            return 'Internal';
-        }
-        return host.replace(/^www\./, '');
-    } catch (e) {
-        return 'Direct / None';
+            if (qRef.includes('discord') || search.includes('ref=discord') || search.includes('utm_source=discord') || search.includes('discord')) {
+                return 'Discord';
+            }
+            if (qRef.includes('youtube') || search.includes('youtube')) return 'YouTube';
+            if (qRef.includes('reddit') || search.includes('reddit')) return 'Reddit';
+            if (qRef.includes('facebook') || search.includes('fb')) return 'Facebook';
+            if (qRef.includes('twitter') || search.includes('x.com')) return 'Twitter / X';
+            if (qRef.includes('telegram') || search.includes('tg')) return 'Telegram';
+            if (qRef.includes('google')) return 'Google';
+        } catch (e) {}
     }
+
+    // 2. In-app mobile browser User-Agent check (e.g. Discord iOS webview)
+    if (ua && /discord/i.test(ua) && !/bot/i.test(ua)) {
+        return 'Discord';
+    }
+
+    // 3. HTTP Referer header
+    if (ref) {
+        try {
+            const lower = ref.toLowerCase();
+            if (lower.startsWith('android-app://com.discord') || lower.includes('discord')) return 'Discord';
+            if (lower.startsWith('android-app://com.google') || lower.includes('google.')) return 'Google';
+            if (lower.includes('youtube.com') || lower.includes('youtu.be')) return 'YouTube';
+            if (lower.includes('reddit.com')) return 'Reddit';
+            if (lower.includes('facebook.com') || lower.includes('fb.me')) return 'Facebook';
+            if (lower.includes('twitter.com') || lower.includes('x.com') || lower.includes('t.co')) return 'Twitter / X';
+            if (lower.includes('t.me') || lower.includes('telegram')) return 'Telegram';
+            if (lower.includes('vk.com')) return 'VKontakte';
+
+            const host = new URL(ref).hostname.toLowerCase();
+            if (host.includes('trade-boy.com') || host.includes('trade-boy.onrender.com') || host.includes('localhost')) {
+                return 'Internal';
+            }
+            return host.replace(/^www\./, '');
+        } catch (e) {}
+    }
+
+    // 4. Smart Discordbot Preview Correlation:
+    // Desktop Discord opens links in system browser without a Referer header (Dark Social).
+    // But Discordbot ALWAYS fetches the link preview when posted, 1-2 hours prior to user clicks!
+    if (pagePath && discordRecentPreviews.has(pagePath)) {
+        const previewTime = discordRecentPreviews.get(pagePath);
+        if (Date.now() - previewTime < 2 * 60 * 60 * 1000) { // 2 hour correlation window
+            return 'Discord';
+        }
+    }
+
+    return 'Direct / None';
 }
 
 function parseDevice(ua) {
@@ -170,7 +212,13 @@ function trackMiddleware(req, res, next) {
     if (SCANNER_PROBE_REGEX.test(urlPath)) return next();
 
     const ua = req.headers['user-agent'] || '';
-    if (isBot(ua)) return next();
+    if (isBot(ua)) {
+        // If it's Discordbot previewing the page, remember the timestamp!
+        if (/discordbot/i.test(ua)) {
+            discordRecentPreviews.set(normalizePath(urlPath), Date.now());
+        }
+        return next();
+    }
 
     // Hook into response finish to ensure only successfully served pages (< 400 status) are logged
     res.on('finish', () => {
@@ -183,7 +231,7 @@ function trackMiddleware(req, res, next) {
         const hash = getVisitorHash(req);
         const page = normalizePath(urlPath);
         const rawRef = req.headers['referer'] || req.headers['referrer'] || '';
-        const ref = parseReferrer(rawRef);
+        const ref = parseReferrer(rawRef, urlPath, ua, page);
         const country = getCountry(req);
         const device = parseDevice(ua);
 
