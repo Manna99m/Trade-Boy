@@ -11,6 +11,15 @@ window.copyPromoCode = window.copyPromoCode || function(btn) {
             btn.style.background = '#aef649';
         }, 2000);
     }
+    // Track promo copy in analytics
+    try {
+        fetch('/api/analytics/event', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ event: 'promo_copy' })
+        }).catch(() => {});
+    } catch (e) {}
+
     if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(code).then(flash).catch(() => {
             fallback(code);
@@ -114,5 +123,19 @@ document.addEventListener('DOMContentLoaded', () => {
     observer.observe(document.body, {
         childList: true,
         subtree: true
+    });
+
+    // Passive tracking for affiliate link clicks
+    document.addEventListener('click', (e) => {
+        const affiliateLink = e.target.closest && e.target.closest('a.affiliate-cta-btn, a[href*="odiencetrck.com"]');
+        if (affiliateLink) {
+            try {
+                fetch('/api/analytics/event', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ event: 'affiliate_click' })
+                }).catch(() => {});
+            } catch (err) {}
+        }
     });
 });

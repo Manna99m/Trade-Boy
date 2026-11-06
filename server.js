@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const http = require('http');
 const { Server } = require('socket.io');
+const analytics = require('./analytics');
 
 const app = express();
 const server = http.createServer(app);
@@ -31,6 +32,9 @@ app.use((req, res, next) => {
     }
     next();
 });
+
+// Analytics tracking middleware (records human pageviews, ignores bots, static assets & admin routes)
+app.use(analytics.trackMiddleware);
 
 // ---------- Guide pages (SEO) ----------
 // Each guide has its own keyword-rich address, and the server sends the full
@@ -717,6 +721,28 @@ function isValidHostKey(key) {
     const cleanKey = key.trim().toLowerCase();
     return MASTER_HOST_KEYS.some(k => k.toLowerCase() === cleanKey);
 }
+
+// ---------- Visitor Analytics API ----------
+app.get('/analytics', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'analytics.html'));
+});
+
+app.get('/api/analytics/stats', (req, res) => {
+    const key = req.query.key || req.headers['x-admin-key'];
+    if (!isValidHostKey(key)) {
+        return res.status(401).json({ error: 'Unauthorized: Invalid Admin Key' });
+    }
+    const range = req.query.range || '7d';
+    res.json(analytics.getStats(range));
+});
+
+app.post('/api/analytics/event', (req, res) => {
+    const eventName = req.body && req.body.event;
+    if (eventName && typeof eventName === 'string') {
+        analytics.trackEvent(eventName.slice(0, 50));
+    }
+    res.json({ ok: true });
+});
 
 function generateTourId() {
     return 'TB-' + Math.floor(1000 + Math.random() * 9000);
