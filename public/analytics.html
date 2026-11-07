@@ -511,6 +511,15 @@
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
                 <span>Refresh</span>
             </button>
+            <button class="btn" onclick="exportBackup()" title="Download Backup (JSON)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                <span>Export</span>
+            </button>
+            <button class="btn" onclick="document.getElementById('import-file-input').click()" title="Restore Backup (JSON)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                <span>Restore</span>
+            </button>
+            <input type="file" id="import-file-input" accept=".json" style="display:none;" onchange="handleFileImport(this)">
             <button class="btn" onclick="logout()" title="Lock Dashboard">Lock</button>
         </div>
     </header>
@@ -524,8 +533,11 @@
                 <button class="range-btn" data-range="30d" onclick="setRange('30d')">Last 30 Days</button>
                 <button class="range-btn" data-range="all" onclick="setRange('all')">All Time</button>
             </div>
-            <div style="font-size: 0.82rem; color: var(--text-dim);" id="last-updated">
-                Auto-refreshing every 10s
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span id="sync-badge" style="display:none; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #10b981; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; padding: 3px 8px; border-radius: 6px; letter-spacing: 0.5px;">☁️ Cloud Synced</span>
+                <div style="font-size: 0.82rem; color: var(--text-dim);" id="last-updated">
+                    Auto-refreshing every 10s
+                </div>
             </div>
         </div>
 
@@ -699,6 +711,38 @@
             document.getElementById('admin-pass').value = '';
         }
 
+        function exportBackup() {
+            const key = getStoredKey();
+            if (!key) return;
+            window.location.href = `/api/analytics/export?key=${encodeURIComponent(key)}`;
+        }
+
+        async function handleFileImport(input) {
+            const file = input.files && input.files[0];
+            if (!file) return;
+            const key = getStoredKey();
+            if (!key) return;
+
+            try {
+                const text = await file.text();
+                const json = JSON.parse(text);
+                const res = await fetch(`/api/analytics/import?key=${encodeURIComponent(key)}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(json)
+                });
+                if (res.ok) {
+                    alert('Analytics data restored successfully! ✅');
+                    fetchData();
+                } else {
+                    alert('Failed to restore analytics data: invalid key or file format.');
+                }
+            } catch (err) {
+                alert('Error reading JSON backup file: ' + err.message);
+            }
+            input.value = '';
+        }
+
         function setRange(range) {
             currentRange = range;
             document.querySelectorAll('.range-btn').forEach(b => {
@@ -723,6 +767,10 @@
                 document.getElementById('lock-screen').style.display = 'none';
                 renderDashboard(data);
                 document.getElementById('last-updated').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
+                const syncBadge = document.getElementById('sync-badge');
+                if (syncBadge) {
+                    syncBadge.style.display = data.cloudSync ? 'inline-flex' : 'none';
+                }
             } catch (e) {
                 console.error('Failed to load stats:', e);
             }

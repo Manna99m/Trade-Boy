@@ -3,8 +3,14 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-const DATA_FILE = path.join(__dirname, 'analytics-data.json');
+// Support Render Persistent Disk if attached, otherwise local app dir
+const DATA_DIR = process.env.DATA_DIR || (fs.existsSync('/data') ? '/data' : __dirname);
+const DATA_FILE = path.join(DATA_DIR, 'analytics-data.json');
 const SALT = crypto.randomBytes(16).toString('hex');
+
+// Upstash Serverless Redis REST API for automated cloud persistence (free tier, survives all redeploys)
+const UPSTASH_URL = process.env.UPSTASH_REDIS_REST_URL;
+const UPSTASH_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
 
 // Bot & Scanner regexes
 const BOT_REGEX = /bot|crawler|spider|crawling|googlebot|bingbot|yandex|baidu|duckduckbot|slurp|twitterbot|facebookexternalhit|discordbot|curl|wget|postman|headlesschrome|bytespider|ahrefsbot|semrushbot|dotbot/i;
@@ -22,27 +28,110 @@ let data = {
 // Map of visitorHash -> lastSeenTimestamp
 const activeVisitors = new Map();
 
-// Load persisted data
+function mergeData(incoming) {
+    if (!incoming || typeof incoming.daily !== 'object') return;
+    Object.entries(incoming.daily).forEach(([day, rec]) => {
+        if (!data.daily[day]) {
+            data.daily[day] = rec;
+        } else {
+            const cur = data.daily[day];
+            cur.pageviews = Math.max(cur.pageviews || 0, rec.pageviews || 0);
+            const curUniques = Array.isArray(cur.uniques) ? cur.uniques : [];
+            const newUniques = Array.isArray(rec.uniques) ? rec.uniques : [];
+            cur.uniques = Array.from(new Set([...curUniques, ...newUniques]));
+
+            ['pages', 'referrers', 'countries', 'events'].forEach(key => {
+                cur[key] = cur[key] || {};
+                if (rec[key]) {
+                    Object.entries(rec[key]).forEach(([k, v]) => {
+                        cur[key][k] = Math.max(cur[key][k] || 0, v);
+                    });
+                }
+            });
+
+            cur.devices = cur.devices || { desktop: 0, mobile: 0, tablet: 0 };
+            if (rec.devices) {
+                cur.devices.desktop = Math.max(cur.devices.desktop || 0, rec.devices.desktop || 0);
+                cur.devices.mobile = Math.max(cur.devices.mobile || 0, rec.devices.mobile || 0);
+                cur.devices.tablet = Math.max(cur.devices.tablet || 0, rec.devices.tablet || 0);
+            }
+        }
+    });
+
+    if (Array.isArray(incoming.recentVisits)) {
+        const seen = new Set();
+        const combined = [...data.recentVisits, ...incoming.recentVisits].filter(v => {
+            if (!v || !v.time || !v.page) return false;
+            if (SCANNER_PROBE_REGEX.test(v.page)) return false;
+            const key = `${v.time}_${v.page}_${v.country}`;
+            if (seen.has(key)) return false;
+            seen.add(key);
+            return true;
+        });
+        combined.sort((a, b) => new Date(b.time) - new Date(a.time));
+        data.recentVisits = combined.slice(0, 40);
+    }
+}
+
+// Load persisted local data
 try {
     if (fs.existsSync(DATA_FILE)) {
         const raw = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
         if (raw && typeof raw.daily === 'object') {
-            data.daily = raw.daily;
-            data.recentVisits = Array.isArray(raw.recentVisits) ? raw.recentVisits : [];
-            // Clean up any stray scanner probes from past logs
-            data.recentVisits = data.recentVisits.filter(v => v && !SCANNER_PROBE_REGEX.test(v.page));
-            Object.values(data.daily).forEach(rec => {
-                if (rec && rec.pages) {
-                    Object.keys(rec.pages).forEach(p => {
-                        if (SCANNER_PROBE_REGEX.test(p)) delete rec.pages[p];
-                    });
-                }
-            });
+            mergeData(raw);
         }
     }
 } catch (e) {
     console.error('[Analytics] Failed to load analytics-data.json:', e.message);
 }
+
+// Automated Cloud Sync (Upstash Redis)
+async function syncFromCloud() {
+    if (!UPSTASH_URL || !UPSTASH_TOKEN) return;
+    try {
+        console.log('[Analytics] Fetching persisted data from Upstash Cloud...');
+        const res = await fetch(`${UPSTASH_URL}/get/tradeboy_analytics_v1`, {
+            headers: { Authorization: `Bearer ${UPSTASH_TOKEN}` }
+        });
+        if (res.ok) {
+            const body = await res.json();
+            if (body && body.result) {
+                const cloudData = typeof body.result === 'string' ? JSON.parse(body.result) : body.result;
+                if (cloudData) {
+                    mergeData(cloudData);
+                    console.log('[Analytics] Successfully restored analytics data from Upstash Cloud!');
+                    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
+                }
+            }
+        }
+    } catch (e) {
+        console.error('[Analytics] Failed to fetch from Upstash Cloud:', e.message);
+    }
+}
+
+let cloudSyncTimeout = null;
+function scheduleCloudSync() {
+    if (!UPSTASH_URL || !UPSTASH_TOKEN) return;
+    if (cloudSyncTimeout) return;
+    cloudSyncTimeout = setTimeout(async () => {
+        cloudSyncTimeout = null;
+        try {
+            await fetch(`${UPSTASH_URL}/set/tradeboy_analytics_v1`, {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${UPSTASH_TOKEN}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+        } catch (e) {
+            console.error('[Analytics] Upstash Cloud Sync failed:', e.message);
+        }
+    }, 25000);
+}
+
+// Trigger cloud pull on boot
+syncFromCloud();
 
 // Debounced file save
 let saveTimeout = null;
@@ -70,6 +159,7 @@ function saveToDisk() {
         // Save to disk
         fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
         isDirty = false;
+        scheduleCloudSync();
     } catch (e) {
         console.error('[Analytics] Error saving analytics-data.json:', e.message);
     }
@@ -428,14 +518,27 @@ function getStats(range = '7d') {
         topCountries,
         devices: deviceCounts,
         events: eventCounts,
-        recentVisits: data.recentVisits.slice(0, 20)
+        recentVisits: data.recentVisits.slice(0, 20),
+        cloudSync: Boolean(UPSTASH_URL && UPSTASH_TOKEN)
     };
+}
+
+function exportData() {
+    return JSON.stringify(data, null, 2);
+}
+
+function importData(imported) {
+    mergeData(imported);
+    saveToDisk();
+    scheduleCloudSync();
 }
 
 module.exports = {
     trackMiddleware,
     trackEvent,
     getStats,
-    saveToDisk
+    saveToDisk,
+    exportData,
+    importData
 };
 

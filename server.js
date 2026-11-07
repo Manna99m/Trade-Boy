@@ -778,6 +778,29 @@ app.post('/api/analytics/event', (req, res) => {
     res.json({ ok: true });
 });
 
+app.get('/api/analytics/export', (req, res) => {
+    const key = req.query.key || req.headers['x-admin-key'];
+    if (!isValidAnalyticsKey(key)) {
+        return res.status(401).json({ error: 'Unauthorized: Invalid Admin Key' });
+    }
+    res.setHeader('Content-Disposition', 'attachment; filename="tradeboy-analytics-backup.json"');
+    res.setHeader('Content-Type', 'application/json');
+    res.send(analytics.exportData());
+});
+
+app.post('/api/analytics/import', (req, res) => {
+    const key = req.query.key || req.headers['x-admin-key'];
+    if (!isValidAnalyticsKey(key)) {
+        return res.status(401).json({ error: 'Unauthorized: Invalid Admin Key' });
+    }
+    const imported = req.body;
+    if (!imported || typeof imported !== 'object') {
+        return res.status(400).json({ error: 'Invalid JSON payload' });
+    }
+    analytics.importData(imported);
+    res.json({ ok: true, message: 'Analytics data restored successfully' });
+});
+
 function generateTourId() {
     return 'TB-' + Math.floor(1000 + Math.random() * 9000);
 }

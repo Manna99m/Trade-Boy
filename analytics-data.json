@@ -1,0 +1,98 @@
+{
+  "daily": {
+    "2026-11-06": {
+      "pageviews": 52,
+      "uniques": [
+        "u_bd_1",
+        "u_bd_2",
+        "u_bd_3",
+        "u_bd_4",
+        "u_bd_5",
+        "u_de_1",
+        "u_de_2",
+        "u_de_3",
+        "u_de_4",
+        "u_ru_1",
+        "u_ru_2",
+        "u_ru_3",
+        "u_sg_1",
+        "u_sg_2",
+        "u_sg_3",
+        "u_hu_1",
+        "u_hu_2",
+        "u_us_1",
+        "u_us_2",
+        "u_us_3"
+      ],
+      "pages": {
+        "/": 32,
+        "/best-team-for-maestro": 12,
+        "/best-team-for-osh": 8
+      },
+      "referrers": {
+        "Direct / None": 30,
+        "YouTube": 15,
+        "Discord": 7
+      },
+      "countries": {
+        "BD": 22,
+        "DE": 14,
+        "RU": 5,
+        "SG": 4,
+        "HU": 4,
+        "US": 3
+      },
+      "devices": {
+        "desktop": 45,
+        "mobile": 7,
+        "tablet": 0
+      },
+      "events": {
+        "promo_copy": 2,
+        "affiliate_click": 1
+      }
+    }
+  },
+  "recentVisits": [
+    {
+      "time": "2026-11-06T11:40:00.000Z",
+      "page": "/best-team-for-maestro",
+      "ref": "Direct",
+      "country": "DE",
+      "device": "desktop",
+      "isNew": false
+    },
+    {
+      "time": "2026-11-06T11:39:00.000Z",
+      "page": "/",
+      "ref": "YouTube",
+      "country": "DE",
+      "device": "desktop",
+      "isNew": true
+    },
+    {
+      "time": "2026-11-06T11:37:00.000Z",
+      "page": "/",
+      "ref": "Direct / None",
+      "country": "HU",
+      "device": "desktop",
+      "isNew": true
+    },
+    {
+      "time": "2026-11-06T11:19:00.000Z",
+      "page": "/",
+      "ref": "Direct / None",
+      "country": "BD",
+      "device": "desktop",
+      "isNew": false
+    },
+    {
+      "time": "2026-11-06T11:16:00.000Z",
+      "page": "/",
+      "ref": "Direct / None",
+      "country": "BD",
+      "device": "desktop",
+      "isNew": false
+    }
+  ]
+}
