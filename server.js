@@ -63,8 +63,8 @@ const GUIDES = {
     },
     'hero-wars-event-teams': {
         id: 'event-teams',
-        title: 'Hero Wars Event Teams - EVA Chapters (2026) | Trade Boy',
-        desc: 'Best Hero Wars teams for the current events and EVA chapters, with lineups, difficulty and video guides.',
+        title: 'Hero Wars Event Teams (2026) | Trade Boy',
+        desc: 'Best Hero Wars event teams, battle lineups, and chapter guides for upcoming special events.',
         img: 'event-teams.jpg'
     }
 };
