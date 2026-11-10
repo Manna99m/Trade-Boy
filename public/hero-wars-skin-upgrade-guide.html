@@ -381,6 +381,93 @@
             }
         }
 
+        /* Skill Breakdown List */
+        .skill-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 20px 0 24px;
+        }
+        .skill-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.035);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+        }
+        .skill-item:hover {
+            transform: translateX(4px);
+            border-color: rgba(245, 158, 11, 0.45);
+            background: rgba(255, 255, 255, 0.06);
+        }
+        .skill-icon-wrap {
+            width: 54px;
+            height: 54px;
+            flex-shrink: 0;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid rgba(245, 158, 11, 0.6);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+            background: #000;
+        }
+        .skill-icon-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .skill-info {
+            flex: 1;
+        }
+        .skill-info h4 {
+            margin: 0 0 4px !important;
+            color: #fbbf24;
+            font-size: 1.1rem;
+            font-family: 'Oxanium', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .skill-scaling-badge {
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .scaling-magic { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.35); }
+        .scaling-physical { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35); }
+        .scaling-level { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); }
+        .scaling-dodge { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.35); }
+        .skill-info p {
+            margin: 0 !important;
+            font-size: 0.96rem;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+        @media (max-width: 600px) {
+            .skill-item {
+                align-items: flex-start;
+                gap: 12px;
+                padding: 12px;
+            }
+            .skill-icon-wrap {
+                width: 44px;
+                height: 44px;
+            }
+            .skill-info h4 {
+                font-size: 0.98rem;
+            }
+            .skill-info p {
+                font-size: 0.9rem;
+            }
+        }
+
         /* Comparison Table */
         .table-scroll { overflow-x: auto; margin: 24px 0 28px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.12); }
         .blog-table { width: 100%; border-collapse: collapse; font-size: 1rem; text-align: left; }
@@ -702,6 +789,46 @@
         <p>If you check his skill descriptions, you'll notice that the damage of every single rocket scales directly with <strong>Magic Attack</strong>.</p>
         <p>This makes Magic Attack the single most important offensive stat for Orion.</p>
 
+        <!-- Orion Skills Breakdown with Icons -->
+        <div class="skill-list">
+            <div class="skill-item">
+                <div class="skill-icon-wrap">
+                    <img src="/blog/skins/orion-skill-total-destruction.png" alt="Total Destruction skill icon" class="no-frame">
+                </div>
+                <div class="skill-info">
+                    <h4>Total Destruction <span class="skill-scaling-badge scaling-magic">Magic Attack Scaling</span></h4>
+                    <p>Fires 6 magic missiles at enemies with the highest health. Missile damage scales directly with Orion's Magic Attack.</p>
+                </div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-icon-wrap">
+                    <img src="/blog/skins/orion-skill-magnetic-field.png" alt="Magnetic Field skill icon" class="no-frame">
+                </div>
+                <div class="skill-info">
+                    <h4>Magnetic Field <span class="skill-scaling-badge scaling-magic">Magic Attack Scaling</span></h4>
+                    <p>Detonates an area explosion in the enemy backline dealing magic damage that scales with Magic Attack and slowing enemy movement.</p>
+                </div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-icon-wrap">
+                    <img src="/blog/skins/orion-skill-antimatter-blast.png" alt="Antimatter Blast skill icon" class="no-frame">
+                </div>
+                <div class="skill-info">
+                    <h4>Antimatter Blast <span class="skill-scaling-badge scaling-magic">Magic Attack Scaling</span></h4>
+                    <p>Launches a high-yield projectile at the nearest target, dealing magic damage scaled with Magic Attack and stunning the target for 4 seconds.</p>
+                </div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-icon-wrap">
+                    <img src="/blog/skins/orion-skill-full-charge.png" alt="Full Charge skill icon" class="no-frame">
+                </div>
+                <div class="skill-info">
+                    <h4>Full Charge <span class="skill-scaling-badge scaling-level">Energy Generation Passive</span></h4>
+                    <p>Passive ability that charges Orion's energy meter upon every attack, enabling him to launch Total Destruction barrages back-to-back.</p>
+                </div>
+            </div>
+        </div>
+
         <div class="callout-tip">
             <h4>🎯 Orion's Recommended Upgrade Order:</h4>
             <ol style="margin-left: 20px; margin-top: 8px; margin-bottom: 0;">
@@ -726,11 +853,45 @@
         <p>Sebastian is another great example of why checking skill descriptions matters so much.</p>
         <p>At first glance, beginners assume Sebastian is merely a utility support hero who cleanses debuffs via his ultimate, Ode to Serenity. However, several of his most devastating combat skills scale directly with <strong>Physical Attack</strong>:</p>
 
-        <ul>
-            <li><strong>Battle Song:</strong> Physical Attack directly improves the bonus critical hit rate granted to your entire team.</li>
-            <li><strong>Striking Solo:</strong> Physical Attack directly scales the extra pure damage dealt every time an ally lands a critical strike.</li>
-            <li><strong>Public Idol:</strong> Physical Attack increases Sebastian's starting energy at the beginning of the battle, allowing him to shield his team faster.</li>
-        </ul>
+        <!-- Sebastian Skills Breakdown with Icons -->
+        <div class="skill-list">
+            <div class="skill-item">
+                <div class="skill-icon-wrap">
+                    <img src="/blog/skins/sebastian-skill-battle-song.png" alt="Battle Song skill icon" class="no-frame">
+                </div>
+                <div class="skill-info">
+                    <h4>Battle Song <span class="skill-scaling-badge scaling-physical">Physical Attack Scaling</span></h4>
+                    <p>Increases the Critical Hit chance of all allies with a critical stat for 5 seconds. The crit bonus formula scales directly with Sebastian's <strong>Physical Attack</strong>.</p>
+                </div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-icon-wrap">
+                    <img src="/blog/skins/sebastian-skill-striking-solo.png" alt="Striking Solo skill icon" class="no-frame">
+                </div>
+                <div class="skill-info">
+                    <h4>Striking Solo <span class="skill-scaling-badge scaling-physical">Physical Attack Scaling</span></h4>
+                    <p>Whenever an ally lands a critical strike, it triggers an explosion of bonus Pure Damage. This extra damage scales heavily with Sebastian's <strong>Physical Attack</strong>.</p>
+                </div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-icon-wrap">
+                    <img src="/blog/skins/sebastian-skill-public-idol.png" alt="Public Idol skill icon" class="no-frame">
+                </div>
+                <div class="skill-info">
+                    <h4>Public Idol <span class="skill-scaling-badge scaling-physical">Physical Attack Scaling</span></h4>
+                    <p>Sebastian enters combat with an initial energy head start. The bonus starting energy scales with his <strong>Physical Attack</strong>, letting him cast his ultimate faster.</p>
+                </div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-icon-wrap">
+                    <img src="/blog/skins/sebastian-skill-ode-to-serenity.png" alt="Ode to Serenity skill icon" class="no-frame">
+                </div>
+                <div class="skill-info">
+                    <h4>Ode to Serenity <span class="skill-scaling-badge scaling-level">Ultimate / Level Dependent</span></h4>
+                    <p>Removes all current debuffs from allies and deploys a protective barrier shielding against up to 15 subsequent debuff attempts.</p>
+                </div>
+            </div>
+        </div>
 
         <div class="callout-tip">
             <h4>💡 Why Upgrade Sebastian's Physical Attack?</h4>
@@ -756,6 +917,46 @@
             <p><strong>Dorian's Vampirism Aura does NOT depend on his Magic Attack! It scales exclusively with its skill level.</strong> Upgrading his Magic Attack skin only improves the damage of his bats (Wings of Night), which is negligible compared to his aura.</p>
         </div>
 
+        <!-- Dorian Skills Breakdown with Icons -->
+        <div class="skill-list">
+            <div class="skill-item">
+                <div class="skill-icon-wrap">
+                    <img src="/blog/skins/dorian-skill-initiation.png" alt="Initiation skill icon" class="no-frame">
+                </div>
+                <div class="skill-info">
+                    <h4>Initiation (Skill 4) <span class="skill-scaling-badge scaling-level">Skill Level Dependent Only!</span></h4>
+                    <p>Creates a passive Vampirism Aura around Dorian. Nearby allies heal for a percentage of damage dealt. <strong>Scales exclusively with skill level</strong>—zero benefit from Magic Attack skin!</p>
+                </div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-icon-wrap">
+                    <img src="/blog/skins/dorian-skill-wings-of-night.png" alt="Wings of Night skill icon" class="no-frame">
+                </div>
+                <div class="skill-info">
+                    <h4>Wings of Night (Skill 3) <span class="skill-scaling-badge scaling-magic">Magic Attack Scaling (Low Priority)</span></h4>
+                    <p>Releases a flock of bats that deal magic damage twice and restore Dorian's health. While it scales with Magic Attack, this damage is minimal and does not warrant skin stone investment.</p>
+                </div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-icon-wrap">
+                    <img src="/blog/skins/dorian-skill-fountain-of-blood.png" alt="Fountain of Blood skill icon" class="no-frame">
+                </div>
+                <div class="skill-info">
+                    <h4>Fountain of Blood (Skill 1) <span class="skill-scaling-badge scaling-level">Debuff Mark</span></h4>
+                    <p>Marks the nearest enemy with a blood curse for 7 seconds. Allied heroes recover health whenever they inflict damage on the marked target.</p>
+                </div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-icon-wrap">
+                    <img src="/blog/skins/dorian-skill-ancestors-amulet.png" alt="Ancestors' Amulet skill icon" class="no-frame">
+                </div>
+                <div class="skill-info">
+                    <h4>Ancestors' Amulet (Skill 2) <span class="skill-scaling-badge scaling-level">Health Transfer</span></h4>
+                    <p>Dorian sacrifices 20% of his current health to immediately restore a large amount of health to the allied hero with the lowest current HP.</p>
+                </div>
+            </div>
+        </div>
+
         <p>When you are a beginner with limited Skin Stones, you <strong>do not need to spend Skin Stones on Dorian's Magic Attack skin</strong>.</p>
         <p>Instead, focus your Skin Stones on heroes that benefit directly from stat upgrades. If Dorian dies too quickly in battle, you can eventually consider upgrading his Health or defensive stats, but your main damage dealers and tank should always come first.</p>
 
@@ -774,6 +975,46 @@
         <p>While Dante's abilities benefit from Physical Attack, he is primarily played for his incredible <strong>Dodge-based survivability and counter-utility</strong>.</p>
 
         <p>Whenever Dante successfully dodges an attack, he launches an additional retaliatory spear at an opponent. Higher Dodge means more frequent counters and significantly higher effective health against physical teams.</p>
+
+        <!-- Dante Skills Breakdown with Icons -->
+        <div class="skill-list">
+            <div class="skill-item">
+                <div class="skill-icon-wrap">
+                    <img src="/blog/skins/dante-skill-foresight.png" alt="Foresight skill icon" class="no-frame">
+                </div>
+                <div class="skill-info">
+                    <h4>Foresight (Skill 2) <span class="skill-scaling-badge scaling-physical">Physical Attack &amp; Dodge Scaling</span></h4>
+                    <p>Increases Dodge for Dante and all allies for 5 seconds. The team Dodge bonus directly scales with Dante's <strong>Physical Attack</strong>, while keeping Dante elusive.</p>
+                </div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-icon-wrap">
+                    <img src="/blog/skins/dante-skill-retribution.png" alt="Retribution skill icon" class="no-frame">
+                </div>
+                <div class="skill-info">
+                    <h4>Retribution (Skill 3) <span class="skill-scaling-badge scaling-dodge">Dodge-Triggered Counter</span></h4>
+                    <p>Every time Dante successfully dodges an attack, he throws a retaliatory spectral spear at the nearest enemy. Higher Dodge activates this passive much more frequently!</p>
+                </div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-icon-wrap">
+                    <img src="/blog/skins/dante-skill-instrument-of-fate.png" alt="Instrument of Fate skill icon" class="no-frame">
+                </div>
+                <div class="skill-info">
+                    <h4>Instrument of Fate (Skill 1) <span class="skill-scaling-badge scaling-physical">Physical Attack Scaling</span></h4>
+                    <p>Launches spectral spears at all enemies, dealing physical damage, knocking them backward, and disrupting enemy formations.</p>
+                </div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-icon-wrap">
+                    <img src="/blog/skins/dante-skill-shackles-of-weakness.png" alt="Shackles of Weakness skill icon" class="no-frame">
+                </div>
+                <div class="skill-info">
+                    <h4>Shackles of Weakness (Skill 4) <span class="skill-scaling-badge scaling-level">Main Stat Debuff</span></h4>
+                    <p>Dante's spears decrease the target's main stat (Strength, Agility, or Intelligence) for 5 seconds, crippling enemy damage and defenses.</p>
+                </div>
+            </div>
+        </div>
 
         <div class="callout-tip">
             <h4>🎯 Dante's Recommended Upgrade Strategy:</h4>
