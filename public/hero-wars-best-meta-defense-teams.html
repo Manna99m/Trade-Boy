@@ -255,6 +255,125 @@
             .team-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
+        /* Smooth scrolling & Jump Navigation (matches Osh page style) */
+        html {
+            scroll-behavior: smooth;
+        }
+        .team-section-target {
+            scroll-margin-top: 100px;
+        }
+        .jump-nav {
+            margin: 28px 0 32px;
+            text-align: center;
+        }
+        .jump-title {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            color: #aef649;
+            font-size: 1.15rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-family: 'Oxanium', sans-serif;
+        }
+        .jump-grid {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .jump-card-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 124px;
+            min-height: 124px;
+            padding: 12px 8px;
+            border-radius: 16px;
+            border: 2px solid rgba(174, 246, 73, 0.5);
+            background: linear-gradient(145deg, rgba(20, 24, 33, 0.95), rgba(10, 13, 20, 0.95));
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+            cursor: pointer;
+        }
+        .jump-card-btn:hover, .jump-card-btn:focus-visible {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 8px 25px rgba(174, 246, 73, 0.45);
+            border-color: #aef649;
+            background: linear-gradient(145deg, rgba(30, 38, 52, 0.95), rgba(15, 20, 30, 0.95));
+        }
+        .jump-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #000;
+            font-family: 'Oxanium', sans-serif;
+            font-weight: 800;
+            font-size: 0.82rem;
+            padding: 3px 10px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+        .jump-hero-img {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: 2px solid rgba(245, 158, 11, 0.7);
+            object-fit: cover;
+            background: rgba(0, 0, 0, 0.4);
+        }
+        .jump-label {
+            color: #cbd5e1;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-align: center;
+            line-height: 1.2;
+        }
+        .jump-card-btn:hover .jump-label {
+            color: #aef649;
+        }
+        .table-jump-link {
+            color: #f59e0b;
+            text-decoration: none;
+            border-bottom: 1px dotted rgba(245, 158, 11, 0.6);
+            transition: color 0.15s ease;
+        }
+        .table-jump-link:hover {
+            color: #aef649;
+            border-bottom-color: #aef649;
+        }
+        @media (max-width: 640px) {
+            .jump-grid {
+                gap: 10px;
+            }
+            .jump-card-btn {
+                width: 100px;
+                min-height: 108px;
+                padding: 10px 6px;
+            }
+            .jump-hero-img {
+                width: 44px;
+                height: 44px;
+            }
+            .jump-badge {
+                font-size: 0.75rem;
+                padding: 2px 8px;
+            }
+            .jump-label {
+                font-size: 0.72rem;
+            }
+        }
+        @media (max-width: 360px) {
+            .jump-card-btn {
+                width: calc(50% - 6px);
+            }
+        }
+
         /* Tables */
         .table-scroll { overflow-x: auto; margin: 24px 0 28px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.12); }
         .blog-table { width: 100%; border-collapse: collapse; font-size: 1rem; text-align: left; }
@@ -435,31 +554,31 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><strong>Team 1</strong></td>
+                        <td><a href="#team-1" class="table-jump-link"><strong>Team 1</strong></a></td>
                         <td>Electra, Cascade, Fluffy, Orion, Augustus</td>
                         <td><span style="color: #38bdf8; font-weight: bold;">Khorus</span></td>
                         <td>Magic damage and protection</td>
                     </tr>
                     <tr>
-                        <td><strong>Team 2</strong></td>
+                        <td><a href="#team-2" class="table-jump-link"><strong>Team 2</strong></a></td>
                         <td>Electra, Byrna, Jorgen, Fluffy, Polaris</td>
                         <td><span style="color: #38bdf8; font-weight: bold;">Khorus</span></td>
                         <td>Magic damage and control</td>
                     </tr>
                     <tr>
-                        <td><strong>Team 3</strong></td>
+                        <td><a href="#team-3" class="table-jump-link"><strong>Team 3</strong></a></td>
                         <td>Electra, Fluffy, Orion, Augustus, Dorian</td>
                         <td><span style="color: #38bdf8; font-weight: bold;">Khorus</span></td>
                         <td>Magic damage and healing</td>
                     </tr>
                     <tr>
-                        <td><strong>Team 4</strong></td>
+                        <td><a href="#team-4" class="table-jump-link"><strong>Team 4</strong></a></td>
                         <td>Dante, Nebula, Orion, Augustus, Dorian</td>
                         <td><span style="color: #38bdf8; font-weight: bold;">Khorus</span></td>
                         <td>Dodge and magic damage</td>
                     </tr>
                     <tr>
-                        <td><strong>Team 5</strong></td>
+                        <td><a href="#team-5" class="table-jump-link"><strong>Team 5</strong></a></td>
                         <td>Galahad, Lyria, Tristan, Sebastian, Lara Croft</td>
                         <td><span style="color: #34d399; font-weight: bold;">Axel</span></td>
                         <td>Physical damage and support</td>
@@ -470,8 +589,40 @@
 
         <p>Let's look at each team individually and understand its strategy.</p>
 
+        <!-- Jump to Section (matches Osh page) -->
+        <nav class="jump-nav" aria-label="Jump to a team">
+            <div class="jump-title"><span>⚡</span> Jump to:</div>
+            <div class="jump-grid">
+                <a href="#team-1" class="jump-card-btn" onclick="event.preventDefault(); const target = document.getElementById('team-1'); if(target) { target.scrollIntoView({ behavior: 'smooth' }); history.pushState(null, null, '#team-1'); }" aria-label="Jump to Team 1">
+                    <span class="jump-badge">Team 1</span>
+                    <img src="/heroes/Electra.png" alt="Electra" class="jump-hero-img no-frame">
+                    <span class="jump-label">Electra &amp; Fluffy</span>
+                </a>
+                <a href="#team-2" class="jump-card-btn" onclick="event.preventDefault(); const target = document.getElementById('team-2'); if(target) { target.scrollIntoView({ behavior: 'smooth' }); history.pushState(null, null, '#team-2'); }" aria-label="Jump to Team 2">
+                    <span class="jump-badge">Team 2</span>
+                    <img src="/heroes/byrna.webp" alt="Byrna" class="jump-hero-img no-frame">
+                    <span class="jump-label">Byrna &amp; Polaris</span>
+                </a>
+                <a href="#team-3" class="jump-card-btn" onclick="event.preventDefault(); const target = document.getElementById('team-3'); if(target) { target.scrollIntoView({ behavior: 'smooth' }); history.pushState(null, null, '#team-3'); }" aria-label="Jump to Team 3">
+                    <span class="jump-badge">Team 3</span>
+                    <img src="/heroes/Dorian.png" alt="Dorian" class="jump-hero-img no-frame">
+                    <span class="jump-label">Dorian Sustain</span>
+                </a>
+                <a href="#team-4" class="jump-card-btn" onclick="event.preventDefault(); const target = document.getElementById('team-4'); if(target) { target.scrollIntoView({ behavior: 'smooth' }); history.pushState(null, null, '#team-4'); }" aria-label="Jump to Team 4">
+                    <span class="jump-badge">Team 4</span>
+                    <img src="/heroes/Dante.png" alt="Dante" class="jump-hero-img no-frame">
+                    <span class="jump-label">Dante Dodge</span>
+                </a>
+                <a href="#team-5" class="jump-card-btn" onclick="event.preventDefault(); const target = document.getElementById('team-5'); if(target) { target.scrollIntoView({ behavior: 'smooth' }); history.pushState(null, null, '#team-5'); }" aria-label="Jump to Team 5">
+                    <span class="jump-badge">Team 5</span>
+                    <img src="/heroes/Galahad.png" alt="Galahad" class="jump-hero-img no-frame">
+                    <span class="jump-label">Physical Burst</span>
+                </a>
+            </div>
+        </nav>
+
         <!-- TEAM 1 -->
-        <h2>1. Electra, Cascade, Fluffy, Orion, and Augustus</h2>
+        <h2 id="team-1" class="team-section-target">1. Electra, Cascade, Fluffy, Orion, and Augustus</h2>
         
         <div class="team-meta-header">
             <span class="team-badge-tag">Team 1</span>
@@ -518,7 +669,7 @@
         </div>
 
         <!-- TEAM 2 -->
-        <h2>2. Electra, Byrna, Jorgen, Fluffy, and Polaris</h2>
+        <h2 id="team-2" class="team-section-target">2. Electra, Byrna, Jorgen, Fluffy, and Polaris</h2>
         
         <div class="team-meta-header">
             <span class="team-badge-tag">Team 2</span>
@@ -565,7 +716,7 @@
         </div>
 
         <!-- TEAM 3 -->
-        <h2>3. Electra, Fluffy, Orion, Augustus, and Dorian</h2>
+        <h2 id="team-3" class="team-section-target">3. Electra, Fluffy, Orion, Augustus, and Dorian</h2>
         
         <div class="team-meta-header">
             <span class="team-badge-tag">Team 3</span>
@@ -614,7 +765,7 @@
         </div>
 
         <!-- TEAM 4 -->
-        <h2>4. Dante, Nebula, Orion, Augustus, and Dorian</h2>
+        <h2 id="team-4" class="team-section-target">4. Dante, Nebula, Orion, Augustus, and Dorian</h2>
         
         <div class="team-meta-header">
             <span class="team-badge-tag">Team 4</span>
@@ -662,7 +813,7 @@
         </div>
 
         <!-- TEAM 5 -->
-        <h2>5. Galahad, Lyria, Tristan, Sebastian, and Lara Croft</h2>
+        <h2 id="team-5" class="team-section-target">5. Galahad, Lyria, Tristan, Sebastian, and Lara Croft</h2>
         
         <div class="team-meta-header">
             <span class="team-badge-tag">Team 5</span>
