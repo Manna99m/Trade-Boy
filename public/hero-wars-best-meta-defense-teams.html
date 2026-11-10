@@ -161,136 +161,111 @@
         .callout-tip h4 { margin: 0 0 8px; color: #34d399; font-family: 'Oxanium', sans-serif; font-size: 1.15rem; }
         .callout-tip p { margin: 0; color: #e2e8f0; }
 
-        /* Team Showcase Box */
-        .team-showcase {
-            background: linear-gradient(145deg, rgba(25, 30, 42, 0.85), rgba(15, 18, 26, 0.95));
-            border: 1px solid rgba(245, 158, 11, 0.28);
-            border-radius: 16px;
-            padding: 24px;
-            margin: 32px 0 24px;
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
-            position: relative;
-            overflow: hidden;
-        }
-        .team-showcase::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; height: 3px;
-            background: linear-gradient(90deg, #f59e0b, #eab308, #38bdf8);
-        }
-        .team-showcase-header {
+        /* Team Composition Box (Exact style matching Asgard/Maestro guides) */
+        .team-meta-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
             flex-wrap: wrap;
-            gap: 14px;
-            margin-bottom: 20px;
-            padding-bottom: 16px;
+            gap: 12px;
+            margin: 24px 0 14px;
+            padding-bottom: 10px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
-        .team-title-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .team-badge {
+        .team-badge-tag {
             background: linear-gradient(135deg, #f59e0b, #d97706);
             color: #000;
             font-family: 'Oxanium', sans-serif;
             font-weight: 800;
-            font-size: 0.95rem;
-            padding: 5px 14px;
-            border-radius: 8px;
+            font-size: 0.92rem;
+            padding: 4px 12px;
+            border-radius: 6px;
             text-transform: uppercase;
             letter-spacing: 0.8px;
-            box-shadow: 0 3px 10px rgba(245, 158, 11, 0.35);
+            display: inline-block;
         }
-        .team-strategy-tag {
-            font-size: 0.95rem;
+        .team-strategy-pill {
             color: #38bdf8;
             font-weight: 600;
-        }
-        .team-pet-badge {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(56, 189, 248, 0.12);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            padding: 6px 14px;
-            border-radius: 999px;
-            font-size: 0.9rem;
-            color: #bae6fd;
-        }
-        .team-pet-badge img {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            border: 1px solid #38bdf8;
-            object-fit: cover;
+            font-size: 0.98rem;
         }
 
-        /* 5 Hero Cards in a row */
-        .team-hero-grid {
+        .team-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 12px;
-            margin-bottom: 18px;
+            margin: 0 0 16px;
         }
-        @media (max-width: 768px) {
-            .team-hero-grid {
-                grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-                gap: 10px;
-            }
-        }
-        .team-hero-card {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 14px 10px;
+        .team-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 6px 12px;
+            border-radius: 14px;
+            border: 1px solid rgba(128,128,128,0.35);
+            background: rgba(128,128,128,0.08);
             text-align: center;
+            line-height: 1.25;
             transition: transform 0.2s ease, border-color 0.2s ease;
         }
-        .team-hero-card:hover {
+        .team-card:hover {
             transform: translateY(-3px);
-            border-color: rgba(245, 158, 11, 0.4);
+            border-color: rgba(245, 158, 11, 0.5);
+            background: rgba(128,128,128,0.12);
         }
-        .team-hero-card img {
-            width: 68px;
-            height: 68px;
-            border-radius: 50%;
-            border: 2px solid #f59e0b;
-            background: #111;
-            margin: 0 auto 10px;
-            display: block;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-            object-fit: cover;
+        .team-card .hero-frame-wrapper {
+            width: 76px !important;
+            height: 76px !important;
+            margin: 0 !important;
         }
-        .team-hero-card .hero-name {
-            font-family: 'Oxanium', sans-serif;
-            font-weight: 700;
+        .team-card .pet-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            opacity: 0.95;
+            color: #cbd5e1;
+        }
+        .team-card .pet-row .hero-frame-wrapper {
+            width: 34px !important;
+            height: 34px !important;
+        }
+        .team-card strong {
             font-size: 1rem;
             color: #fff;
-            margin-bottom: 4px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            font-weight: 700;
+            margin-top: 2px;
         }
-        .team-hero-card .hero-role-pill {
-            display: inline-block;
-            font-size: 0.75rem;
-            font-weight: 600;
-            padding: 2px 8px;
-            border-radius: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            background: rgba(255, 255, 255, 0.08);
-            color: #94a3b8;
+        .team-pet {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            margin: 0 0 24px;
+            border-radius: 12px;
+            border: 1px dashed rgba(174,246,73,0.6);
+            background: rgba(174,246,73,0.08);
+            color: #e2e8f0;
+            font-size: 0.95rem;
         }
-        .role-tank { background: rgba(239, 68, 68, 0.2) !important; color: #fca5a5 !important; border: 1px solid rgba(239, 68, 68, 0.3); }
-        .role-damage { background: rgba(245, 158, 11, 0.2) !important; color: #fde047 !important; border: 1px solid rgba(245, 158, 11, 0.3); }
-        .role-support { background: rgba(56, 189, 248, 0.2) !important; color: #7dd3fc !important; border: 1px solid rgba(56, 189, 248, 0.3); }
-        .role-control { background: rgba(168, 85, 247, 0.2) !important; color: #d8b4fe !important; border: 1px solid rgba(168, 85, 247, 0.3); }
-        .role-healer { background: rgba(34, 197, 94, 0.2) !important; color: #86efac !important; border: 1px solid rgba(34, 197, 94, 0.3); }
+        .team-pet .hero-frame-wrapper {
+            width: 48px !important;
+            height: 48px !important;
+            margin: 0 !important;
+            flex-shrink: 0;
+        }
+        .team-pet strong {
+            color: #aef649;
+        }
+
+        @media (max-width: 768px) {
+            .team-grid { grid-template-columns: repeat(3, 1fr); }
+            .team-meta-header { flex-direction: column; align-items: flex-start; }
+        }
+        @media (max-width: 420px) {
+            .team-grid { grid-template-columns: repeat(2, 1fr); }
+        }
 
         /* Tables */
         .table-scroll { overflow-x: auto; margin: 24px 0 28px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.12); }
@@ -369,7 +344,6 @@
             .blog-container { margin: 15px; padding: 18px; }
             .blog-container h1 { font-size: 1.85rem; }
             .blog-container h2 { font-size: 1.45rem; }
-            .team-showcase-header { flex-direction: column; align-items: flex-start; }
         }
     </style>
 
@@ -511,45 +485,20 @@
         <!-- TEAM 1 -->
         <h2>1. Electra, Cascade, Fluffy, Orion, and Augustus</h2>
         
-        <div class="team-showcase">
-            <div class="team-showcase-header">
-                <div class="team-title-row">
-                    <span class="team-badge">Team 1</span>
-                    <span class="team-strategy-tag">⚡ Magic Damage, Protection, and Survivability</span>
-                </div>
-                <div class="team-pet-badge">
-                    <img src="/pets/Khorus.png" alt="Khorus">
-                    <span>Team Pet: <strong>Khorus</strong></span>
-                </div>
-            </div>
-            <div class="team-hero-grid">
-                <div class="team-hero-card">
-                    <img src="/heroes/Electra.png" alt="Electra">
-                    <div class="hero-name">Electra</div>
-                    <span class="hero-role-pill role-tank">Tank</span>
-                </div>
-                <div class="team-hero-card">
-                    <img src="/heroes/Cascade.png" alt="Cascade">
-                    <div class="hero-name">Cascade</div>
-                    <span class="hero-role-pill role-support">Support/Mage</span>
-                </div>
-                <div class="team-hero-card">
-                    <img src="/heroes/fluffy.webp" alt="Fluffy">
-                    <div class="hero-name">Fluffy</div>
-                    <span class="hero-role-pill role-support">Protection</span>
-                </div>
-                <div class="team-hero-card">
-                    <img src="/heroes/Orion.png" alt="Orion">
-                    <div class="hero-name">Orion</div>
-                    <span class="hero-role-pill role-damage">Magic DPS</span>
-                </div>
-                <div class="team-hero-card">
-                    <img src="/heroes/Augustus.png" alt="Augustus">
-                    <div class="hero-name">Augustus</div>
-                    <span class="hero-role-pill role-damage">Magic DPS</span>
-                </div>
-            </div>
+        <div class="team-meta-header">
+            <span class="team-badge-tag">Team 1</span>
+            <span class="team-strategy-pill">⚡ Main Strategy: Magic Damage, Protection, and Survivability</span>
         </div>
+
+        <p>Here is the exact team composition:</p>
+        <div class="team-grid">
+            <div class="team-card"><img src="/heroes/Electra.png" alt="Electra"><strong>Electra</strong><span class="pet-row"><img src="/pets/Oliver.png" alt="Oliver">Oliver</span></div>
+            <div class="team-card"><img src="/heroes/Cascade.png" alt="Cascade"><strong>Cascade</strong><span class="pet-row"><img src="/pets/Merlin.png" alt="Merlin">Merlin</span></div>
+            <div class="team-card"><img src="/heroes/fluffy.webp" alt="Fluffy"><strong>Fluffy</strong><span class="pet-row"><img src="/pets/Axel.png" alt="Axel">Axel</span></div>
+            <div class="team-card"><img src="/heroes/Orion.png" alt="Orion"><strong>Orion</strong><span class="pet-row"><img src="/pets/Khorus.png" alt="Khorus">Khorus</span></div>
+            <div class="team-card"><img src="/heroes/Augustus.png" alt="Augustus"><strong>Augustus</strong><span class="pet-row"><img src="/pets/Albus.png" alt="Albus">Albus</span></div>
+        </div>
+        <div class="team-pet"><img src="/pets/Khorus.png" alt="Khorus"><span><strong>Team pet: Khorus</strong> &middot; the small pet under each hero is their patron pet.</span></div>
 
         <p>This is one of the most interesting magic-focused defense combinations currently featured in the meta.</p>
         <p>The foundation of this team is Electra and Fluffy. Together, they provide multiple defensive layers, making it difficult for opponents to eliminate the team's damage dealers.</p>
@@ -583,45 +532,20 @@
         <!-- TEAM 2 -->
         <h2>2. Electra, Byrna, Jorgen, Fluffy, and Polaris</h2>
         
-        <div class="team-showcase">
-            <div class="team-showcase-header">
-                <div class="team-title-row">
-                    <span class="team-badge">Team 2</span>
-                    <span class="team-strategy-tag">❄️ Magic Damage, Crowd Control, and Survivability</span>
-                </div>
-                <div class="team-pet-badge">
-                    <img src="/pets/Khorus.png" alt="Khorus">
-                    <span>Team Pet: <strong>Khorus</strong></span>
-                </div>
-            </div>
-            <div class="team-hero-grid">
-                <div class="team-hero-card">
-                    <img src="/heroes/Electra.png" alt="Electra">
-                    <div class="hero-name">Electra</div>
-                    <span class="hero-role-pill role-tank">Tank</span>
-                </div>
-                <div class="team-hero-card">
-                    <img src="/heroes/byrna.webp" alt="Byrna">
-                    <div class="hero-name">Byrna</div>
-                    <span class="hero-role-pill role-support">Support/Heal</span>
-                </div>
-                <div class="team-hero-card">
-                    <img src="/heroes/Jorgen.png" alt="Jorgen">
-                    <div class="hero-name">Jorgen</div>
-                    <span class="hero-role-pill role-control">Energy Control</span>
-                </div>
-                <div class="team-hero-card">
-                    <img src="/heroes/fluffy.webp" alt="Fluffy">
-                    <div class="hero-name">Fluffy</div>
-                    <span class="hero-role-pill role-support">Protection</span>
-                </div>
-                <div class="team-hero-card">
-                    <img src="/heroes/Polaris.png" alt="Polaris">
-                    <div class="hero-name">Polaris</div>
-                    <span class="hero-role-pill role-control">Crowd Control</span>
-                </div>
-            </div>
+        <div class="team-meta-header">
+            <span class="team-badge-tag">Team 2</span>
+            <span class="team-strategy-pill">❄️ Main Strategy: Magic Damage, Crowd Control, and Survivability</span>
         </div>
+
+        <p>Here is the exact team composition:</p>
+        <div class="team-grid">
+            <div class="team-card"><img src="/heroes/Electra.png" alt="Electra"><strong>Electra</strong><span class="pet-row"><img src="/pets/Oliver.png" alt="Oliver">Oliver</span></div>
+            <div class="team-card"><img src="/heroes/byrna.webp" alt="Byrna"><strong>Byrna</strong><span class="pet-row"><img src="/pets/Merlin.png" alt="Merlin">Merlin</span></div>
+            <div class="team-card"><img src="/heroes/Jorgen.png" alt="Jorgen"><strong>Jorgen</strong><span class="pet-row"><img src="/pets/Biscuit.png" alt="Biscuit">Biscuit</span></div>
+            <div class="team-card"><img src="/heroes/fluffy.webp" alt="Fluffy"><strong>Fluffy</strong><span class="pet-row"><img src="/pets/Axel.png" alt="Axel">Axel</span></div>
+            <div class="team-card"><img src="/heroes/Polaris.png" alt="Polaris"><strong>Polaris</strong><span class="pet-row"><img src="/pets/Mara.png" alt="Mara">Mara</span></div>
+        </div>
+        <div class="team-pet"><img src="/pets/Khorus.png" alt="Khorus"><span><strong>Team pet: Khorus</strong> &middot; the small pet under each hero is their patron pet.</span></div>
 
         <p>This is another Electra and Fluffy combination, but its strategy is quite different from the previous team.</p>
         <p>Instead of concentrating mainly on direct magic damage, this lineup focuses more on protection, control, and disrupting the enemy team's abilities.</p>
@@ -655,45 +579,20 @@
         <!-- TEAM 3 -->
         <h2>3. Electra, Fluffy, Orion, Augustus, and Dorian</h2>
         
-        <div class="team-showcase">
-            <div class="team-showcase-header">
-                <div class="team-title-row">
-                    <span class="team-badge">Team 3</span>
-                    <span class="team-strategy-tag">🩸 Magic Damage and Healing</span>
-                </div>
-                <div class="team-pet-badge">
-                    <img src="/pets/Khorus.png" alt="Khorus">
-                    <span>Team Pet: <strong>Khorus</strong></span>
-                </div>
-            </div>
-            <div class="team-hero-grid">
-                <div class="team-hero-card">
-                    <img src="/heroes/Electra.png" alt="Electra">
-                    <div class="hero-name">Electra</div>
-                    <span class="hero-role-pill role-tank">Tank</span>
-                </div>
-                <div class="team-hero-card">
-                    <img src="/heroes/fluffy.webp" alt="Fluffy">
-                    <div class="hero-name">Fluffy</div>
-                    <span class="hero-role-pill role-support">Protection</span>
-                </div>
-                <div class="team-hero-card">
-                    <img src="/heroes/Orion.png" alt="Orion">
-                    <div class="hero-name">Orion</div>
-                    <span class="hero-role-pill role-damage">Magic DPS</span>
-                </div>
-                <div class="team-hero-card">
-                    <img src="/heroes/Augustus.png" alt="Augustus">
-                    <div class="hero-name">Augustus</div>
-                    <span class="hero-role-pill role-damage">Magic DPS</span>
-                </div>
-                <div class="team-hero-card">
-                    <img src="/heroes/Dorian.png" alt="Dorian">
-                    <div class="hero-name">Dorian</div>
-                    <span class="hero-role-pill role-healer">Healer/Aura</span>
-                </div>
-            </div>
+        <div class="team-meta-header">
+            <span class="team-badge-tag">Team 3</span>
+            <span class="team-strategy-pill">🩸 Main Strategy: Magic Damage and Healing</span>
         </div>
+
+        <p>Here is the exact team composition:</p>
+        <div class="team-grid">
+            <div class="team-card"><img src="/heroes/Electra.png" alt="Electra"><strong>Electra</strong><span class="pet-row"><img src="/pets/Oliver.png" alt="Oliver">Oliver</span></div>
+            <div class="team-card"><img src="/heroes/fluffy.webp" alt="Fluffy"><strong>Fluffy</strong><span class="pet-row"><img src="/pets/Axel.png" alt="Axel">Axel</span></div>
+            <div class="team-card"><img src="/heroes/Orion.png" alt="Orion"><strong>Orion</strong><span class="pet-row"><img src="/pets/Merlin.png" alt="Merlin">Merlin</span></div>
+            <div class="team-card"><img src="/heroes/Augustus.png" alt="Augustus"><strong>Augustus</strong><span class="pet-row"><img src="/pets/Albus.png" alt="Albus">Albus</span></div>
+            <div class="team-card"><img src="/heroes/Dorian.png" alt="Dorian"><strong>Dorian</strong><span class="pet-row"><img src="/pets/Biscuit.png" alt="Biscuit">Biscuit</span></div>
+        </div>
+        <div class="team-pet"><img src="/pets/Khorus.png" alt="Khorus"><span><strong>Team pet: Khorus</strong> &middot; the small pet under each hero is their patron pet.</span></div>
 
         <p>This is another popular Electra and Fluffy combination.</p>
         <p>At first glance, it looks very similar to the first team. However, there's one important difference: instead of Cascade, this lineup uses Dorian.</p>
@@ -729,45 +628,20 @@
         <!-- TEAM 4 -->
         <h2>4. Dante, Nebula, Orion, Augustus, and Dorian</h2>
         
-        <div class="team-showcase">
-            <div class="team-showcase-header">
-                <div class="team-title-row">
-                    <span class="team-badge">Team 4</span>
-                    <span class="team-strategy-tag">💨 Dodge, Magic Damage, and Support</span>
-                </div>
-                <div class="team-pet-badge">
-                    <img src="/pets/Khorus.png" alt="Khorus">
-                    <span>Team Pet: <strong>Khorus</strong></span>
-                </div>
-            </div>
-            <div class="team-hero-grid">
-                <div class="team-hero-card">
-                    <img src="/heroes/Dante.png" alt="Dante">
-                    <div class="hero-name">Dante</div>
-                    <span class="hero-role-pill role-tank">Dodge/Tank</span>
-                </div>
-                <div class="team-hero-card">
-                    <img src="/heroes/Nebula.png" alt="Nebula">
-                    <div class="hero-name">Nebula</div>
-                    <span class="hero-role-pill role-support">Attack Buff</span>
-                </div>
-                <div class="team-hero-card">
-                    <img src="/heroes/Orion.png" alt="Orion">
-                    <div class="hero-name">Orion</div>
-                    <span class="hero-role-pill role-damage">Magic DPS</span>
-                </div>
-                <div class="team-hero-card">
-                    <img src="/heroes/Augustus.png" alt="Augustus">
-                    <div class="hero-name">Augustus</div>
-                    <span class="hero-role-pill role-damage">Magic DPS</span>
-                </div>
-                <div class="team-hero-card">
-                    <img src="/heroes/Dorian.png" alt="Dorian">
-                    <div class="hero-name">Dorian</div>
-                    <span class="hero-role-pill role-healer">Healer/Aura</span>
-                </div>
-            </div>
+        <div class="team-meta-header">
+            <span class="team-badge-tag">Team 4</span>
+            <span class="team-strategy-pill">💨 Main Strategy: Dodge, Magic Damage, and Support</span>
         </div>
+
+        <p>Here is the exact team composition:</p>
+        <div class="team-grid">
+            <div class="team-card"><img src="/heroes/Dante.png" alt="Dante"><strong>Dante</strong><span class="pet-row"><img src="/pets/Cain.png" alt="Cain">Cain</span></div>
+            <div class="team-card"><img src="/heroes/Nebula.png" alt="Nebula"><strong>Nebula</strong><span class="pet-row"><img src="/pets/Axel.png" alt="Axel">Axel</span></div>
+            <div class="team-card"><img src="/heroes/Orion.png" alt="Orion"><strong>Orion</strong><span class="pet-row"><img src="/pets/Merlin.png" alt="Merlin">Merlin</span></div>
+            <div class="team-card"><img src="/heroes/Augustus.png" alt="Augustus"><strong>Augustus</strong><span class="pet-row"><img src="/pets/Albus.png" alt="Albus">Albus</span></div>
+            <div class="team-card"><img src="/heroes/Dorian.png" alt="Dorian"><strong>Dorian</strong><span class="pet-row"><img src="/pets/Biscuit.png" alt="Biscuit">Biscuit</span></div>
+        </div>
+        <div class="team-pet"><img src="/pets/Khorus.png" alt="Khorus"><span><strong>Team pet: Khorus</strong> &middot; the small pet under each hero is their patron pet.</span></div>
 
         <p>Unlike the previous three combinations, this team does not depend on Electra and Fluffy.</p>
         <p>Instead, it uses an older defensive strategy built around Dante's dodge abilities.</p>
@@ -802,45 +676,20 @@
         <!-- TEAM 5 -->
         <h2>5. Galahad, Lyria, Tristan, Sebastian, and Lara Croft</h2>
         
-        <div class="team-showcase">
-            <div class="team-showcase-header">
-                <div class="team-title-row">
-                    <span class="team-badge">Team 5</span>
-                    <span class="team-strategy-tag">⚔️ Physical Damage, Offensive Synergy, and Support</span>
-                </div>
-                <div class="team-pet-badge">
-                    <img src="/pets/Axel.png" alt="Axel">
-                    <span>Team Pet: <strong>Axel</strong></span>
-                </div>
-            </div>
-            <div class="team-hero-grid">
-                <div class="team-hero-card">
-                    <img src="/heroes/Galahad.png" alt="Galahad">
-                    <div class="hero-name">Galahad</div>
-                    <span class="hero-role-pill role-tank">Tank</span>
-                </div>
-                <div class="team-hero-card">
-                    <img src="/heroes/Lyria.png" alt="Lyria">
-                    <div class="hero-name">Lyria</div>
-                    <span class="hero-role-pill role-damage">Physical DPS</span>
-                </div>
-                <div class="team-hero-card">
-                    <img src="/heroes/Tristan.png" alt="Tristan">
-                    <div class="hero-name">Tristan</div>
-                    <span class="hero-role-pill role-support">Blessed Buffer</span>
-                </div>
-                <div class="team-hero-card">
-                    <img src="/heroes/Sebastian.png" alt="Sebastian">
-                    <div class="hero-name">Sebastian</div>
-                    <span class="hero-role-pill role-support">Debuff Shield</span>
-                </div>
-                <div class="team-hero-card">
-                    <img src="/heroes/Lara Croft.png" alt="Lara Croft">
-                    <div class="hero-name">Lara Croft</div>
-                    <span class="hero-role-pill role-damage">Physical DPS</span>
-                </div>
-            </div>
+        <div class="team-meta-header">
+            <span class="team-badge-tag">Team 5</span>
+            <span class="team-strategy-pill">⚔️ Main Strategy: Physical Damage, Offensive Synergy, and Support</span>
         </div>
+
+        <p>Here is the exact team composition:</p>
+        <div class="team-grid">
+            <div class="team-card"><img src="/heroes/Galahad.png" alt="Galahad"><strong>Galahad</strong><span class="pet-row"><img src="/pets/Oliver.png" alt="Oliver">Oliver</span></div>
+            <div class="team-card"><img src="/heroes/Lyria.png" alt="Lyria"><strong>Lyria</strong><span class="pet-row"><img src="/pets/Fenris.png" alt="Fenris">Fenris</span></div>
+            <div class="team-card"><img src="/heroes/Tristan.png" alt="Tristan"><strong>Tristan</strong><span class="pet-row"><img src="/pets/Albus.png" alt="Albus">Albus</span></div>
+            <div class="team-card"><img src="/heroes/Sebastian.png" alt="Sebastian"><strong>Sebastian</strong><span class="pet-row"><img src="/pets/Biscuit.png" alt="Biscuit">Biscuit</span></div>
+            <div class="team-card"><img src="/heroes/Lara Croft.png" alt="Lara Croft"><strong>Lara Croft</strong><span class="pet-row"><img src="/pets/Cain.png" alt="Cain">Cain</span></div>
+        </div>
+        <div class="team-pet"><img src="/pets/Axel.png" alt="Axel"><span><strong>Team pet: Axel</strong> &middot; the small pet under each hero is their patron pet.</span></div>
 
         <p>This is another combination from the previous meta, before Electra and Fluffy became so popular.</p>
         <p>It is a different type of team compared to the first three combinations, relying more on physical damage and offensive support.</p>
@@ -1043,6 +892,7 @@
         </div>
     </footer>
 
+    <script src="hero-framer.js"></script>
     <script>
         const user = localStorage.getItem('user');
         const userAvatarEl = document.getElementById('user-avatar');
