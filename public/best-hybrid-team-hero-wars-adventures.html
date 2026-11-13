@@ -249,85 +249,95 @@
             line-height: 1.2;
         }
 
-        /* Team Composition Lineup Header */
-        .team-composition-box {
-            margin: 28px 0;
-            padding: 22px;
-            border-radius: 16px;
-            background: linear-gradient(145deg, rgba(20, 24, 34, 0.95), rgba(12, 14, 20, 0.98));
-            border: 1px solid rgba(245, 158, 11, 0.3);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-        }
-        .team-composition-header {
+        /* Team Lineup Meta Header (Matches Top 5 Meta Defense) */
+        .team-meta-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 12px;
-            margin-bottom: 20px;
-            padding-bottom: 14px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            margin: 28px 0 16px;
+            padding: 12px 18px;
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 4px solid #f59e0b;
+            border-radius: 10px;
         }
-        .team-title-tag {
+        .team-badge-tag {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #000;
             font-family: 'Oxanium', sans-serif;
-            font-size: 1.15rem;
             font-weight: 800;
-            color: #f59e0b;
-            text-transform: uppercase;
+            font-size: 0.92rem;
+            padding: 4px 12px;
+            border-radius: 6px;
             letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
-        .team-pet-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(56, 189, 248, 0.12);
+        .team-strategy-pill {
             color: #38bdf8;
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            padding: 5px 12px;
-            border-radius: 999px;
             font-weight: 600;
-            font-size: 0.9rem;
-        }
-        .team-pet-badge img {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            object-fit: cover;
+            font-size: 0.98rem;
         }
 
-        /* Team Grid (Compatible with hero-framer.js for Level 130 Red Frame) */
+        /* Team Grid (Matches Top 5 Meta Defense - Level 130 Red Frame) */
         .team-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 14px;
-            margin: 16px 0;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin: 0 0 16px;
         }
         .team-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 6px 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 215, 0, 0.15);
             border-radius: 12px;
-            padding: 14px 10px;
             text-align: center;
             transition: transform 0.2s ease, border-color 0.2s ease;
         }
         .team-card:hover {
             transform: translateY(-3px);
-            border-color: rgba(245, 158, 11, 0.4);
+            border-color: rgba(245, 158, 11, 0.5);
+            background: rgba(128,128,128,0.12);
         }
-        .team-card img {
-            width: 68px;
-            height: 68px;
-            border-radius: 8px;
-            display: block;
-            margin: 0 auto 10px;
+        .team-card .hero-frame-wrapper {
+            width: 76px !important;
+            height: 76px !important;
+            margin: 0 !important;
         }
         .team-card strong {
-            display: block;
-            color: #f8fafc;
-            font-family: 'Oxanium', sans-serif;
             font-size: 1rem;
-            margin-bottom: 6px;
+            color: #fff;
+            font-weight: 700;
+            margin-top: 2px;
         }
+
+        /* Team Pet Box (Matches Top 5 Meta Defense) */
+        .team-pet {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            margin: 0 0 24px;
+            border-radius: 12px;
+            border: 1px dashed rgba(174,246,73,0.6);
+            background: rgba(174,246,73,0.08);
+            color: #e2e8f0;
+            font-size: 0.95rem;
+        }
+        .team-pet .hero-frame-wrapper {
+            width: 48px !important;
+            height: 48px !important;
+            margin: 0 !important;
+            flex-shrink: 0;
+        }
+        .team-pet strong {
+            color: #aef649;
+        }
+
         .hero-role-pill {
             display: inline-block;
             font-size: 0.72rem;
@@ -343,23 +353,30 @@
         .role-pure { background: rgba(250, 204, 21, 0.18); color: #facc15; border: 1px solid rgba(250, 204, 21, 0.35); }
         .role-healer { background: rgba(34, 197, 94, 0.18); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.35); }
 
-        /* Hero Spotlight Showcase Box */
+        @media (max-width: 768px) {
+            .team-grid { grid-template-columns: repeat(3, 1fr); }
+            .team-meta-header { flex-direction: column; align-items: flex-start; }
+        }
+        @media (max-width: 420px) {
+            .team-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* Hero Spotlight Showcase Box (Matches Skin Upgrade Guide) */
         .hero-showcase-box {
             display: flex;
             align-items: center;
             gap: 20px;
             background: linear-gradient(145deg, rgba(25, 30, 42, 0.85), rgba(15, 18, 26, 0.95));
-            border: 1px solid rgba(245, 158, 11, 0.25);
-            padding: 18px 22px;
+            border: 1px solid rgba(245, 158, 11, 0.3);
             border-radius: 14px;
-            margin: 24px 0 20px;
+            padding: 20px 24px;
+            margin: 28px 0 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
         }
-        .hero-showcase-box img {
-            width: 74px;
-            height: 74px;
-            border-radius: 12px;
-            border: 2px solid #f59e0b;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+        .hero-showcase-box .hero-frame-wrapper {
+            width: 80px !important;
+            height: 80px !important;
+            margin: 0 !important;
             flex-shrink: 0;
         }
         .hero-showcase-meta h3 {
@@ -639,45 +656,44 @@
         <h2>The Solution: Build a Hybrid Team</h2>
         <p>A true hybrid team combines different damage sources while maintaining elite combat synergy. Simply placing random heroes together doesn't work—heroes must amplify each other's offensive outputs, cover defensive weaknesses, and sustain through extended waves.</p>
 
-        <!-- Team Showcase Box -->
-        <div class="team-composition-box">
-            <div class="team-composition-header">
-                <span class="team-title-tag">⚔️ Best Hybrid Adventure Team Lineup</span>
-                <span class="team-pet-badge">
-                    <img src="/pets/Khorus.png" alt="Khorus">
-                    Team Pet: Khorus
-                </span>
-            </div>
+        <!-- Team Composition Lineup -->
+        <div class="team-meta-header">
+            <span class="team-badge-tag">Best Hybrid Team</span>
+            <span class="team-strategy-pill">⚔️ Physical, Magic, and Pure Damage Synergy</span>
+        </div>
 
-            <p style="margin: 0 0 12px; font-size: 0.95rem; color: #94a3b8;">Click any hero below to see detailed skill scaling and battle synergy:</p>
-
-            <div class="team-grid">
-                <div class="team-card">
-                    <img src="/heroes/Dante.png" alt="Dante">
-                    <strong>Dante</strong>
-                    <span class="hero-role-pill role-physical">Physical DPS</span>
-                </div>
-                <div class="team-card">
-                    <img src="/heroes/Nebula.png" alt="Nebula">
-                    <strong>Nebula</strong>
-                    <span class="hero-role-pill role-support">Buffer &amp; Support</span>
-                </div>
-                <div class="team-card">
-                    <img src="/heroes/Orion.png" alt="Orion">
-                    <strong>Orion</strong>
-                    <span class="hero-role-pill role-magic">Magic DPS</span>
-                </div>
-                <div class="team-card">
-                    <img src="/heroes/Augustus.png" alt="Augustus">
-                    <strong>Augustus</strong>
-                    <span class="hero-role-pill role-pure">Magic &amp; Pure DPS</span>
-                </div>
-                <div class="team-card">
-                    <img src="/heroes/Dorian.png" alt="Dorian">
-                    <strong>Dorian</strong>
-                    <span class="hero-role-pill role-healer">Vampirism Healer</span>
-                </div>
+        <p>Here is the exact team composition:</p>
+        <div class="team-grid">
+            <div class="team-card">
+                <img src="/heroes/Dante.png" alt="Dante">
+                <strong>Dante</strong>
+                <span class="hero-role-pill role-physical">Physical DPS</span>
             </div>
+            <div class="team-card">
+                <img src="/heroes/Nebula.png" alt="Nebula">
+                <strong>Nebula</strong>
+                <span class="hero-role-pill role-support">Buffer &amp; Support</span>
+            </div>
+            <div class="team-card">
+                <img src="/heroes/Orion.png" alt="Orion">
+                <strong>Orion</strong>
+                <span class="hero-role-pill role-magic">Magic DPS</span>
+            </div>
+            <div class="team-card">
+                <img src="/heroes/Augustus.png" alt="Augustus">
+                <strong>Augustus</strong>
+                <span class="hero-role-pill role-pure">Magic &amp; Pure DPS</span>
+            </div>
+            <div class="team-card">
+                <img src="/heroes/Dorian.png" alt="Dorian">
+                <strong>Dorian</strong>
+                <span class="hero-role-pill role-healer">Vampirism Healer</span>
+            </div>
+        </div>
+
+        <div class="team-pet">
+            <img src="/pets/Khorus.png" alt="Khorus">
+            <span><strong>Team pet: Khorus</strong> &ndash; Provides control immunity, absorbs magic disruption, and shields against stuns.</span>
         </div>
 
         <p>This team combines relentless physical burst, explosive magical missile bombardments, pure damage piercing, adjacent stat amplification, and immortal vampirism healing. Let's examine each hero individually.</p>
